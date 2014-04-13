@@ -55,4 +55,9 @@ public final class testLegalGamer extends SampleGamer
 		notifyObservers(new GamerSelectedMoveEvent(moves, selection, stop - start));
 		return selection;
 	}
+
+	@Override
+	public String getName() {
+		return "BloodBathAndBeyond";
+	}
 }
