@@ -94,7 +94,6 @@ public final class Game {
         return theStylesheet;
     }
 
-    //crain has small penis
 
     public String getRulesheet() {
     	return theRulesheet;
