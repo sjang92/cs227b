@@ -120,7 +120,7 @@ public final class Kiosk extends JPanel implements ActionListener, ItemListener,
                 ;
             }
         }
-
+//test
         flipRoles = new JCheckBox("Flip roles?");
 
         selectedGame = new JList<AvailableGame>(theAvailableGames.toArray(new AvailableGame[0]));
