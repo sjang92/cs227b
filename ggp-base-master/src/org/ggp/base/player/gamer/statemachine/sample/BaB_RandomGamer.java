@@ -18,21 +18,14 @@ import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
 import org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine;
 
 /**
- * SampleGamer is a simplified version of the StateMachineGamer, dropping some
- * advanced functionality so the example gamers can be presented concisely.
- * This class implements 7 of the 8 core functions that need to be implemented
- * for any gamer.
- *
- * If you want to quickly create a gamer of your own, extend this class and
- * add the last core function : public Move stateMachineSelectMove(long timeout)
+ * RandomGamer is a very simple state-machine-based Gamer that will always
+ * pick randomly from the legal moves it finds at any state in the game.
  */
-
-public abstract class BaB_RandomGamer extends StateMachineGamer
+public final class BaB_RandomGamer extends StateMachineGamer
 {
 	@Override
-	public void stateMachineMetaGame(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
-	{
-		// Sample gamers do no metagaming at the beginning of the match.
+	public String getName() {
+		return "Random";
 	}
 
 	@Override
@@ -50,36 +43,33 @@ public abstract class BaB_RandomGamer extends StateMachineGamer
 	}
 
 	@Override
-	public String getName() {
-		return "Random: Team Bloodbath & Beyond";
-	}
-
-	// This is the default State Machine
-	@Override
 	public StateMachine getInitialStateMachine() {
 		return new CachedStateMachine(new ProverStateMachine());
 	}
 
-	// This is the defaul Sample Panel
 	@Override
-	public DetailPanel getDetailPanel() {
-		return new SimpleDetailPanel();
+	public void preview(Game g, long timeout) throws GamePreviewException {
+		// Random gamer does no game previewing.
 	}
 
-
+	@Override
+	public void stateMachineMetaGame(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+	{
+		// Random gamer does no metagaming at the beginning of the match.
+	}
 
 	@Override
 	public void stateMachineStop() {
-		// Sample gamers do no special cleanup when the match ends normally.
+		// Random gamer does no special cleanup when the match ends normally.
 	}
 
 	@Override
 	public void stateMachineAbort() {
-		// Sample gamers do no special cleanup when the match ends abruptly.
+		// Random gamer does no special cleanup when the match ends abruptly.
 	}
 
 	@Override
-	public void preview(Game g, long timeout) throws GamePreviewException {
-		// Sample gamers do no game previewing.
+	public DetailPanel getDetailPanel() {
+		return new SimpleDetailPanel();
 	}
 }
