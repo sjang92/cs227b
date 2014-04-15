@@ -25,7 +25,7 @@ public final class BaB_RandomGamer extends StateMachineGamer
 {
 	@Override
 	public String getName() {
-		return "Random";
+		return "BaB_RandomGamer";
 	}
 
 	@Override
