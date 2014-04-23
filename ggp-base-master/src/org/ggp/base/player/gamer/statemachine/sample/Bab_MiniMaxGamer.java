@@ -61,7 +61,6 @@ public final class Bab_MiniMaxGamer extends SampleGamer
 	}
 
 	public Move bestMove(Role role, MachineState state) throws MoveDefinitionException, TransitionDefinitionException, GoalDefinitionException {
-		System.out.print("bestMove is Called");
 		List<Move> legalMoves = getStateMachine().getLegalMoves(state, role);
 		Move move = legalMoves.get(0);
 		int score = 0;
@@ -73,7 +72,6 @@ public final class Bab_MiniMaxGamer extends SampleGamer
 				move = currMove;
 			}
 		}
-		System.out.print("Exiting best Move");
 		return move;
 	}
 
@@ -85,7 +83,7 @@ public final class Bab_MiniMaxGamer extends SampleGamer
 		Map<Role, Integer>roleIndexMap = getStateMachine().getRoleIndices();
 		Integer myIndex = roleIndexMap.get(getRole());
 		Role opponent = roles.get(myIndex++ < roles.size() - 1? myIndex : 0);
-
+		System.out.print("My Role: "+getRole().toString()+" | "+"Opponent Role: "+opponent.toString());
 		List<Move> opponentLegalMoves = getStateMachine().getLegalMoves(state, opponent);
 
 			//if (allOpponentsLegalMoves.size() == 1) return beta;
