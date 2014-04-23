@@ -65,7 +65,7 @@ public final class Bab_MiniMaxGamer extends SampleGamer
 		Move move = legalMoves.get(0);
 		int score = 0;
 		for (Move currMove : legalMoves) {
-			int result = minScore(role, currMove, state, 0, 100);
+			int result = minScore(role, currMove, state, -100, 100);
 			if (result == 100) return currMove;
 			if (result > score) {
 				score = result;
@@ -83,7 +83,7 @@ public final class Bab_MiniMaxGamer extends SampleGamer
 		Map<Role, Integer>roleIndexMap = getStateMachine().getRoleIndices();
 		Integer myIndex = roleIndexMap.get(getRole());
 		Role opponent = roles.get(myIndex++ < roles.size() - 1? myIndex : 0);
-		System.out.print("My Role: "+getRole().toString()+" | "+"Opponent Role: "+opponent.toString());
+		//System.out.print("My Role: "+getRole().toString()+" | "+"Opponent Role: "+opponent.toString());
 		List<Move> opponentLegalMoves = getStateMachine().getLegalMoves(state, opponent);
 
 			//if (allOpponentsLegalMoves.size() == 1) return beta;
