@@ -87,4 +87,19 @@ public final class Bab_MiniMaxGamer extends SampleGamer
 
 		return 0;
 	}
+
+
+	public int maxScore(Role role, MachineState state, int alpha, int beta) throws GoalDefinitionException, MoveDefinitionException {
+		if (getStateMachine().isTerminal(state))
+			return getStateMachine().getGoal(state, role);
+		else {
+			List<Move> legalMoves = getStateMachine().getLegalMoves(state, role);
+			for (Move legalMove : legalMoves) {
+				int result = minScore(role, legalMove, state, alpha, beta);
+				alpha = alpha > result ? alpha : result;
+				if (alpha >= beta) return beta;
+			}
+		}
+		return alpha;
+	}
 }
