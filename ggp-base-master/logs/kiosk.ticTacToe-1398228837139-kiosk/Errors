@@ -1,0 +1,105 @@
+LOG 1398228837403 [L9]: <ERR> (in GamePlayer) java.lang.IndexOutOfBoundsException: Index: 2, Size: 2
+	at java.util.ArrayList.rangeCheck(ArrayList.java:635)
+	at java.util.ArrayList.get(ArrayList.java:411)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.minScore(Bab_MiniMaxGamer.java:87)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.bestMove(Bab_MiniMaxGamer.java:69)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.stateMachineSelectMove(Bab_MiniMaxGamer.java:47)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1398228837404 [L9]: <ERR> (in GamePlayer) An unhandled exception ocurred during move selection: org.ggp.base.player.gamer.exception.MoveSelectionException: java.lang.IndexOutOfBoundsException: Index: 2, Size: 2
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:215)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+Caused by: java.lang.IndexOutOfBoundsException: Index: 2, Size: 2
+	at java.util.ArrayList.rangeCheck(ArrayList.java:635)
+	at java.util.ArrayList.get(ArrayList.java:411)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.minScore(Bab_MiniMaxGamer.java:87)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.bestMove(Bab_MiniMaxGamer.java:69)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.stateMachineSelectMove(Bab_MiniMaxGamer.java:47)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	... 2 more
+LOG 1398228838741 [L9]: <ERR> (in GamePlayer) java.lang.IndexOutOfBoundsException: Index: 2, Size: 2
+	at java.util.ArrayList.rangeCheck(ArrayList.java:635)
+	at java.util.ArrayList.get(ArrayList.java:411)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.minScore(Bab_MiniMaxGamer.java:87)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.bestMove(Bab_MiniMaxGamer.java:69)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.stateMachineSelectMove(Bab_MiniMaxGamer.java:47)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1398228838742 [L9]: <ERR> (in GamePlayer) An unhandled exception ocurred during move selection: org.ggp.base.player.gamer.exception.MoveSelectionException: java.lang.IndexOutOfBoundsException: Index: 2, Size: 2
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:215)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+Caused by: java.lang.IndexOutOfBoundsException: Index: 2, Size: 2
+	at java.util.ArrayList.rangeCheck(ArrayList.java:635)
+	at java.util.ArrayList.get(ArrayList.java:411)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.minScore(Bab_MiniMaxGamer.java:87)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.bestMove(Bab_MiniMaxGamer.java:69)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.stateMachineSelectMove(Bab_MiniMaxGamer.java:47)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	... 2 more
+LOG 1398228838768 [L9]: <ERR> (in GamePlayer) java.lang.IndexOutOfBoundsException: Index: 2, Size: 2
+	at java.util.ArrayList.rangeCheck(ArrayList.java:635)
+	at java.util.ArrayList.get(ArrayList.java:411)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.minScore(Bab_MiniMaxGamer.java:87)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.bestMove(Bab_MiniMaxGamer.java:69)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.stateMachineSelectMove(Bab_MiniMaxGamer.java:47)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1398228838769 [L9]: <ERR> (in GamePlayer) An unhandled exception ocurred during move selection: org.ggp.base.player.gamer.exception.MoveSelectionException: java.lang.IndexOutOfBoundsException: Index: 2, Size: 2
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:215)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+Caused by: java.lang.IndexOutOfBoundsException: Index: 2, Size: 2
+	at java.util.ArrayList.rangeCheck(ArrayList.java:635)
+	at java.util.ArrayList.get(ArrayList.java:411)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.minScore(Bab_MiniMaxGamer.java:87)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.bestMove(Bab_MiniMaxGamer.java:69)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.stateMachineSelectMove(Bab_MiniMaxGamer.java:47)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	... 2 more
+LOG 1398228840314 [L9]: <ERR> (in GamePlayer) java.lang.IndexOutOfBoundsException: Index: 2, Size: 2
+	at java.util.ArrayList.rangeCheck(ArrayList.java:635)
+	at java.util.ArrayList.get(ArrayList.java:411)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.minScore(Bab_MiniMaxGamer.java:87)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.bestMove(Bab_MiniMaxGamer.java:69)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.stateMachineSelectMove(Bab_MiniMaxGamer.java:47)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1398228840314 [L9]: <ERR> (in GamePlayer) An unhandled exception ocurred during move selection: org.ggp.base.player.gamer.exception.MoveSelectionException: java.lang.IndexOutOfBoundsException: Index: 2, Size: 2
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:215)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+Caused by: java.lang.IndexOutOfBoundsException: Index: 2, Size: 2
+	at java.util.ArrayList.rangeCheck(ArrayList.java:635)
+	at java.util.ArrayList.get(ArrayList.java:411)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.minScore(Bab_MiniMaxGamer.java:87)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.bestMove(Bab_MiniMaxGamer.java:69)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.stateMachineSelectMove(Bab_MiniMaxGamer.java:47)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	... 2 more
+LOG 1398228840333 [L9]: <ERR> (in GamePlayer) java.lang.IndexOutOfBoundsException: Index: 2, Size: 2
+	at java.util.ArrayList.rangeCheck(ArrayList.java:635)
+	at java.util.ArrayList.get(ArrayList.java:411)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.minScore(Bab_MiniMaxGamer.java:87)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.bestMove(Bab_MiniMaxGamer.java:69)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.stateMachineSelectMove(Bab_MiniMaxGamer.java:47)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1398228840335 [L9]: <ERR> (in GamePlayer) An unhandled exception ocurred during move selection: org.ggp.base.player.gamer.exception.MoveSelectionException: java.lang.IndexOutOfBoundsException: Index: 2, Size: 2
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:215)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+Caused by: java.lang.IndexOutOfBoundsException: Index: 2, Size: 2
+	at java.util.ArrayList.rangeCheck(ArrayList.java:635)
+	at java.util.ArrayList.get(ArrayList.java:411)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.minScore(Bab_MiniMaxGamer.java:87)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.bestMove(Bab_MiniMaxGamer.java:69)
+	at org.ggp.base.player.gamer.statemachine.sample.Bab_MiniMaxGamer.stateMachineSelectMove(Bab_MiniMaxGamer.java:47)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	... 2 more

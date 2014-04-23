@@ -2,6 +2,7 @@ package org.ggp.base.player.gamer.statemachine.sample;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.ggp.base.player.gamer.event.GamerSelectedMoveEvent;
 import org.ggp.base.util.statemachine.MachineState;
@@ -77,10 +78,18 @@ public final class Bab_MiniMaxGamer extends SampleGamer
 	}
 
 	public int minScore(Role role, Move move, MachineState state, int alpha, int beta) throws MoveDefinitionException, TransitionDefinitionException, GoalDefinitionException {
-		List<List<Move>> allOpponentsLegalMoves = getStateMachine().getLegalJointMoves(state);
+		//List<List<Move>> allOpponentsLegalMoves = getStateMachine().getLegalJointMoves(state);
+		//System.out.print(allOpponentsLegalMoves.size() + "\n");
 		//for (List<Move> opponentLegalMoves : allOpponentsLegalMoves) {
-			if (allOpponentsLegalMoves.size() == 1) return beta;
-			List<Move> opponentLegalMoves = allOpponentsLegalMoves.get(1);
+		List<Role> roles = getStateMachine().getRoles();
+		Map<Role, Integer>roleIndexMap = getStateMachine().getRoleIndices();
+		Integer myIndex = roleIndexMap.get(getRole());
+		Role opponent = roles.get(myIndex++ < roles.size() - 1? myIndex : 0);
+
+		List<Move> opponentLegalMoves = getStateMachine().getLegalMoves(state, opponent);
+
+			//if (allOpponentsLegalMoves.size() == 1) return beta;
+			//List<Move> opponentLegalMoves = allOpponentsLegalMoves.get(1);
 			for (Move legalMove : opponentLegalMoves) {
 				List<Move> moves = new ArrayList<Move>();
 				if (role == getStateMachine().getRoles().get(0)) {
