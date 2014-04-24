@@ -20,7 +20,7 @@ import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
  * public Move stateMachineSelectMove(long timeout)
  *
  */
-public final class Bab_MiniMaxGamer extends SampleGamer
+public final class Bab_AlphaBetaGamer extends SampleGamer
 {
 	/**
 	 * This function is called at the start of each round
@@ -64,7 +64,7 @@ public final class Bab_MiniMaxGamer extends SampleGamer
 		Move move = legalMoves.get(0);
 		int score = 0;
 		for (Move currMove : legalMoves) {
-			int result = minScore(role, currMove, state, 0, 100);
+			int result = minScore(role, currMove, state, -100, 100);
 			if (result == 100) return currMove;
 			if (result > score) {
 				score = result;
