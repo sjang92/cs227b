@@ -64,7 +64,7 @@ public final class Bab_MiniMaxGamer extends SampleGamer
 		Move move = legalMoves.get(0);
 		int score = 0;
 		for (Move currMove : legalMoves) {
-			int result = minScore(role, currMove, state, 0, 100);
+			int result = minScore(role, currMove, state, -100, 100);
 			if (result == 100) return currMove;
 			if (result > score) {
 				score = result;
@@ -75,6 +75,13 @@ public final class Bab_MiniMaxGamer extends SampleGamer
 	}
 
 	public int minScore(Role role, Move move, MachineState state, int alpha, int beta) throws MoveDefinitionException, TransitionDefinitionException, GoalDefinitionException {
+		//List<List<Move>> allOpponentsLegalMoves = getStateMachine().getLegalJointMoves(state);
+		//System.out.print(allOpponentsLegalMoves.size() + "\n");
+		//for (List<Move> opponentLegalMoves : allOpponentsLegalMoves) {
+//		List<Role> roles = getStateMachine().getRoles();
+//		Map<Role, Integer>roleIndexMap = getStateMachine().getRoleIndices();
+//		Integer myIndex = roleIndexMap.get(getRole());
+
 		Role opponent = null;
 		for(final Role currRole : getStateMachine().getRoles()){
 			if(!currRole.equals(getRole())){
@@ -82,25 +89,31 @@ public final class Bab_MiniMaxGamer extends SampleGamer
 			}
 		}
 
+
+		//Role opponent = roles.get(myIndex++ < roles.size() - 1? myIndex : 0);
+		//System.out.print("My Role: "+getRole().toString()+" | "+"Opponent Role: "+opponent.toString());
 		List<Move> opponentLegalMoves = getStateMachine().getLegalMoves(state, opponent);
 
-		for (Move legalMove : opponentLegalMoves) {
-			List<Move> moves = new ArrayList<Move>();
-			if (role == getRole()) {
-				moves.add(move);
-				moves.add(legalMove);
-			} else {
-				moves.add(legalMove);
-				moves.add(move);
+			//if (allOpponentsLegalMoves.size() == 1) return beta;
+			//List<Move> opponentLegalMoves = allOpponentsLegalMoves.get(1);
+			for (Move legalMove : opponentLegalMoves) {
+				List<Move> moves = new ArrayList<Move>();
+				if (role == getRole()) {
+					moves.add(move);
+					moves.add(legalMove);
+				} else {
+					moves.add(legalMove);
+					moves.add(move);
+				}
+
+				MachineState newState = getStateMachine().getNextState(state, moves);
+				int result = maxScore(role, newState, alpha, beta);
+				beta = beta < result ? beta : result;
+				if (beta<=alpha) return alpha;
 			}
+		//}
 
-			MachineState newState = getStateMachine().getNextState(state, moves);
-			int result = maxScore(role, newState, alpha, beta);
-			beta = beta < result ? beta : result;
-			if (beta<=alpha) return alpha;
-		}
-
-	return beta;
+		return beta;
 	}
 
 
