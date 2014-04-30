@@ -32,6 +32,7 @@ public final class BaB_AlphaBeta_DepthLimit_Gamer_4_29 extends SampleGamer
 	private long stop;
 	private long myTimeout;
 	private final int DEPTH_LIMIT = 10000000;
+	private final int DEPTH_START = 1;
 	private final int TIME_BUFFER = 500;
 
 	/**
@@ -81,7 +82,7 @@ public final class BaB_AlphaBeta_DepthLimit_Gamer_4_29 extends SampleGamer
 	private int maxMovesSeen = 0;
 
 
-	private int HEURISTIC = 2; // 1=mobility, 2=focus, 3=goal proximity; anything else defaults to terminal depth i.e. 0
+	private int HEURISTIC = 1; // 1=mobility, 2=focus, 3=goal proximity; anything else defaults to terminal depth i.e. 0
 
 
 	public Move bestMove(Role role, MachineState state) throws MoveDefinitionException, TransitionDefinitionException, GoalDefinitionException {
@@ -90,7 +91,7 @@ public final class BaB_AlphaBeta_DepthLimit_Gamer_4_29 extends SampleGamer
 		Move move = legalMoves.get(0);
 		int score = 0;
 		bestMove = move;
-		for (int i = 1; i < DEPTH_LIMIT; i++) { // wrapped with layers of ID (iterative-deepening)
+		for (int i = DEPTH_START; i < DEPTH_LIMIT; i++) { // wrapped with layers of ID (iterative-deepening)
 			currLevelBestMoveScore = 0;
 			currLevelBestMove = move;
 			for (Move currMove : legalMoves) {
@@ -198,7 +199,9 @@ public final class BaB_AlphaBeta_DepthLimit_Gamer_4_29 extends SampleGamer
 	public int mobilityHeuristic(Role role, MachineState state) throws MoveDefinitionException {
 		List<Move> legalMoves = getStateMachine().getLegalMoves(state, role);
 		int numMoves = legalMoves.size();
-		return (((numMoves - minMovesSeen)/(maxMovesSeen - minMovesSeen+1)) * 100); //+1 avoid DBZ
+		//return (((numMoves - minMovesSeen)/(maxMovesSeen - minMovesSeen + 1)) * 100); //+1 avoid DBZ
+		//return (((numMoves)/(maxMovesSeen + 1)) * 100); //+1 avoid DBZ
+		return Math.min(100, numMoves);
 	}
 
 	// scales the # moves available to lie between the min/max seen
@@ -206,7 +209,9 @@ public final class BaB_AlphaBeta_DepthLimit_Gamer_4_29 extends SampleGamer
 	public int focusHeuristic(Role role, MachineState state) throws MoveDefinitionException {
 		List<Move> legalMoves = getStateMachine().getLegalMoves(state, role);
 		int numMoves = legalMoves.size();
-		return (100 - ((numMoves - minMovesSeen)/(maxMovesSeen - minMovesSeen+1)) * 100); //+1 avoid DBZ
+		//return (100 - ((numMoves - minMovesSeen)/(maxMovesSeen - minMovesSeen + 1)) * 100); //+1 avoid DBZ
+		//return (100 - ((numMoves)/(maxMovesSeen + 1)) * 100); //+1 avoid DBZ
+		return 100 - Math.min(100, numMoves);
 	}
 
 	// very simple/ rudimentary
