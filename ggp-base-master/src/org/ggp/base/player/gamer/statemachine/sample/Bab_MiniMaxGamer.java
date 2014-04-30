@@ -2,6 +2,7 @@ package org.ggp.base.player.gamer.statemachine.sample;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.ggp.base.player.gamer.event.GamerSelectedMoveEvent;
 import org.ggp.base.util.statemachine.MachineState;
@@ -78,19 +79,19 @@ public final class Bab_MiniMaxGamer extends SampleGamer
 		//List<List<Move>> allOpponentsLegalMoves = getStateMachine().getLegalJointMoves(state);
 		//System.out.print(allOpponentsLegalMoves.size() + "\n");
 		//for (List<Move> opponentLegalMoves : allOpponentsLegalMoves) {
-//		List<Role> roles = getStateMachine().getRoles();
-//		Map<Role, Integer>roleIndexMap = getStateMachine().getRoleIndices();
-//		Integer myIndex = roleIndexMap.get(getRole());
+		List<Role> roles = getStateMachine().getRoles();
+		Map<Role, Integer>roleIndexMap = getStateMachine().getRoleIndices();
+		Integer myIndex = roleIndexMap.get(getRole());
 
-		Role opponent = null;
-		for(final Role currRole : getStateMachine().getRoles()){
-			if(!currRole.equals(getRole())){
-				opponent = currRole;
-			}
-		}
+//		Role opponent = null;
+//		for(final Role currRole : getStateMachine().getRoles()){
+//			if(!currRole.equals(getRole())){
+//				opponent = currRole;
+//			}
+//		}
 
 
-		//Role opponent = roles.get(myIndex++ < roles.size() - 1? myIndex : 0);
+		Role opponent = roles.get(myIndex++ < roles.size() - 1? myIndex : 0);
 		//System.out.print("My Role: "+getRole().toString()+" | "+"Opponent Role: "+opponent.toString());
 		List<Move> opponentLegalMoves = getStateMachine().getLegalMoves(state, opponent);
 
