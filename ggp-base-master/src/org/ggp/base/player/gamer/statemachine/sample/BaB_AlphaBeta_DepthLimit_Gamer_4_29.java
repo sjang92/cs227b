@@ -31,8 +31,8 @@ public final class BaB_AlphaBeta_DepthLimit_Gamer_4_29 extends SampleGamer
 	private long start;
 	private long stop;
 	private long myTimeout;
-	private final int DEPTH_LIMIT = 10000000;
-	private final int DEPTH_START = 1;
+	private final int DEPTH_LIMIT = 1000000;
+	private final int DEPTH_START = 0;
 	private final int TIME_BUFFER = 500;
 
 	/**
@@ -54,10 +54,16 @@ public final class BaB_AlphaBeta_DepthLimit_Gamer_4_29 extends SampleGamer
 		 * is to return one of these moves. The choice of which
 		 * Move to play is the goal of GGP.
 		 */
-		List<Move> moves = getStateMachine().getLegalMoves(getCurrentState(), getRole());
+		Move selection = null;
 
+		List<Move> moves = getStateMachine().getLegalMoves(getCurrentState(), getRole());
+		if (moves.size() == 1) {
+			selection = moves.get(0);
+		} else {
+			selection = bestMove(getRole(), getCurrentState());
+		}
 		// SampleLegalGamer is very simple : it picks the first legal move
-		Move selection = bestMove(getRole(), getCurrentState());
+
 
 		// We get the end time
 		// It is mandatory that stop<timeout
@@ -82,7 +88,7 @@ public final class BaB_AlphaBeta_DepthLimit_Gamer_4_29 extends SampleGamer
 	private int maxMovesSeen = 0;
 
 
-	private int HEURISTIC = 1; // 1=mobility, 2=focus, 3=goal proximity; anything else defaults to terminal depth i.e. 0
+	private int HEURISTIC = 0; // 1=mobility, 2=focus, 3=goal proximity; anything else defaults to terminal depth i.e. 0
 
 
 	public Move bestMove(Role role, MachineState state) throws MoveDefinitionException, TransitionDefinitionException, GoalDefinitionException {
