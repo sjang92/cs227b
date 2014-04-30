@@ -32,6 +32,7 @@ public final class BaB_AlphaBeta_DepthLimit_Gamer_4_29 extends SampleGamer
 	private long stop;
 	private long myTimeout;
 	private final int DEPTH_LIMIT = 10000000;
+	private final int TIME_BUFFER = 500;
 
 	/**
 	 * This function is called at the start of each round
@@ -80,7 +81,7 @@ public final class BaB_AlphaBeta_DepthLimit_Gamer_4_29 extends SampleGamer
 	private int maxMovesSeen = 0;
 
 
-	private int HEURISTIC = 1; // 1=mobility, 2=focus, 3=goal proximity; anything else defaults to terminal depth i.e. 0
+	private int HEURISTIC = 2; // 1=mobility, 2=focus, 3=goal proximity; anything else defaults to terminal depth i.e. 0
 
 
 	public Move bestMove(Role role, MachineState state) throws MoveDefinitionException, TransitionDefinitionException, GoalDefinitionException {
@@ -153,7 +154,9 @@ public final class BaB_AlphaBeta_DepthLimit_Gamer_4_29 extends SampleGamer
 
 	// checks how much time left, constant should be in millisecs
 	private boolean timeoutCheck() {
-		if ((System.currentTimeMillis() - start) >= (myTimeout - 2000)) return true;
+		if ((System.currentTimeMillis()) >= (myTimeout - TIME_BUFFER)) {
+			return true;
+		}
 		return false;
 	}
 
