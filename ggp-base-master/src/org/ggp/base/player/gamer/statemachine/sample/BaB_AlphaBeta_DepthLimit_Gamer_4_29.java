@@ -195,7 +195,7 @@ public final class BaB_AlphaBeta_DepthLimit_Gamer_4_29 extends SampleGamer
 	public int mobilityHeuristic(Role role, MachineState state) throws MoveDefinitionException {
 		List<Move> legalMoves = getStateMachine().getLegalMoves(state, role);
 		int numMoves = legalMoves.size();
-		return (((numMoves - minMovesSeen)/(maxMovesSeen - minMovesSeen)+1) * 100); //+1 avoid DBZ
+		return (((numMoves - minMovesSeen)/(maxMovesSeen - minMovesSeen+1)) * 100); //+1 avoid DBZ
 	}
 
 	// scales the # moves available to lie between the min/max seen
@@ -203,7 +203,7 @@ public final class BaB_AlphaBeta_DepthLimit_Gamer_4_29 extends SampleGamer
 	public int focusHeuristic(Role role, MachineState state) throws MoveDefinitionException {
 		List<Move> legalMoves = getStateMachine().getLegalMoves(state, role);
 		int numMoves = legalMoves.size();
-		return (100 - ((numMoves - minMovesSeen)/(maxMovesSeen - minMovesSeen)+1) * 100); //+1 avoid DBZ
+		return (100 - ((numMoves - minMovesSeen)/(maxMovesSeen - minMovesSeen+1)) * 100); //+1 avoid DBZ
 	}
 
 	// very simple/ rudimentary
