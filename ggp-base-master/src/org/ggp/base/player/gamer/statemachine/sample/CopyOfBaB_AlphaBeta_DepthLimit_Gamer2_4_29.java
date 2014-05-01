@@ -19,7 +19,7 @@ import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
  * public Move stateMachineSelectMove(long timeout)
  *
  */
-public final class BaB_AlphaBeta_DepthLimit_Gamer_4_29 extends SampleGamer
+public final class CopyOfBaB_AlphaBeta_DepthLimit_Gamer2_4_29 extends SampleGamer
 {
 
 	@Override
@@ -97,12 +97,12 @@ public final class BaB_AlphaBeta_DepthLimit_Gamer_4_29 extends SampleGamer
 		Move move = legalMoves.get(0);
 		int score = 0;
 		bestMove = move;
-		//for (int i = DEPTH_START; i < DEPTH_LIMIT; i++) { // wrapped with layers of ID (iterative-deepening)
+		for (int i = DEPTH_START; i < DEPTH_LIMIT; i++) { // wrapped with layers of ID (iterative-deepening)
 			currLevelBestMoveScore = 0;
 			currLevelBestMove = move;
 			for (Move currMove : legalMoves) {
-				//int result = minScore(i, role, currMove, state, 0, 0, 100);
-				int result = minScore(5, role, currMove, state, 0, 0, 100);
+				int result = minScore(i, role, currMove, state, 0, 0, 100);
+				//int result = minScore(3, role, currMove, state, 0, 0, 100);
 				if (result == 100) return currMove;
 				if (result > score) {
 					score = result;
@@ -114,7 +114,7 @@ public final class BaB_AlphaBeta_DepthLimit_Gamer_4_29 extends SampleGamer
 			bestMoveScore = currLevelBestMoveScore;
 			if (timeoutCheck() || bestMoveScore == 100) return bestMove;
 
-		//}
+		}
 		return bestMove; // should not be reached
 	}
 
