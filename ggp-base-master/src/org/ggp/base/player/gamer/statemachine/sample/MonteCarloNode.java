@@ -9,16 +9,20 @@ public class MonteCarloNode {
 	private MonteCarloNode parent;
 	private MachineState state;
 	private ArrayList<MonteCarloNode> children;
+	//private Role role; // the one who needs to make the next move from here.
 	private int visits;
 	private int utility;
+	public boolean isMax;
 
 
 	/* Constructor: takes the state as the param. */
-	public MonteCarloNode(MachineState state) {
+	public MonteCarloNode(MachineState state, boolean isMax, MonteCarloNode parent) {
 		this.state = state;
 		this.children = new ArrayList<MonteCarloNode>();
-		this.visits = 1;
+		this.visits = 0;
 		this.utility = 0;
+		this.isMax = isMax;
+		this.parent = parent;
 	}
 
 	/* Getters & Setters */
@@ -34,16 +38,24 @@ public class MonteCarloNode {
 		return utility;
 	}
 
+	public double getAverageUtility() {
+		return this.utility/this.visits;
+	}
+
 	public void setUtility(int utility) {
 		this.utility = utility;
 	}
 
+	public void incrementUtilityAndVisited(int incUtility) {
+		this.visits++;
+		this.utility += incUtility;
+	}
 	/* Function: getSelectFnResult
 	 * ================================
 	 * Returns the value of the selectFn of the current node.
 	 * */
 	public double getSelectFnResult() {
-		return this.utility + Math.sqrt(2 * Math.log(this.parent.visits)/this.visits);
+		return this.utility/this.visits + Math.sqrt(2 * Math.log(this.parent.visits)/this.visits);
 	}
 
 	public MachineState getState() {
@@ -63,6 +75,10 @@ public class MonteCarloNode {
 
 	public int getNumChildren() {
 		return this.children.size();
+	}
+
+	public MonteCarloNode getParent() {
+		return parent;
 	}
 
 	public ArrayList<MonteCarloNode> getChildren() {

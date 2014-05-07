@@ -1,9 +1,13 @@
 package org.ggp.base.player.gamer.statemachine.sample;
 
 import java.util.List;
+import java.util.Map;
 
 import org.ggp.base.player.gamer.event.GamerSelectedMoveEvent;
+import org.ggp.base.util.statemachine.MachineState;
 import org.ggp.base.util.statemachine.Move;
+import org.ggp.base.util.statemachine.Role;
+import org.ggp.base.util.statemachine.StateMachine;
 import org.ggp.base.util.statemachine.exceptions.GoalDefinitionException;
 import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException;
 import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
@@ -17,6 +21,9 @@ public final class BaB_MCTSGamer extends SampleGamer
 	 * before the timeout.
 	 *
 	 */
+	private Map<Role, Integer> roleIndices;
+	private Role myRole;
+
 	@Override
 	public Move stateMachineSelectMove(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
@@ -30,7 +37,8 @@ public final class BaB_MCTSGamer extends SampleGamer
 		 * Move to play is the goal of GGP.
 		 */
 		List<Move> moves = getStateMachine().getLegalMoves(getCurrentState(), getRole());
-
+		roleIndices = getStateMachine().getRoleIndices();
+		myRole = getRole();
 		// SampleLegalGamer is very simple : it picks the first legal move
 		Move selection = moves.get(0);
 
@@ -46,6 +54,49 @@ public final class BaB_MCTSGamer extends SampleGamer
 		 */
 		notifyObservers(new GamerSelectedMoveEvent(moves, selection, stop - start));
 		return selection;
+	}
+
+	public void expandMax(MonteCarloNode node) throws MoveDefinitionException, TransitionDefinitionException {
+		List<Move> myLegalMoves = getStateMachine().getLegalMoves(node.getState(), getRole());
+		for (Move move : myLegalMoves) {
+			MonteCarloNode newNode = new MonteCarloNode(null, false, node);
+			node.addChild(newNode);
+			expandMin(newNode, move);
+		}
+	}
+
+	public void expandMin(MonteCarloNode node, Move myMove) throws MoveDefinitionException, TransitionDefinitionException {
+		List<List<Move> > jointLegalMoves = getStateMachine().getLegalJointMoves(node.getParent().getState(), myRole, myMove);
+
+		for (List<Move> jointLegalMove : jointLegalMoves) {
+			Move currMove = jointLegalMove.get(roleIndices.get(myRole));
+			if (currMove.equals(myMove)) {
+				MachineState newState = getStateMachine().getNextState(node.getParent().getState(), jointLegalMove);
+				MonteCarloNode newNode = new MonteCarloNode(newState, true, node);
+				node.addChild(newNode);
+			}
+		}
+	}
+
+	int performDepthChargeFromMove(MachineState theState, Move myMove) {
+	    StateMachine theMachine = getStateMachine();
+	    int depth[];
+	    try {
+            MachineState finalState = theMachine.performDepthCharge(theMachine.getRandomNextState(theState, getRole(), myMove), depth);
+            return theMachine.getGoal(finalState, getRole());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+	}
+
+	public int simulateToTerminal(MonteCarloNode node) {
+		StateMachine theMachine = getStateMachine();
+		List<Moves>
+
+		MachineState finalState = theMachine.performDepthCharge(theMachine.getRandomNextState(theState, getRole(), )
+		return theMachine.getGoal(finalState, myRole);
+		return 0;
 	}
 
 	public MonteCarloNode select(MonteCarloNode node) {
