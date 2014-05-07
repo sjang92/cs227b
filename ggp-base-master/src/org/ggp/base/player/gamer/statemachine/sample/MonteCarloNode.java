@@ -3,6 +3,7 @@ package org.ggp.base.player.gamer.statemachine.sample;
 import java.util.ArrayList;
 
 import org.ggp.base.util.statemachine.MachineState;
+import org.ggp.base.util.statemachine.Move;
 
 public class MonteCarloNode {
 
@@ -13,15 +14,18 @@ public class MonteCarloNode {
 	private int visits;
 	private int utility;
 	public boolean isMax;
+	public Move moveIfMin;
 
 
 	/* Constructor: takes the state as the param. */
-	public MonteCarloNode(MachineState state, boolean isMax, MonteCarloNode parent) {
+	public MonteCarloNode(MachineState state, boolean isMax, Move move, MonteCarloNode parent) {
 		this.state = state;
 		this.children = new ArrayList<MonteCarloNode>();
-		this.visits = 0;
+		this.visits = 1;
 		this.utility = 0;
 		this.isMax = isMax;
+		if (!isMax) moveIfMin = move;
+			else moveIfMin = null;
 		this.parent = parent;
 	}
 
@@ -55,7 +59,7 @@ public class MonteCarloNode {
 	 * Returns the value of the selectFn of the current node.
 	 * */
 	public double getSelectFnResult() {
-		return this.utility/this.visits + Math.sqrt(2 * Math.log(this.parent.visits)/this.visits);
+		return this.utility/this.visits + Math.sqrt(Math.log(this.parent.visits)/this.visits);
 	}
 
 	public MachineState getState() {
