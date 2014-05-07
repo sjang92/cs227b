@@ -37,25 +37,40 @@ public final class BaB_MCTSGamer extends SampleGamer
 		 * Move to play is the goal of GGP.
 		 */
 		List<Move> moves = getStateMachine().getLegalMoves(getCurrentState(), getRole());
+	//	System.err.println(moves);
 		roleIndices = getStateMachine().getRoleIndices();
 		myRole = getRole();
 		MonteCarloNode root = new MonteCarloNode(getCurrentState(), true, null, null);
 		Move bestMove= moves.get(0);
-		int i = 0;
-		while (/*enough time*/ i < 10000) {// idk wtf i'm doing here -kev
+
+
+		while (/*enough time*/ System.currentTimeMillis() < timeout - 1000) {// idk wtf i'm doing here -kev
+			if (moves.size() == 1) break;
+
+			//selection
 			MonteCarloNode selection = select(root);
-			expandMax(selection);
+			//expansion
+			if (selection.isMax) expandMax(selection);
+				else expandMin(selection);
+			// simulation
 			int terminalValue = simulateToTerminal(selection);
+			// back-propagation
 			backpropagate(selection, terminalValue);
+
+			// determining best move with current tree
 			double topChildScore = 0;
 			MonteCarloNode topChild = null;
 			for (MonteCarloNode child : root.getChildren()) {
 				if (child.getAverageUtility() > topChildScore) {
 					topChildScore = child.getAverageUtility();
 					topChild = child;
+			//		System.err.println("UPDATED TOP CHILD");
 				}
 			}
-			if (topChild != null) bestMove = topChild.moveIfMin;
+			if (topChild != null) {
+				bestMove = topChild.moveIfMin;
+			//	System.err.println("UPDATED BEST MOVE");
+			}
 		}
 
 
@@ -69,20 +84,23 @@ public final class BaB_MCTSGamer extends SampleGamer
 		 * moves, selection, stop and start defined in the same way as
 		 * this example, and copy-paste these two lines in your player
 		 */
+		System.err.println(bestMove);
 		notifyObservers(new GamerSelectedMoveEvent(moves, bestMove, stop - start));
-		return null;
+		return bestMove;
 	}
 
 	public void expandMax(MonteCarloNode node) throws MoveDefinitionException, TransitionDefinitionException {
 		List<Move> myLegalMoves = getStateMachine().getLegalMoves(node.getState(), getRole());
 		for (Move move : myLegalMoves) {
-			MonteCarloNode newNode = new MonteCarloNode(null, false, move, node);
+			MonteCarloNode newNode = new MonteCarloNode(node.getState(), false, move, node);
 			node.addChild(newNode);
-			expandMin(newNode, move);
+			//expandMin(newNode, move); // we don't want to create all the grandchildren
 		}
 	}
 
-	public void expandMin(MonteCarloNode node, Move myMove) throws MoveDefinitionException, TransitionDefinitionException {
+	// adds the
+	public void expandMin(MonteCarloNode node) throws MoveDefinitionException, TransitionDefinitionException {
+		Move myMove = node.moveIfMin;
 		List<List<Move> > jointLegalMoves = getStateMachine().getLegalJointMoves(node.getParent().getState(), myRole, myMove);
 
 		for (List<Move> jointLegalMove : jointLegalMoves) {
@@ -98,7 +116,13 @@ public final class BaB_MCTSGamer extends SampleGamer
 	public int simulateToTerminal(MonteCarloNode node) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException {
 		StateMachine theMachine = getStateMachine();
 		int depth[] = new int[1];
-		MachineState finalState = theMachine.performDepthCharge(node.getState(), depth);
+		MachineState finalState;
+		if (node.isMax) {
+			finalState = theMachine.performDepthCharge(node.getState(), depth);
+		} else { // isMin
+			MachineState nextState = theMachine.getRandomNextState(node.getState(), myRole, node.moveIfMin);
+			finalState = theMachine.performDepthCharge(nextState, depth);
+		}
 		//MachineState finalState = theMachine.performDepthCharge(theMachine.getRandomNextState(node.getState(), getRole(), theMachine.getRandomMove(node.getState(), myRole)), depth);
 		return theMachine.getGoal(finalState, myRole);
 

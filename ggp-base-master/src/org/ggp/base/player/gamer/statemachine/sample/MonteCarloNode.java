@@ -21,7 +21,7 @@ public class MonteCarloNode {
 	public MonteCarloNode(MachineState state, boolean isMax, Move move, MonteCarloNode parent) {
 		this.state = state;
 		this.children = new ArrayList<MonteCarloNode>();
-		this.visits = 1;
+		this.visits = 0;
 		this.utility = 0;
 		this.isMax = isMax;
 		if (!isMax) moveIfMin = move;
@@ -43,6 +43,7 @@ public class MonteCarloNode {
 	}
 
 	public double getAverageUtility() {
+		if (this.visits == 0) return 0;
 		return this.utility/this.visits;
 	}
 
