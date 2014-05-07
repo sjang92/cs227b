@@ -1,0 +1,88 @@
+LOG 1399502656017 [L0]: [Received at 1399502656017] ( START kiosk.ticTacToe-1399502655870 xplayer (( role xplayer ) ( role oplayer ) ( index 1 ) ( index 2 ) ( index 3 ) ( <= ( base ( cell ?x ?y b ) ) ( index ?x ) ( index ?y ) ) ( <= ( base ( cell ?x ?y x ) ) ( index ?x ) ( index ?y ) ) ( <= ( base ( cell ?x ?y o ) ) ( index ?x ) ( index ?y ) ) ( <= ( base ( control ?p ) ) ( role ?p ) ) ( <= ( input ?p ( mark ?x ?y ) ) ( index ?x ) ( index ?y ) ( role ?p ) ) ( <= ( input ?p noop ) ( role ?p ) ) ( init ( cell 1 1 b ) ) ( init ( cell 1 2 b ) ) ( init ( cell 1 3 b ) ) ( init ( cell 2 1 b ) ) ( init ( cell 2 2 b ) ) ( init ( cell 2 3 b ) ) ( init ( cell 3 1 b ) ) ( init ( cell 3 2 b ) ) ( init ( cell 3 3 b ) ) ( init ( control xplayer ) ) ( <= ( next ( cell ?m ?n x ) ) ( does xplayer ( mark ?m ?n ) ) ( true ( cell ?m ?n b ) ) ) ( <= ( next ( cell ?m ?n o ) ) ( does oplayer ( mark ?m ?n ) ) ( true ( cell ?m ?n b ) ) ) ( <= ( next ( cell ?m ?n ?w ) ) ( true ( cell ?m ?n ?w ) ) ( distinct ?w b ) ) ( <= ( next ( cell ?m ?n b ) ) ( does ?w ( mark ?j ?k ) ) ( true ( cell ?m ?n b ) ) ( or ( distinct ?m ?j ) ( distinct ?n ?k ) ) ) ( <= ( next ( control xplayer ) ) ( true ( control oplayer ) ) ) ( <= ( next ( control oplayer ) ) ( true ( control xplayer ) ) ) ( <= ( row ?m ?x ) ( true ( cell ?m 1 ?x ) ) ( true ( cell ?m 2 ?x ) ) ( true ( cell ?m 3 ?x ) ) ) ( <= ( column ?n ?x ) ( true ( cell 1 ?n ?x ) ) ( true ( cell 2 ?n ?x ) ) ( true ( cell 3 ?n ?x ) ) ) ( <= ( diagonal ?x ) ( true ( cell 1 1 ?x ) ) ( true ( cell 2 2 ?x ) ) ( true ( cell 3 3 ?x ) ) ) ( <= ( diagonal ?x ) ( true ( cell 1 3 ?x ) ) ( true ( cell 2 2 ?x ) ) ( true ( cell 3 1 ?x ) ) ) ( <= ( line ?x ) ( row ?m ?x ) ) ( <= ( line ?x ) ( column ?m ?x ) ) ( <= ( line ?x ) ( diagonal ?x ) ) ( <= open ( true ( cell ?m ?n b ) ) ) ( <= ( legal ?w ( mark ?x ?y ) ) ( true ( cell ?x ?y b ) ) ( true ( control ?w ) ) ) ( <= ( legal xplayer noop ) ( true ( control oplayer ) ) ) ( <= ( legal oplayer noop ) ( true ( control xplayer ) ) ) ( <= ( goal xplayer 100 ) ( line x ) ) ( <= ( goal xplayer 50 ) ( not ( line x ) ) ( not ( line o ) ) ( not open ) ) ( <= ( goal xplayer 0 ) ( line o ) ) ( <= ( goal oplayer 100 ) ( line o ) ) ( <= ( goal oplayer 50 ) ( not ( line x ) ) ( not ( line o ) ) ( not open ) ) ( <= ( goal oplayer 0 ) ( line x ) ) ( <= terminal ( line x ) ) ( <= terminal ( line o ) ) ( <= terminal ( not open ) ) ) 2 10)
+LOG 1399502656019 [L0]: [Received at 1399502656019] ( START kiosk.ticTacToe-1399502655870 oplayer (( role xplayer ) ( role oplayer ) ( index 1 ) ( index 2 ) ( index 3 ) ( <= ( base ( cell ?x ?y b ) ) ( index ?x ) ( index ?y ) ) ( <= ( base ( cell ?x ?y x ) ) ( index ?x ) ( index ?y ) ) ( <= ( base ( cell ?x ?y o ) ) ( index ?x ) ( index ?y ) ) ( <= ( base ( control ?p ) ) ( role ?p ) ) ( <= ( input ?p ( mark ?x ?y ) ) ( index ?x ) ( index ?y ) ( role ?p ) ) ( <= ( input ?p noop ) ( role ?p ) ) ( init ( cell 1 1 b ) ) ( init ( cell 1 2 b ) ) ( init ( cell 1 3 b ) ) ( init ( cell 2 1 b ) ) ( init ( cell 2 2 b ) ) ( init ( cell 2 3 b ) ) ( init ( cell 3 1 b ) ) ( init ( cell 3 2 b ) ) ( init ( cell 3 3 b ) ) ( init ( control xplayer ) ) ( <= ( next ( cell ?m ?n x ) ) ( does xplayer ( mark ?m ?n ) ) ( true ( cell ?m ?n b ) ) ) ( <= ( next ( cell ?m ?n o ) ) ( does oplayer ( mark ?m ?n ) ) ( true ( cell ?m ?n b ) ) ) ( <= ( next ( cell ?m ?n ?w ) ) ( true ( cell ?m ?n ?w ) ) ( distinct ?w b ) ) ( <= ( next ( cell ?m ?n b ) ) ( does ?w ( mark ?j ?k ) ) ( true ( cell ?m ?n b ) ) ( or ( distinct ?m ?j ) ( distinct ?n ?k ) ) ) ( <= ( next ( control xplayer ) ) ( true ( control oplayer ) ) ) ( <= ( next ( control oplayer ) ) ( true ( control xplayer ) ) ) ( <= ( row ?m ?x ) ( true ( cell ?m 1 ?x ) ) ( true ( cell ?m 2 ?x ) ) ( true ( cell ?m 3 ?x ) ) ) ( <= ( column ?n ?x ) ( true ( cell 1 ?n ?x ) ) ( true ( cell 2 ?n ?x ) ) ( true ( cell 3 ?n ?x ) ) ) ( <= ( diagonal ?x ) ( true ( cell 1 1 ?x ) ) ( true ( cell 2 2 ?x ) ) ( true ( cell 3 3 ?x ) ) ) ( <= ( diagonal ?x ) ( true ( cell 1 3 ?x ) ) ( true ( cell 2 2 ?x ) ) ( true ( cell 3 1 ?x ) ) ) ( <= ( line ?x ) ( row ?m ?x ) ) ( <= ( line ?x ) ( column ?m ?x ) ) ( <= ( line ?x ) ( diagonal ?x ) ) ( <= open ( true ( cell ?m ?n b ) ) ) ( <= ( legal ?w ( mark ?x ?y ) ) ( true ( cell ?x ?y b ) ) ( true ( control ?w ) ) ) ( <= ( legal xplayer noop ) ( true ( control oplayer ) ) ) ( <= ( legal oplayer noop ) ( true ( control xplayer ) ) ) ( <= ( goal xplayer 100 ) ( line x ) ) ( <= ( goal xplayer 50 ) ( not ( line x ) ) ( not ( line o ) ) ( not open ) ) ( <= ( goal xplayer 0 ) ( line o ) ) ( <= ( goal oplayer 100 ) ( line o ) ) ( <= ( goal oplayer 50 ) ( not ( line x ) ) ( not ( line o ) ) ( not open ) ) ( <= ( goal oplayer 0 ) ( line x ) ) ( <= terminal ( line x ) ) ( <= terminal ( line o ) ) ( <= terminal ( not open ) ) ) 2 10)
+LOG 1399502656063 [L0]: [Sent at 1399502656063] ready
+LOG 1399502656092 [L0]: [Sent at 1399502656092] ready
+LOG 1399502656135 [L0]: [Received at 1399502656135] ( PLAY kiosk.ticTacToe-1399502655870 NIL )
+LOG 1399502656135 [L0]: [Received at 1399502656135] ( PLAY kiosk.ticTacToe-1399502655870 NIL )
+LOG 1399502656146 [L0]: [Sent at 1399502656146] noop
+LOG 1399502657632 [L0]: [Sent at 1399502657632] ( mark 1 3 )
+LOG 1399502657648 [L0]: [Received at 1399502657648] ( PLAY kiosk.ticTacToe-1399502655870 (( mark 1 3 ) noop ) )
+LOG 1399502657648 [L0]: [Received at 1399502657648] ( PLAY kiosk.ticTacToe-1399502655870 (( mark 1 3 ) noop ) )
+LOG 1399502657657 [L0]: [Sent at 1399502657657] noop
+LOG 1399502658219 [L9]: <ERR> There are no legal moves defined for oplayer in [( true ( cell 1 2 x ) ), ( true ( cell 1 3 x ) ), ( true ( cell 1 1 o ) ), ( true ( control oplayer ) ), ( true ( cell 2 3 o ) ), ( true ( cell 3 3 o ) ), ( true ( cell 2 1 x ) ), ( true ( cell 2 2 o ) ), ( true ( cell 3 1 x ) ), ( true ( cell 3 2 x ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getLegalMoves(ProverStateMachine.java:90)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getLegalMoves(CachedStateMachine.java:76)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.expandMax(BaB_MCTSGamer.java:178)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:63)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1399502658220 [L9]: <ERR> An unhandled exception ocurred during move selection: org.ggp.base.player.gamer.exception.MoveSelectionException: There are no legal moves defined for oplayer in [( true ( cell 1 2 x ) ), ( true ( cell 1 3 x ) ), ( true ( cell 1 1 o ) ), ( true ( control oplayer ) ), ( true ( cell 2 3 o ) ), ( true ( cell 3 3 o ) ), ( true ( cell 2 1 x ) ), ( true ( cell 2 2 o ) ), ( true ( cell 3 1 x ) ), ( true ( cell 3 2 x ) )]
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:215)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+Caused by: There are no legal moves defined for oplayer in [( true ( cell 1 2 x ) ), ( true ( cell 1 3 x ) ), ( true ( cell 1 1 o ) ), ( true ( control oplayer ) ), ( true ( cell 2 3 o ) ), ( true ( cell 3 3 o ) ), ( true ( cell 2 1 x ) ), ( true ( cell 2 2 o ) ), ( true ( cell 3 1 x ) ), ( true ( cell 3 2 x ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getLegalMoves(ProverStateMachine.java:90)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getLegalMoves(CachedStateMachine.java:76)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.expandMax(BaB_MCTSGamer.java:178)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:63)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	... 2 more
+LOG 1399502658220 [L0]: [Sent at 1399502658220] nil
+LOG 1399502658223 [L0]: [Received at 1399502658223] ( PLAY kiosk.ticTacToe-1399502655870 (noop ( mark 3 3 ) ) )
+LOG 1399502658223 [L0]: [Received at 1399502658223] ( PLAY kiosk.ticTacToe-1399502655870 (noop ( mark 3 3 ) ) )
+LOG 1399502658227 [L0]: [Sent at 1399502658227] noop
+LOG 1399502796343 [L0]: [Sent at 1399502796343] ( mark 2 2 )
+LOG 1399502796347 [L0]: [Received at 1399502796347] ( PLAY kiosk.ticTacToe-1399502655870 (( mark 2 2 ) noop ) )
+LOG 1399502796347 [L0]: [Received at 1399502796347] ( PLAY kiosk.ticTacToe-1399502655870 (( mark 2 2 ) noop ) )
+LOG 1399502796352 [L0]: [Sent at 1399502796352] noop
+LOG 1399502796391 [L9]: <ERR> Goal is poorly defined for oplayer in [( true ( cell 1 2 x ) ), ( true ( cell 2 3 x ) ), ( true ( cell 1 3 x ) ), ( true ( cell 1 1 o ) ), ( true ( control oplayer ) ), ( true ( cell 3 3 o ) ), ( true ( cell 2 2 x ) ), ( true ( cell 2 1 o ) ), ( true ( cell 3 1 o ) ), ( true ( cell 3 2 x ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getGoal(ProverStateMachine.java:61)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getGoal(CachedStateMachine.java:61)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:212)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:66)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1399502796392 [L9]: <ERR> An unhandled exception ocurred during move selection: org.ggp.base.player.gamer.exception.MoveSelectionException: Goal is poorly defined for oplayer in [( true ( cell 1 2 x ) ), ( true ( cell 2 3 x ) ), ( true ( cell 1 3 x ) ), ( true ( cell 1 1 o ) ), ( true ( control oplayer ) ), ( true ( cell 3 3 o ) ), ( true ( cell 2 2 x ) ), ( true ( cell 2 1 o ) ), ( true ( cell 3 1 o ) ), ( true ( cell 3 2 x ) )]
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:215)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+Caused by: Goal is poorly defined for oplayer in [( true ( cell 1 2 x ) ), ( true ( cell 2 3 x ) ), ( true ( cell 1 3 x ) ), ( true ( cell 1 1 o ) ), ( true ( control oplayer ) ), ( true ( cell 3 3 o ) ), ( true ( cell 2 2 x ) ), ( true ( cell 2 1 o ) ), ( true ( cell 3 1 o ) ), ( true ( cell 3 2 x ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getGoal(ProverStateMachine.java:61)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getGoal(CachedStateMachine.java:61)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:212)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:66)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	... 2 more
+LOG 1399502796392 [L0]: [Sent at 1399502796392] nil
+LOG 1399502796395 [L0]: [Received at 1399502796395] ( PLAY kiosk.ticTacToe-1399502655870 (noop ( mark 3 1 ) ) )
+LOG 1399502796395 [L0]: [Received at 1399502796395] ( PLAY kiosk.ticTacToe-1399502655870 (noop ( mark 3 1 ) ) )
+LOG 1399502796396 [L0]: [Sent at 1399502796396] noop
+LOG 1399502799557 [L0]: [Sent at 1399502799557] ( mark 2 1 )
+LOG 1399502799561 [L0]: [Received at 1399502799561] ( PLAY kiosk.ticTacToe-1399502655870 (( mark 2 1 ) noop ) )
+LOG 1399502799561 [L0]: [Received at 1399502799561] ( PLAY kiosk.ticTacToe-1399502655870 (( mark 2 1 ) noop ) )
+LOG 1399502799564 [L0]: [Sent at 1399502799564] noop
+LOG 1399502799580 [L9]: <ERR> Goal is poorly defined for oplayer in [( true ( cell 2 3 x ) ), ( true ( cell 1 3 x ) ), ( true ( control oplayer ) ), ( true ( cell 1 1 b ) ), ( true ( cell 3 3 o ) ), ( true ( cell 2 2 x ) ), ( true ( cell 2 1 x ) ), ( true ( cell 3 2 o ) ), ( true ( cell 3 1 o ) ), ( true ( cell 1 2 b ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getGoal(ProverStateMachine.java:61)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getGoal(CachedStateMachine.java:61)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:212)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:66)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1399502799581 [L9]: <ERR> An unhandled exception ocurred during move selection: org.ggp.base.player.gamer.exception.MoveSelectionException: Goal is poorly defined for oplayer in [( true ( cell 2 3 x ) ), ( true ( cell 1 3 x ) ), ( true ( control oplayer ) ), ( true ( cell 1 1 b ) ), ( true ( cell 3 3 o ) ), ( true ( cell 2 2 x ) ), ( true ( cell 2 1 x ) ), ( true ( cell 3 2 o ) ), ( true ( cell 3 1 o ) ), ( true ( cell 1 2 b ) )]
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:215)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+Caused by: Goal is poorly defined for oplayer in [( true ( cell 2 3 x ) ), ( true ( cell 1 3 x ) ), ( true ( control oplayer ) ), ( true ( cell 1 1 b ) ), ( true ( cell 3 3 o ) ), ( true ( cell 2 2 x ) ), ( true ( cell 2 1 x ) ), ( true ( cell 3 2 o ) ), ( true ( cell 3 1 o ) ), ( true ( cell 1 2 b ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getGoal(ProverStateMachine.java:61)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getGoal(CachedStateMachine.java:61)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:212)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:66)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	... 2 more
+LOG 1399502799581 [L0]: [Sent at 1399502799581] nil
+LOG 1399502799584 [L0]: [Received at 1399502799584] ( PLAY kiosk.ticTacToe-1399502655870 (noop ( mark 1 2 ) ) )
+LOG 1399502799584 [L0]: [Received at 1399502799584] ( PLAY kiosk.ticTacToe-1399502655870 (noop ( mark 1 2 ) ) )
+LOG 1399502799584 [L0]: [Sent at 1399502799584] noop

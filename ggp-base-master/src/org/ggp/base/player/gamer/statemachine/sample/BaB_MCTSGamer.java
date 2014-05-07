@@ -2,6 +2,7 @@ package org.ggp.base.player.gamer.statemachine.sample;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.ggp.base.player.gamer.event.GamerSelectedMoveEvent;
 import org.ggp.base.util.statemachine.MachineState;
@@ -42,34 +43,50 @@ public final class BaB_MCTSGamer extends SampleGamer
 		myRole = getRole();
 		MonteCarloNode root = new MonteCarloNode(getCurrentState(), true, null, null);
 		Move bestMove= moves.get(0);
-
+		MonteCarloNode bestNode = null;
 
 		while (/*enough time*/ System.currentTimeMillis() < timeout - 1000) {// idk wtf i'm doing here -kev
 			if (moves.size() == 1) break;
 
 			//selection
 			MonteCarloNode selection = select(root);
+
 			//expansion
+			expandGeneral(selection);
+			Random rand = new Random();
+			//System.out.print("Number of Children at current Node: "+selection.getNumChildren()+"\n");
+			//MonteCarloNode randomChild = selection.getChildAtIndex(rand.nextInt(selection.getNumChildren()));
+			//int terminalValue = simulateToTerminal(randomChild);
+			//backpropagate(randomChild, terminalValue);
+			int terminalValue = simulateToTerminal(selection);
+			backpropagate(selection, terminalValue);
+
+			//backpropagate();
+			/*
 			if (selection.isMax) expandMax(selection);
 				else expandMin(selection);
 			// simulation
 			int terminalValue = simulateToTerminal(selection);
 			// back-propagation
 			backpropagate(selection, terminalValue);
-
+			*/
 			// determining best move with current tree
 			double topChildScore = 0;
 			MonteCarloNode topChild = null;
 			for (MonteCarloNode child : root.getChildren()) {
+
 				if (child.getAverageUtility() > topChildScore) {
 					topChildScore = child.getAverageUtility();
 					topChild = child;
+
 			//		System.err.println("UPDATED TOP CHILD");
 				}
 			}
 			if (topChild != null) {
 				bestMove = topChild.moveIfMin;
-			//	System.err.println("UPDATED BEST MOVE");
+				bestNode = topChild;
+				System.out.print("Average Utility of this child: "+bestNode.getAverageUtility()+"\n");
+				System.err.println("UPDATED BEST MOVE\n");
 			}
 		}
 
@@ -85,10 +102,86 @@ public final class BaB_MCTSGamer extends SampleGamer
 		 * this example, and copy-paste these two lines in your player
 		 */
 		System.err.println(bestMove);
+
 		notifyObservers(new GamerSelectedMoveEvent(moves, bestMove, stop - start));
 		return bestMove;
 	}
 
+	/* function: expandGeneral
+	 * ===========================================================================
+	 * In this way of expansion, we have no intermediate nodes. We have nodes for every possible joint legal moves.
+	 * @ Parameter
+	 * 		- MonteCarloNode node: this is assumed to have a state stored in it.
+	 * 							Since we're dealing with all possible joint moves.
+	 * */
+	public void expandGeneral(MonteCarloNode node) throws MoveDefinitionException, TransitionDefinitionException {
+
+
+		/* Get all legal joint moves from the current node we're looking at*/
+		List<List<Move> > jointLegalMoves = getStateMachine().getLegalJointMoves(node.getState());
+
+		/* Iterate through each joint legal moves, create node for them */
+		for (List<Move> jointLegalMove : jointLegalMoves) {
+			MachineState nextState = null;
+			if (node.getParent() == null)
+				nextState = getStateMachine().getNextState(getCurrentState(), jointLegalMove);
+			else
+				nextState = getStateMachine().getNextState(node.getParent().getState(), jointLegalMove);
+
+			Move originMove = jointLegalMove.get(roleIndices.get(myRole));
+
+			MonteCarloNode newNode = new MonteCarloNode(nextState, true, originMove, node);
+			node.addChild(newNode);
+		}
+	}
+
+	/* function: simulateToTerminal
+	 * ===========================================================================
+	 * Since in this implementation we only have max nodes, there's no need to check ifMax or not.
+	 * Just depth charge directly. */
+	public int simulateToTerminal(MonteCarloNode node) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException {
+		StateMachine theMachine = getStateMachine();
+		int depth[] = new int[1];
+		MachineState finalState;
+		finalState = theMachine.performDepthCharge(node.getState(), depth);
+		//System.out.print("Depth From Current Node: " + depth[0]);
+		//MachineState finalState = theMachine.performDepthCharge(theMachine.getRandomNextState(node.getState(), getRole(), theMachine.getRandomMove(node.getState(), myRole)), depth);
+		return theMachine.getGoal(finalState, myRole);
+	}
+
+	public MonteCarloNode select(MonteCarloNode node) {
+		if (node.getNumVisits() == 0 || node.getNumChildren() == 0) return node;
+		else {
+			for (MonteCarloNode childNode : node.getChildren()) {
+				if (childNode.getNumVisits() == 0) return childNode;
+			}
+
+			double score = 0;
+			MonteCarloNode resultNode = node;
+			for (MonteCarloNode childNode : node.getChildren()) {
+				double newScore = childNode.getSelectFnResult();
+				if (newScore > score) {
+					score = newScore;
+					resultNode = childNode;
+				}
+			}
+			return select(resultNode);
+		}
+	}
+
+	private boolean backpropagate(MonteCarloNode node, int reward) {
+		node.setNumVisits(node.getNumVisits() + 1);
+		node.setUtility(node.getUtility() + reward);
+		if (node.getParent() != null) backpropagate(node.getParent(), reward);
+		return true;
+	}
+
+	/* ==========================================================================================
+	 * ==========================================================================================*/
+	/* PREV IMPLEMENTATION
+	 * ==========================================================================================
+	 * ==========================================================================================*/
+	/*
 	public void expandMax(MonteCarloNode node) throws MoveDefinitionException, TransitionDefinitionException {
 		List<Move> myLegalMoves = getStateMachine().getLegalMoves(node.getState(), getRole());
 		for (Move move : myLegalMoves) {
@@ -128,25 +221,6 @@ public final class BaB_MCTSGamer extends SampleGamer
 
 	}
 
-	public MonteCarloNode select(MonteCarloNode node) {
-		if (node.getNumVisits() == 0) return node;
-		else {
-			for (MonteCarloNode childNode : node.getChildren()) {
-				if (childNode.getNumVisits() == 0) return childNode;
-			}
-
-			double score = 0;
-			MonteCarloNode resultNode = node;
-			for (MonteCarloNode childNode : node.getChildren()) {
-				double newScore = childNode.getSelectFnResult();
-				if (newScore > score) {
-					score = newScore;
-					resultNode = childNode;
-				}
-			}
-			return resultNode;
-		}
-	}
 
 	private boolean backpropagate(MonteCarloNode node, int reward) {
 		node.setNumVisits(node.getNumVisits() + 1);
@@ -154,4 +228,5 @@ public final class BaB_MCTSGamer extends SampleGamer
 		if (node.getParent() != null) backpropagate(node.getParent(), reward);
 		return true;
 	}
+	*/
 }

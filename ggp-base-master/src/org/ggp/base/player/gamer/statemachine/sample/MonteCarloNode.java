@@ -24,8 +24,10 @@ public class MonteCarloNode {
 		this.visits = 0;
 		this.utility = 0;
 		this.isMax = isMax;
+		/*
 		if (!isMax) moveIfMin = move;
-			else moveIfMin = null;
+			else moveIfMin = null;*/
+		this.moveIfMin = move;
 		this.parent = parent;
 	}
 
@@ -71,11 +73,11 @@ public class MonteCarloNode {
 		this.state = state;
 	}
 
-	public void getChildAtIndex(int i) {
+	public MonteCarloNode getChildAtIndex(int i) {
 		if (i >= this.children.size()) {
 			System.out.print("Index Out of Bounds Error at MonteCarloNode getChildAtIndex");
 		}
-		this.children.get(i);
+		return this.children.get(i);
 	}
 
 	public int getNumChildren() {
