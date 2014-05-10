@@ -49,7 +49,8 @@ public final class BaB_MCTSGamer extends SampleGamer
 			MonteCarloNode selection = select(root);
 			System.out.print("Selected Node is Max? : " + selection.isMax+"\n"); // should always be max? no...
 			if (selection.isMax) expandMax(selection);
-			else expandMin(selection);
+			//else expandMin(selection);
+			//expandMax(selection);
 			int terminalValue = simulateToTerminal(selection);
 			backpropagate(selection, terminalValue);
 		}
@@ -86,10 +87,12 @@ public final class BaB_MCTSGamer extends SampleGamer
 	public MonteCarloNode select(MonteCarloNode node) {
 		if (node.getNumVisits() == 0 || node.getNumChildren() == 0) return node;
 		else {
+			if (node.isMax) System.out.print("PASSED IN A MAX NODE\n");
+			else System.out.print("PASSED IN A MIN NODE\n");
+			System.out.print("Num Nodes Generated Uptil Now: "+MonteCarloNode.numNodesConstructed+ "\n");
 			for (MonteCarloNode childNode : node.getChildren()) {
 				if (childNode.getNumVisits() == 0) return childNode;
 			}
-
 			double score = 0;
 			MonteCarloNode resultNode = node;
 			for (MonteCarloNode childNode : node.getChildren()) {
@@ -112,10 +115,14 @@ public final class BaB_MCTSGamer extends SampleGamer
 	 * that are created from this function call do not have states.
 	 * */
 	public void expandMax(MonteCarloNode node) throws MoveDefinitionException, TransitionDefinitionException {
+		System.out.print("EXPAND MAX CALLED!! \n");
+
 		if (getStateMachine().isTerminal(node.getState()))
 			return;
+		if (node.getNumChildren() != 0) {
+			return;
+		}
 
-		System.out.print("EXPAND MAX!! \n");
 		/* Get all my legal moves */
 		List<Move> myLegalMoves = getStateMachine().getLegalMoves(node.getState(), getRole());
 
@@ -125,7 +132,7 @@ public final class BaB_MCTSGamer extends SampleGamer
 			/* Create new min node and append it to the max node we started from. */
 			MonteCarloNode newNode = new MonteCarloNode(null, false, move, node); // no states + not maxnode + the move that I made + parent
 			node.addChild(newNode);
-			//expandMin(newNode); // we don't want to create all the grandchildren??
+			expandMin(newNode); // we don't want to create all the grandchildren??
 		}
 	}
 
@@ -136,7 +143,9 @@ public final class BaB_MCTSGamer extends SampleGamer
 	 * that opponents can make from the given move.
 	 */
 	public void expandMin(MonteCarloNode node) throws MoveDefinitionException, TransitionDefinitionException {
-
+		if (node.getNumChildren() != 0) {
+			return;
+		}
 		/* Get prev my Move */
 		Move myMove = node.moveIfMin;
 

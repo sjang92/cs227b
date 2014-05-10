@@ -15,7 +15,7 @@ public class MonteCarloNode {
 	private int utility;
 	public boolean isMax;
 	public Move moveIfMin;
-
+	public static int numNodesConstructed = 0;
 
 	/* Constructor: takes the state as the param. */
 	public MonteCarloNode(MachineState state, boolean isMax, Move move, MonteCarloNode parent) {
@@ -29,6 +29,8 @@ public class MonteCarloNode {
 			else this.moveIfMin = null;
 		//this.moveIfMin = move;
 		this.parent = parent;
+
+		numNodesConstructed++;
 	}
 
 	/* Getters & Setters */
