@@ -7,10 +7,10 @@ import org.ggp.base.util.statemachine.Move;
 
 public class MonteCarloNode {
 
+	/* Instance variables */
 	private MonteCarloNode parent;
 	private MachineState state;
 	private ArrayList<MonteCarloNode> children;
-	//private Role role; // the one who needs to make the next move from here.
 	private int visits;
 	private int utility;
 	public boolean isMax;
@@ -24,14 +24,16 @@ public class MonteCarloNode {
 		this.visits = 0;
 		this.utility = 0;
 		this.isMax = isMax;
-		/*
-		if (!isMax) moveIfMin = move;
-			else moveIfMin = null;*/
-		this.moveIfMin = move;
+
+		if (!isMax) this.moveIfMin = move;
+			else this.moveIfMin = null;
+		//this.moveIfMin = move;
 		this.parent = parent;
 	}
 
 	/* Getters & Setters */
+
+	/* NUM VISITS */
 	public int getNumVisits() {
 		return visits;
 	}
@@ -40,6 +42,7 @@ public class MonteCarloNode {
 		this.visits = newVisits;
 	}
 
+	/* UTILITY */
 	public int getUtility() {
 		return utility;
 	}
@@ -57,12 +60,17 @@ public class MonteCarloNode {
 		this.visits++;
 		this.utility += incUtility;
 	}
+
 	/* Function: getSelectFnResult
 	 * ================================
 	 * Returns the value of the selectFn of the current node.
 	 * */
 	public double getSelectFnResult() {
-		return this.utility/this.visits + Math.sqrt(Math.log(this.parent.visits)/this.visits);
+		if (this.isMax) {
+			return this.utility/this.visits + Math.sqrt(Math.log(this.parent.visits)/this.visits);
+		} else {
+			return -(this.utility/this.visits + Math.sqrt(Math.log(this.parent.visits)/this.visits));
+		}
 	}
 
 	public MachineState getState() {
@@ -74,9 +82,8 @@ public class MonteCarloNode {
 	}
 
 	public MonteCarloNode getChildAtIndex(int i) {
-		if (i >= this.children.size()) {
+		if (i >= this.children.size())
 			System.out.print("Index Out of Bounds Error at MonteCarloNode getChildAtIndex");
-		}
 		return this.children.get(i);
 	}
 

@@ -1,0 +1,27 @@
+LOG 1399754022853 [L9]: <ERR> (in GamePlayer) java.lang.NullPointerException
+	at org.ggp.base.util.statemachine.implementation.prover.query.ProverQueryBuilder.getContext(ProverQueryBuilder.java:33)
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getLegalMoves(ProverStateMachine.java:86)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getLegalMoves(CachedStateMachine.java:76)
+	at org.ggp.base.util.statemachine.StateMachine.getRandomMove(StateMachine.java:323)
+	at org.ggp.base.util.statemachine.StateMachine.getRandomJointMove(StateMachine.java:310)
+	at org.ggp.base.util.statemachine.StateMachine.getRandomNextState(StateMachine.java:354)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:167)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:53)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1399754022854 [L9]: <ERR> (in GamePlayer) An unhandled exception ocurred during move selection: org.ggp.base.player.gamer.exception.MoveSelectionException: java.lang.NullPointerException
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:215)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+Caused by: java.lang.NullPointerException
+	at org.ggp.base.util.statemachine.implementation.prover.query.ProverQueryBuilder.getContext(ProverQueryBuilder.java:33)
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getLegalMoves(ProverStateMachine.java:86)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getLegalMoves(CachedStateMachine.java:76)
+	at org.ggp.base.util.statemachine.StateMachine.getRandomMove(StateMachine.java:323)
+	at org.ggp.base.util.statemachine.StateMachine.getRandomJointMove(StateMachine.java:310)
+	at org.ggp.base.util.statemachine.StateMachine.getRandomNextState(StateMachine.java:354)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:167)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:53)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	... 2 more
