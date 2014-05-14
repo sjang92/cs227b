@@ -193,13 +193,13 @@ public final class BaB_MCTSGamer extends SampleGamer
 	public int simulateToTerminal(MonteCarloNode node) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException {
 		/* Declare depth and final state variables */
 		int depth[] = new int[1];
-		MachineState currState;
+		//MachineState currState;
 
 		/* If max, currState is give. If min, get random currState from currMove.*/
-		if (node.isMax) currState = node.getState();
-		else currState = getStateMachine().getRandomNextState(node.getParent().getState(), myRole, node.moveIfMin);
+		//if (node.isMax) currState = node.getState();
+		//else currState = getStateMachine().getRandomNextState(node.getParent().getState(), myRole, node.moveIfMin);
 
-		MachineState finalState = getStateMachine().performDepthCharge(currState, depth);
+		MachineState finalState = getStateMachine().performDepthCharge(node.getState(), depth);
 		return getStateMachine().getGoal(finalState, myRole);
 	}
 
