@@ -40,19 +40,22 @@ public final class BaB_MCTSGamer extends SampleGamer
 		myRole = getRole();
 		MonteCarloNode root = new MonteCarloNode(getCurrentState(), true, null, null);
 		Move bestMove= moves.get(0);
-		MonteCarloNode bestNode = null;
+//		MonteCarloNode bestNode = null;
+
 
 		while (/*enough time*/ System.currentTimeMillis() < timeout - 1000) { // loop until 1 second is left.
 			if (moves.size() == 1) break;
 
 			/* MCTS Routine: Select -> Expand -> Simulate -> Backpropagate */
 			MonteCarloNode selection = select(root);
-			System.out.print("Selected Node is Max? : " + selection.isMax+"\n"); // should always be max? no...
-			if (selection.isMax) expandMax(selection);
+			System.out.print("Selected Node is Max? : " + selection.isMax+"\n"); // should always be max? no... (Kev: no, sometimes min)
+			//if (selection.isMax) expandMax(selection);
 			//else expandMin(selection);
-			//expandMax(selection);
+			expandGeneral(selection);
 			int terminalValue = simulateToTerminal(selection);
 			backpropagate(selection, terminalValue);
+
+			System.out.print("~~~~~~~~~~~~~~~Round Complete~~~~~~~~~~~~~~~~~\n");
 		}
 
 		/* Get Best Move*/
@@ -85,23 +88,35 @@ public final class BaB_MCTSGamer extends SampleGamer
 	 * ==========================================================================================*/
 
 	public MonteCarloNode select(MonteCarloNode node) {
-		if (node.getNumVisits() == 0 || node.getNumChildren() == 0) return node;
+		if (node.getNumVisits() == 0 || node.getNumChildren() == 0) {
+			System.out.print("Recursion base case reached\n");
+			return node;
+		}
 		else {
 			if (node.isMax) System.out.print("PASSED IN A MAX NODE\n");
 			else System.out.print("PASSED IN A MIN NODE\n");
 			System.out.print("Num Nodes Generated Uptil Now: "+MonteCarloNode.numNodesConstructed+ "\n");
 			for (MonteCarloNode childNode : node.getChildren()) {
-				if (childNode.getNumVisits() == 0) return childNode;
+				if (childNode.getNumVisits() == 0) {
+					System.out.print("Recursion base case reached\n");
+					return childNode;
+				}
 			}
-			double score = 0;
+			double score = Integer.MAX_VALUE;
+			if (node.isMax) score = 0; //node passed in is max, looking for maximum among min-children
 			MonteCarloNode resultNode = node;
 			for (MonteCarloNode childNode : node.getChildren()) {
 				double newScore = childNode.getSelectFnResult();
-				if (newScore > score) {
-					score = newScore;
+				if (node.isMax && newScore > score) {  //node passed in is max, looking for maximum among min-children
 					resultNode = childNode;
+					score = newScore;
+				}
+				if (!node.isMax && newScore < score) { // node passed in is min, looking for minimum among max-children
+					resultNode = childNode;
+					score = newScore;
 				}
 			}
+			System.out.print("~~~recursive call to select~~~\n");
 			return select(resultNode);
 		}
 	}
@@ -119,7 +134,7 @@ public final class BaB_MCTSGamer extends SampleGamer
 
 		if (getStateMachine().isTerminal(node.getState()))
 			return;
-		if (node.getNumChildren() != 0) {
+		if (node.getNumChildren() != 0) { // does this have a purpose? why would expandMax ever be called on a node w/ children?
 			return;
 		}
 
@@ -132,29 +147,30 @@ public final class BaB_MCTSGamer extends SampleGamer
 			/* Create new min node and append it to the max node we started from. */
 			MonteCarloNode newNode = new MonteCarloNode(null, false, move, node); // no states + not maxnode + the move that I made + parent
 			node.addChild(newNode);
-			expandMin(newNode); // we don't want to create all the grandchildren??
+			//expandMin(newNode); // we don't want to create all the grandchildren?? (Kev: we do not create any grandkids)
 		}
 	}
 
 	/* Function: expandMin
 	 * ==========================================================================================
 	 * Expand from a min node. This would expand given a min node, all the max nodes that can come out of it.
-	 * This is done by getting the initial move that resulted in the min nodes, and then getting all the joint moves
+	 * This is done by getting the initial move that resulted in the min node, and then getting all the joint moves
 	 * that opponents can make from the given move.
 	 */
 	public void expandMin(MonteCarloNode node) throws MoveDefinitionException, TransitionDefinitionException {
-		if (node.getNumChildren() != 0) {
+		System.out.print("EXPAND MIN CALLED!!\n");
+		if (node.getNumChildren() != 0) { // does this have a purpose? why would expandMax ever be called on a node w/ children?
 			return;
 		}
 		/* Get prev my Move */
 		Move myMove = node.moveIfMin;
 
 		/* Get all combinations of myMove and opponents move */
-		List<List<Move> > jointLegalMoves = getStateMachine().getLegalJointMoves(node.getParent().getState(), myRole, myMove);
+		List<List<Move> > jointLegalMoves = getStateMachine().getLegalJointMoves(node.getParent().getState()/*, myRole, myMove*/);
 
-		/* Iterate through all combinations */
+		/* Iterate through all combinations */ // (Kev: only combos that have myMove are in here due to above param passing)
 		for (List<Move> jointLegalMove : jointLegalMoves) {
-			Move currMove = jointLegalMove.get(roleIndices.get(myRole));
+			Move currMove = jointLegalMove.get(roleIndices.get(myRole)); // (Kev: pretty sure the myMove passed above covers these checks)
 			if (currMove.equals(myMove)) {
 				MachineState newState = getStateMachine().getNextState(node.getParent().getState(), jointLegalMove);
 				MonteCarloNode newNode = new MonteCarloNode(newState, true, null, node);
@@ -215,7 +231,12 @@ public final class BaB_MCTSGamer extends SampleGamer
 
 			Move originMove = jointLegalMove.get(roleIndices.get(myRole));
 
-			MonteCarloNode newNode = new MonteCarloNode(nextState, true, originMove, node);
+			MonteCarloNode newNode;
+			if (originMove.getContents().toString().equals("noop")) {
+				newNode = new MonteCarloNode(nextState, true, originMove, node);
+			} else {
+				newNode = new MonteCarloNode(nextState, false, originMove, node);
+			}
 			node.addChild(newNode);
 		}
 	}

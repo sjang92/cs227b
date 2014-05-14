@@ -17,6 +17,8 @@ public class MonteCarloNode {
 	public Move moveIfMin;
 	public static int numNodesConstructed = 0;
 
+	private final int C_CONSTANT = 40;
+
 	/* Constructor: takes the state as the param. */
 	public MonteCarloNode(MachineState state, boolean isMax, Move move, MonteCarloNode parent) {
 		this.state = state;
@@ -25,9 +27,9 @@ public class MonteCarloNode {
 		this.utility = 0;
 		this.isMax = isMax;
 
-		if (!isMax) this.moveIfMin = move;
-			else this.moveIfMin = null;
-		//this.moveIfMin = move;
+//		if (!isMax) this.moveIfMin = move;
+//			else this.moveIfMin = null;
+		this.moveIfMin = move;
 		this.parent = parent;
 
 		numNodesConstructed++;
@@ -69,9 +71,9 @@ public class MonteCarloNode {
 	 * */
 	public double getSelectFnResult() {
 		if (this.isMax) {
-			return this.utility/this.visits + Math.sqrt(Math.log(this.parent.visits)/this.visits);
-		} else {
-			return -(this.utility/this.visits + Math.sqrt(Math.log(this.parent.visits)/this.visits));
+			return this.utility/this.visits + C_CONSTANT * Math.sqrt(Math.log(this.parent.visits)/this.visits);
+		} else { // (Kev: if min we do comparison to find the smallest avg util, return the util and give it a bonus (subtraction) if it hasn't been visited very often)
+			return this.utility/this.visits - C_CONSTANT * Math.sqrt(Math.log(this.parent.visits)/this.visits);
 		}
 	}
 
