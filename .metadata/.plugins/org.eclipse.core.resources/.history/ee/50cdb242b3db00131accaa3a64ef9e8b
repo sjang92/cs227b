@@ -105,6 +105,7 @@ public final class BaB_MCTSGamer extends SampleGamer
 			double score = Integer.MAX_VALUE;
 			if (node.isMax) score = 0; //node passed in is max, looking for maximum among min-children
 			MonteCarloNode resultNode = null;
+			List<MonteCarloNode> nodeChildren = node.getChildren();
 			System.out.print("Size of children arrray: " + node.getChildren().size() + "\n");
 			for (MonteCarloNode childNode : node.getChildren()) {
 				double newScore = childNode.getSelectFnResult();
@@ -192,22 +193,13 @@ public final class BaB_MCTSGamer extends SampleGamer
 	public int simulateToTerminal(MonteCarloNode node) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException {
 		/* Declare depth and final state variables */
 		int depth[] = new int[1];
-<<<<<<< HEAD
-		//MachineState currState;
+		MachineState currState;
 
 		/* If max, currState is give. If min, get random currState from currMove.*/
-		//if (node.isMax) currState = node.getState();
-		//else currState = getStateMachine().getRandomNextState(node.getParent().getState(), myRole, node.moveIfMin);
-=======
-//		MachineState currState;
-//
-//		/* If max, currState is give. If min, get random currState from currMove.*/
-//		if (node.isMax) currState = node.getState();
-//		else currState = getStateMachine().getRandomNextState(node.getParent().getState(), myRole, node.moveIfMin);
+		if (node.isMax) currState = node.getState();
+		else currState = getStateMachine().getRandomNextState(node.getParent().getState(), myRole, node.moveIfMin);
 
->>>>>>> FETCH_HEAD
-
-		MachineState finalState = getStateMachine().performDepthCharge(node.getState(), depth);
+		MachineState finalState = getStateMachine().performDepthCharge(currState, depth);
 		return getStateMachine().getGoal(finalState, myRole);
 	}
 
@@ -246,9 +238,9 @@ public final class BaB_MCTSGamer extends SampleGamer
 			Move originMove = jointLegalMove.get(roleIndices.get(myRole));
 
 			MonteCarloNode newNode;
-			if (originMove.getContents().toString().equals("noop")) { //newNode is max since we just moved "noop"
+			if (originMove.getContents().toString().equals("noop")) {
 				newNode = new MonteCarloNode(nextState, true, originMove, node);
-			} else { //newNode is min, we just made a "mark"
+			} else {
 				newNode = new MonteCarloNode(nextState, false, originMove, node);
 			}
 			node.addChild(newNode);
