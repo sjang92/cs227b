@@ -105,21 +105,19 @@ public final class BaB_MCTSGamer extends SampleGamer
 			double score = Integer.MAX_VALUE;
 			if (node.isMax) score = 0; //node passed in is max, looking for maximum among min-children
 			MonteCarloNode resultNode = null;
-			List<MonteCarloNode> nodeChildren = node.getChildren();
 			System.out.print("Size of children arrray: " + node.getChildren().size() + "\n");
 			for (MonteCarloNode childNode : node.getChildren()) {
 				double newScore = childNode.getSelectFnResult();
-				if (node.isMax && newScore >= score) {  //node passed in is max, looking for maximum among min-children
+				if (!node.isMax && newScore >= score) {  //node passed in is max, looking for maximum among min-children
 					resultNode = childNode;
 					score = newScore;
 				}
-				if (!node.isMax && newScore <= score) { // node passed in is min, looking for minimum among max-children
+				if (!!node.isMax && newScore < score) { // node passed in is min, looking for minimum among max-children
 					resultNode = childNode;
 					score = newScore;
 				}
 			}
 			if (resultNode == null) {
-				System.out.print("CHECK");
 				return node.getChildAtIndex(0);
 			}
 			System.out.print("~~~recursive call to select~~~\n");

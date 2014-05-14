@@ -70,7 +70,7 @@ public class MonteCarloNode {
 	 * Returns the value of the selectFn of the current node.
 	 * */
 	public double getSelectFnResult() {
-		if (this.parent.isMax) {
+		if (this.isMax) {
 			return ((float)this.utility)/this.visits + C_CONSTANT * Math.sqrt(Math.log(this.parent.visits)/this.visits);
 		} else { // (Kev: if min we do comparison to find the smallest avg util, return the util and give it a bonus (subtraction) if it hasn't been visited very often)
 			return ((float)this.utility)/this.visits - C_CONSTANT * Math.sqrt(Math.log(this.parent.visits)/this.visits);

@@ -113,7 +113,7 @@ public final class BaB_MCTSGamer extends SampleGamer
 					resultNode = childNode;
 					score = newScore;
 				}
-				if (!node.isMax && newScore <= score) { // node passed in is min, looking for minimum among max-children
+				if (!node.isMax && newScore < score) { // node passed in is min, looking for minimum among max-children
 					resultNode = childNode;
 					score = newScore;
 				}
