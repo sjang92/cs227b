@@ -14,7 +14,7 @@ public class MonteCarloNode {
 	private int visits;
 	private int utility;
 	public boolean isMax;
-	public Move moveIfMin;
+	public Move originMove;
 	public static int numNodesConstructed = 0;
 
 	private final int C_CONSTANT = 40;
@@ -27,9 +27,9 @@ public class MonteCarloNode {
 		this.utility = 0;
 		this.isMax = isMax;
 
-//		if (!isMax) this.moveIfMin = move;
-//			else this.moveIfMin = null;
-		this.moveIfMin = move;
+//		if (!isMax) this.originMove = move;
+//			else this.originMove = null;
+		this.originMove = move;
 		this.parent = parent;
 
 		numNodesConstructed++;
@@ -74,6 +74,7 @@ public class MonteCarloNode {
 			return ((float)this.utility)/this.visits + C_CONSTANT * Math.sqrt(Math.log(this.parent.visits)/this.visits);
 		} else { // (Kev: if min we do comparison to find the smallest avg util, return the util and give it a bonus (subtraction) if it hasn't been visited very often)
 			return ((float)this.utility)/this.visits - C_CONSTANT * Math.sqrt(Math.log(this.parent.visits)/this.visits);
+			//return ((float)this.utility)/this.visits;
 		}
 	}
 
