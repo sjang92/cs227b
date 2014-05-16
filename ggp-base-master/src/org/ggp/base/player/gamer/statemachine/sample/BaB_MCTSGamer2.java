@@ -15,98 +15,162 @@ import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
 
 public final class BaB_MCTSGamer2 extends SampleGamer
 {
-	/**
-	 * This function is called at the start of each round
-	 * You are required to return the Move your player will play
-	 * before the timeout.
-	 *
-	 */
+
+	/* =======================================================================
+	 * ====================== Global Variables & Constants  ==================
+	 * ======================================================================= */
 	private Map<Role, Integer> roleIndices;
 	private Role myRole;
+	private double bestUtility;
+	private int numRounds;
+	private boolean hasPropNet = false;
+	private int C_Constant = 1;
 
+	private final int TIME_BUFFER = 1000;
+
+	/* =======================================================================
+	 * ====================== Inheritance Methods ============================
+	 * ======================================================================= */
+
+	/* Method: stateMachineMetaGame
+	 * =======================================================================
+	 * This method is called during the meta- gaming phase.
+	 * The server does not check whether this gamer's computation during this phase is over or not.
+	 * It's crucial to end everything before the timeout. */
+	@Override
+	public void stateMachineMetaGame(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+	{
+		/* Record Start Time */
+		long start = System.currentTimeMillis();
+
+		System.out.print("============= START METAGAMING PHASE =========== \n");
+
+		/* Initialize Gamer Instance Variables that will be used globally throughout the game. */
+		roleIndices = getStateMachine().getRoleIndices();
+		myRole = getRole();
+
+		/* Construct Prop-net */
+
+		long end = System.currentTimeMillis();
+		System.out.print("================================================ \n");
+
+		System.out.print("============== METAGAMING REPORT =============== \n");
+		System.out.print("	- Duration: "+(end - start)+"\n");
+		System.out.print("	- Propnet: "+hasPropNet+"\n");
+		System.out.print("	- C Constant: "+ MonteCarloNode2.C_CONSTANT+"\n");
+		System.out.print("================================================= \n");
+	}
+
+
+	/* Method: stateMachineSelectMove
+	 * =======================================================================
+	 * This method is called when the Gamer receives a signal from the server.
+	 * Returns the move that we're trying to make. */
 	@Override
 	public Move stateMachineSelectMove(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
-		// We get the current start time
+		/* Record Start Time */
 		long start = System.currentTimeMillis();
 
-		/**
-		 * We put in memory the list of legal moves from the
-		 * current state. The goal of every stateMachineSelectMove()
-		 * is to return one of these moves. The choice of which
-		 * Move to play is the goal of GGP.
-		 */
+		System.out.print("================ START SELECT MOVE ==============\n");
+
+		/* Initialize Variables */
+		System.out.print("	- Initializing Move Variables... \n");
 		List<Move> moves = getStateMachine().getLegalMoves(getCurrentState(), getRole());
-		roleIndices = getStateMachine().getRoleIndices();
-		myRole = getRole();
 		MonteCarloNode2 root = new MonteCarloNode2(getCurrentState(), true, null, null, roleIndices.size());
 		Move bestMove= moves.get(0);
-		int numRounds = 0;
+		numRounds = 0;
+		bestUtility = 0;
 
-		while (/*enough time*/ System.currentTimeMillis() < timeout - 1000) { // loop until 1 second is left.
-			if (moves.size() == 1) break;
+		/* Construct & Update MCTS Tree  */
+		System.out.print("	- Constructing the MCTS Tree... \n");
+		while (System.currentTimeMillis() < timeout - TIME_BUFFER) { // loop until 1 second is left.
+			if (moves.size() == 1) {
+				System.out.print("	- Detected only one possible move. Returning it... \n");
+				break;
+			}
 
-			/* MCTS Routine: Select -> Expand -> Simulate -> Backpropagate */
+			/* MCTS Tree Traverse Routine: Select -> Expand -> Simulate -> Backpropagate */
 			MonteCarloNode2 selection = select(root);
 			expandGeneral(selection);
 			List<Integer> terminalValues = simulateToTerminal(selection);
 			backpropagate(selection, terminalValues);
 
 			numRounds++;
-			System.out.print("~~~~~~~~~~~~~~~Round Complete~~~~~~~~~~~~~~~~~\n");
 		}
 
-		/* Get Best Move*/
+		/* Get Best Move from the MCTS Tree */
+		System.out.print("- Interpreting the MCTS Tree... \n");
 		if (moves.size() != 1) bestMove = getBestMove(root);
+		System.out.print("================================================= \n");
 
-		System.out.print("Number of Depth Charges: " + numRounds + "\n");
+		/* Print Readable End Turn Report */
+		System.out.print("============= START END TURN REPORT ==============\n");
+		System.out.print("	- Best Utility: "+bestUtility+"\n");
+		System.out.print("	- Number of Rounds: " + numRounds + "\n");
+		System.out.print("==================================================\n");
+
+		/* Notify the server */
 		long stop = System.currentTimeMillis();
-
 		notifyObservers(new GamerSelectedMoveEvent(moves, bestMove, stop - start));
 		return bestMove;
 	}
 
+
+	/* =======================================================================
+	 * ================== KEY FUNCTION IMPLEMENTATION ========================
+	 * ======================================================================= */
+
+	/* Function: getBestMove
+	 * =======================================================================
+	 * Given the root node with the complete tree, loops through its children nodes
+	 * and find out the best move by comparing their average utility scores.
+	 */
 	public Move getBestMove(MonteCarloNode2 root) {
+
+		/* comparing variables */
 		Move bestMove = null;
 		double bestScore = 0;
+
+		/* Loop through all children nodes */
 		for (MonteCarloNode2 child : root.getChildren()) {
-			if (child.moveIfMin == null) System.err.print("Child of root node doesn't have a move associated with it.");
 
 			if (child.getAverageUtility(roleIndices.get(myRole)) > bestScore) {
 				bestScore = child.getAverageUtility(roleIndices.get(myRole));
 				bestMove = child.moveIfMin;
 			}
 		}
+
+		/* set Instance Variables for End-turn reporting */
+		bestUtility = bestScore;
 		return bestMove;
 	}
 
-	/* ==========================================================================================
-	 * ==========================================================================================*/
-	/* KEY FUNCTION IMPLEMENTATION
+	/* Function: select
 	 * ==========================================================================================
-	 * ==========================================================================================*/
-
+	 *
+	 */
 	public MonteCarloNode2 select(MonteCarloNode2 node) throws MoveDefinitionException, TransitionDefinitionException {
+
+		/* Escape Statement: Escape Recursion when the current node has no children or has never been visited */
 		if (node.getNumVisits() == 0 || node.getNumChildren() == 0) {
-			System.out.print("Recursion base case reached\n");
 			return node;
-		}
-		else {
-			System.out.print("Num Nodes Generated Uptil Now: "+MonteCarloNode2.numNodesConstructed+ "\n");
-			for (MonteCarloNode2 childNode : node.getChildren()) {
-				if (childNode.getNumVisits() == 0) {
-					System.out.print("Recursion base case reached\n");
-					return childNode;
-				}
-			}
+
+		/* Recursive Statement */
+		} else {
+
+			/* Check 1: Check if every child has been visited. */
+			for (MonteCarloNode2 childNode : node.getChildren())
+				if (childNode.getNumVisits() == 0) return childNode;
+
 			MonteCarloNode2 resultNode = null;
-			System.out.print("Size of children arrray: " + node.getChildren().size() + "\n");
 
 			List<List<Move> > jointLegalMoves = getStateMachine().getLegalJointMoves(node.getState());
 			List<Move> moves = getOpponentsMoves(node, jointLegalMoves);
 			double bestScore = 0;
 			MonteCarloNode2 bestChild = null;
 			List<Move> myLegalMoves = getStateMachine().getLegalMoves(node.getState(), myRole);
+
 			// iterate over all my moves, if child's SelectFn is better than before we track it
 			for (Move currMove : myLegalMoves) {
 				moves.set(roleIndices.get(myRole), currMove);
@@ -136,7 +200,6 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 				if (bestChild == null) {
 					System.out.print("we've got a null problem...\n");
 					System.out.print("Terminal at current node?: " + getStateMachine().isTerminal(node.getState()) + "\n");
-
 					System.out.print("Terminal at child?: " + getStateMachine().isTerminal(getStateMachine().getNextState(node.getState(), moves)) + "\n");
 				}
 			}
@@ -146,7 +209,6 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 				System.out.print("FAILURE ON SELECT");
 				return null;
 			}
-			System.out.print("~~~recursive call to select~~~\n");
 			return select(resultNode);
 		}
 	}
@@ -271,15 +333,7 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 	public List<Integer> simulateToTerminal(MonteCarloNode2 node) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException {
 		/* Declare depth and final state variables */
 		int depth[] = new int[1];
-//		MachineState currState;
-//
-//		/* If max, currState is give. If min, get random currState from currMove.*/
-//		if (node.isMax) currState = node.getState();
-//		else currState = getStateMachine().getRandomNextState(node.getParent().getState(), myRole, node.moveIfMin);
-
-
 		MachineState finalState = getStateMachine().performDepthCharge(node.getState(), depth);
-		//return getStateMachine().getGoal(finalState, myRole);
 		return getStateMachine().getGoals(finalState);
 	}
 

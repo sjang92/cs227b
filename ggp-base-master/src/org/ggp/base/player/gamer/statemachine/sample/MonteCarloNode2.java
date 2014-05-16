@@ -18,7 +18,7 @@ public class MonteCarloNode2 {
 	public Move moveIfMin;
 	public static int numNodesConstructed = 0;
 
-	private final int C_CONSTANT = 1;
+	public static final int C_CONSTANT = 1;
 
 	/* Constructor: takes the state as the param. */
 	public MonteCarloNode2(MachineState state, boolean isMax, Move move, MonteCarloNode2 parent, int numPlayers) {
