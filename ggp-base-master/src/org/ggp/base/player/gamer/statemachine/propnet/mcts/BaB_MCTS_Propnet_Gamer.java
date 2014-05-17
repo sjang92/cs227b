@@ -1,10 +1,13 @@
-package org.ggp.base.player.gamer.statemachine.sample;
+package org.ggp.base.player.gamer.statemachine.propnet.mcts;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.ggp.base.player.gamer.event.GamerSelectedMoveEvent;
+import org.ggp.base.player.gamer.statemachine.sample.SampleGamer;
+import org.ggp.base.util.propnet.architecture.components.Proposition;
 import org.ggp.base.util.statemachine.MachineState;
 import org.ggp.base.util.statemachine.Move;
 import org.ggp.base.util.statemachine.Role;
@@ -13,7 +16,7 @@ import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException;
 import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
 
 
-public final class BaB_MCTSGamer2 extends SampleGamer
+public final class BaB_MCTS_Propnet_Gamer extends SampleGamer
 {
 
 	/* =======================================================================
@@ -25,6 +28,7 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 	private int numRounds;
 	private boolean hasPropNet = false;
 	private int C_Constant = 1;
+	private PropNetStateMachine propNetStateMachine;
 
 	private final int TIME_BUFFER = 1000;
 
@@ -50,6 +54,13 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 		myRole = getRole();
 
 		/* Construct Prop-net */
+		propNetStateMachine = new PropNetStateMachine();
+		propNetStateMachine.initialize(getMatch().getGame().getRules());
+		Set<Proposition> props = propNetStateMachine.propNet.getPropositions();
+		for (Proposition prop : props) {
+			System.out.print("Testing Proposition Name:"+prop.toString()+"\n");
+		}
+
 
 		long end = System.currentTimeMillis();
 		System.out.print("================================================ \n");
@@ -57,7 +68,7 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 		System.out.print("============== METAGAMING REPORT =============== \n");
 		System.out.print("	- Duration: "+(end - start)+"\n");
 		System.out.print("	- Propnet: "+hasPropNet+"\n");
-		System.out.print("	- C Constant: "+ MonteCarloNode2.C_CONSTANT+"\n");
+		System.out.print("	- C Constant: "+ MonteCarloTreeNode.C_CONSTANT+"\n");
 		System.out.print("================================================= \n");
 	}
 
@@ -74,10 +85,10 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 
 		System.out.print("================ START SELECT MOVE ==============\n");
 
-		/* Initialize Variables */
+		/* Initialize and Reset Variables */
 		System.out.print("	- Initializing Move Variables... \n");
 		List<Move> moves = getStateMachine().getLegalMoves(getCurrentState(), getRole());
-		MonteCarloNode2 root = new MonteCarloNode2(getCurrentState(), true, null, null, roleIndices.size());
+		MonteCarloTreeNode root = new MonteCarloTreeNode(getCurrentState(), true, null, null, roleIndices.size());
 		Move bestMove= moves.get(0);
 		numRounds = 0;
 		bestUtility = 0;
@@ -91,7 +102,7 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 			}
 
 			/* MCTS Tree Traverse Routine: Select -> Expand -> Simulate -> Backpropagate */
-			MonteCarloNode2 selection = select(root);
+			MonteCarloTreeNode selection = select(root);
 			expandGeneral(selection);
 			List<Integer> terminalValues = simulateToTerminal(selection);
 			backpropagate(selection, terminalValues);
@@ -127,14 +138,14 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 	 * Given the root node with the complete tree, loops through its children nodes
 	 * and find out the best move by comparing their average utility scores.
 	 */
-	public Move getBestMove(MonteCarloNode2 root) {
+	public Move getBestMove(MonteCarloTreeNode root) {
 
 		/* comparing variables */
 		Move bestMove = null;
 		double bestScore = 0;
 
 		/* Loop through all children nodes */
-		for (MonteCarloNode2 child : root.getChildren()) {
+		for (MonteCarloTreeNode child : root.getChildren()) {
 
 			if (child.getAverageUtility(roleIndices.get(myRole)) > bestScore) {
 				bestScore = child.getAverageUtility(roleIndices.get(myRole));
@@ -151,7 +162,7 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 	 * ==========================================================================================
 	 *
 	 */
-	public MonteCarloNode2 select(MonteCarloNode2 node) throws MoveDefinitionException, TransitionDefinitionException {
+	public MonteCarloTreeNode select(MonteCarloTreeNode node) throws MoveDefinitionException, TransitionDefinitionException {
 
 		/* Escape Statement: Escape Recursion when the current node has no children or has never been visited */
 		if (node.getNumVisits() == 0 || node.getNumChildren() == 0) {
@@ -161,14 +172,14 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 		} else {
 
 			/* Check 1: Check if every child has been visited. */
-			for (MonteCarloNode2 childNode : node.getChildren())
+			for (MonteCarloTreeNode childNode : node.getChildren())
 				if (childNode.getNumVisits() == 0) return childNode;
 
-			MonteCarloNode2 resultNode = null;
+			MonteCarloTreeNode resultNode = null;
 			List<List<Move> > jointLegalMoves = getStateMachine().getLegalJointMoves(node.getState());
 			List<Move> moves = getOpponentsMoves(node, jointLegalMoves);
 			double bestScore = 0;
-			MonteCarloNode2 bestChild = null;
+			MonteCarloTreeNode bestChild = null;
 			List<Move> myLegalMoves = getStateMachine().getLegalMoves(node.getState(), myRole);
 
 			// iterate over all my moves, if child's SelectFn is better than before we track it
@@ -179,7 +190,7 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 					System.out.print("NULLY IN SELECT\n");
 				}
 				boolean foundStateInChildren = false;
-				for (MonteCarloNode2 child : node.getChildren()) {;
+				for (MonteCarloTreeNode child : node.getChildren()) {;
 					if (nextState.equals(child.getState())) {
 						foundStateInChildren = true;
 
@@ -221,7 +232,7 @@ public final class BaB_MCTSGamer2 extends SampleGamer
     * -This is done for all opponents and returns the list of moves.
     * Move at myRole's index is null.
     */
-    private List<Move> getOpponentsMoves(MonteCarloNode2 node, List<List<Move> > jointLegalMoves) throws TransitionDefinitionException, MoveDefinitionException {
+    private List<Move> getOpponentsMoves(MonteCarloTreeNode node, List<List<Move> > jointLegalMoves) throws TransitionDefinitionException, MoveDefinitionException {
     	Move[] moves = new Move[roleIndices.size()];
     //	rolesloop:
     	for (Role currRole : getStateMachine().getRoles()) {
@@ -245,7 +256,7 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 						if (currMove.equals(jointMove.get(roleIndices.get(currRole)))) { //if this JLM has the currRole making currMove
 							numMoves++;
 							MachineState nextState = getStateMachine().getNextState(node.getState(), jointMove);
-							for (MonteCarloNode2 child : node.getChildren()) { //find the node
+							for (MonteCarloTreeNode child : node.getChildren()) { //find the node
 								if (nextState.equals(child.getState())) {
 									cumSelectFn += child.getSelectFnResult(roleIndices.get(currRole));
 								//	break; // should just break out of children loop and back into JLM loop
@@ -275,7 +286,7 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 	 * However, since we need both opponents moves and my moves to reach a new state, the min nodes
 	 * that are created from this function call do not have states.
 	 * */
-	public void expandMax(MonteCarloNode2 node) throws MoveDefinitionException, TransitionDefinitionException {
+	public void expandMax(MonteCarloTreeNode node) throws MoveDefinitionException, TransitionDefinitionException {
 		System.out.print("EXPAND MAX CALLED!! \n");
 
 		if (getStateMachine().isTerminal(node.getState()))
@@ -291,7 +302,7 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 		for (Move move : myLegalMoves) {
 
 			/* Create new min node and append it to the max node we started from. */
-			MonteCarloNode2 newNode = new MonteCarloNode2(null, false, move, node, roleIndices.size()); // no states + not maxnode + the move that I made + parent
+			MonteCarloTreeNode newNode = new MonteCarloTreeNode(null, false, move, node, roleIndices.size()); // no states + not maxnode + the move that I made + parent
 			node.addChild(newNode);
 			//expandMin(newNode); // we don't want to create all the grandchildren?? (Kev: we do not create any grandkids)
 		}
@@ -303,7 +314,7 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 	 * This is done by getting the initial move that resulted in the min node, and then getting all the joint moves
 	 * that opponents can make from the given move.
 	 */
-	public void expandMin(MonteCarloNode2 node) throws MoveDefinitionException, TransitionDefinitionException {
+	public void expandMin(MonteCarloTreeNode node) throws MoveDefinitionException, TransitionDefinitionException {
 		System.out.print("EXPAND MIN CALLED!!\n");
 		if (node.getNumChildren() != 0) { // does this have a purpose? why would expandMax ever be called on a node w/ children?
 			return;
@@ -319,7 +330,7 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 			Move currMove = jointLegalMove.get(roleIndices.get(myRole)); // (Kev: pretty sure the myMove passed above covers these checks)
 			if (currMove.equals(myMove)) {
 				MachineState newState = getStateMachine().getNextState(node.getParent().getState(), jointLegalMove);
-				MonteCarloNode2 newNode = new MonteCarloNode2(newState, true, null, node, roleIndices.size());
+				MonteCarloTreeNode newNode = new MonteCarloTreeNode(newState, true, null, node, roleIndices.size());
 				node.addChild(newNode); // add max nodes to the given minnode
 			}
 		}
@@ -330,7 +341,7 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 	 * From the given node, simulate to the terminal state and get the score that this player can get.
 	 * This is random depth charge.
 	 * */
-	public List<Integer> simulateToTerminal(MonteCarloNode2 node) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException {
+	public List<Integer> simulateToTerminal(MonteCarloTreeNode node) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException {
 		/* Declare depth and final state variables */
 		int depth[] = new int[1];
 		MachineState finalState = getStateMachine().performDepthCharge(node.getState(), depth);
@@ -342,7 +353,7 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 	 * backpropagates from the given node to the root.
 	 * For each node visited, updates the utility and the number of visits.
 	 */
-	public void backpropagate(MonteCarloNode2 node, List<Integer> rewards) {
+	public void backpropagate(MonteCarloTreeNode node, List<Integer> rewards) {
 		node.incrementUtilityAndVisited(rewards);
 		if (node.getParent() != null)
 			backpropagate(node.getParent(), rewards);
@@ -355,7 +366,7 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 	 * 		- MonteCarloNode node: this is assumed to have a state stored in it.
 	 * 							Since we're dealing with all possible joint moves.
 	 * */
-	public void expandGeneral(MonteCarloNode2 node) throws MoveDefinitionException, TransitionDefinitionException {
+	public void expandGeneral(MonteCarloTreeNode node) throws MoveDefinitionException, TransitionDefinitionException {
 
 		if (getStateMachine().isTerminal(node.getState())) return;
 		/* Get all legal joint moves from the current node we're looking at*/
@@ -367,7 +378,7 @@ public final class BaB_MCTSGamer2 extends SampleGamer
 
 			Move originMove = jointLegalMove.get(roleIndices.get(myRole));
 
-			MonteCarloNode2 newNode = new MonteCarloNode2(nextState, false, originMove, node, roleIndices.size());
+			MonteCarloTreeNode newNode = new MonteCarloTreeNode(nextState, false, originMove, node, roleIndices.size());
 			node.addChild(newNode);
 		}
 	}
