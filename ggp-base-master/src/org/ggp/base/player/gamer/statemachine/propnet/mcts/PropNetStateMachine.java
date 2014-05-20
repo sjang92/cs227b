@@ -26,12 +26,13 @@ import org.ggp.base.util.statemachine.implementation.prover.query.ProverQueryBui
 
 public class PropNetStateMachine extends StateMachine {
 	/** The underlying proposition network  */
-    public PropNet propNet;
+    private PropNet propNet;
     /** The topological ordering of the propositions */
-    public List<Proposition> ordering;
+    private List<Component> ordering;
     /** The player roles */
     private List<Role> roles;
-
+    /** Singleton PropNetUtil class **/
+    private PropNetUtil propNetUtil;
 
     /**
      * Initializes the PropNetStateMachine. You should compute the topological
@@ -40,9 +41,13 @@ public class PropNetStateMachine extends StateMachine {
      */
     @Override
     public void initialize(List<Gdl> description) {
+    	System.out.print("	- Creating propNet... \n");
         propNet = PropNetFactory.create(description);
+        if (propNet == null) System.err.print("propNet is null for some reason");
+        System.out.print("	- Finished initializing propNet... \n");
         roles = propNet.getRoles();
         ordering = getOrdering();
+        propNetUtil = new PropNetUtil(propNet);
     }
 
 	/**
@@ -51,8 +56,8 @@ public class PropNetStateMachine extends StateMachine {
 	 */
 	@Override
 	public boolean isTerminal(MachineState state) {
-		// TODO: Compute whether the MachineState is terminal.
-		return false;
+		propNetUtil.markBases(state);
+		return propNetUtil.propMarkP(propNet.getTerminalProposition());
 	}
 
 	/**
@@ -65,7 +70,9 @@ public class PropNetStateMachine extends StateMachine {
 	@Override
 	public int getGoal(MachineState state, Role role)
 	throws GoalDefinitionException {
-		// TODO: Compute the goal for role in state.
+		propNetUtil.markBases(state);
+		List<Role> roles = propNet.getRoles();
+
 		return -1;
 	}
 
@@ -86,8 +93,17 @@ public class PropNetStateMachine extends StateMachine {
 	@Override
 	public List<Move> getLegalMoves(MachineState state, Role role)
 	throws MoveDefinitionException {
-		// TODO: Compute legal moves.
-		return null;
+		propNetUtil.markBases(state);
+		List<Role> roles = propNet.getRoles();
+		List<Move> actions = new ArrayList<Move>();
+		Set<Proposition> legals = propNet.getLegalPropositions().get(role);
+
+		for (Proposition p : legals) {
+			if (propNetUtil.propMarkP(p))
+				actions.add(new Move(p.getName().toTerm()));
+		}
+
+		return actions;
 	}
 
 	/**
@@ -96,8 +112,20 @@ public class PropNetStateMachine extends StateMachine {
 	@Override
 	public MachineState getNextState(MachineState state, List<Move> moves)
 	throws TransitionDefinitionException {
-		// TODO: Compute the next state.
-		return null;
+
+		/* Mark action propositions from the list of moves, and the base proposition from the given state */
+		propNetUtil.markActions(moves);
+		propNetUtil.markBases(state);
+
+		Map<GdlSentence, Proposition> bases = propNet.getBasePropositions();
+		Set<GdlSentence> stateInfo = new HashSet<GdlSentence>();
+		for (GdlSentence gdl: bases.keySet()) {
+			if (propNetUtil.propMarkP(bases.get(gdl).getSingleInput().getSingleInput())) {
+				//stateInfo.add(gdl)
+			}
+		}
+
+		return new MachineState(stateInfo);
 	}
 
 	/**
@@ -114,20 +142,150 @@ public class PropNetStateMachine extends StateMachine {
 	 *
 	 * @return The order in which the truth values of propositions need to be set.
 	 */
-	public List<Proposition> getOrdering()
+	public List<Component> getOrdering()
 	{
-	    // List to contain the topological ordering.
-	    List<Proposition> order = new LinkedList<Proposition>();
+		System.out.print("	- Starting Topological Ordering... \n");
+	    List<Component> result = new LinkedList<Component>();
+	    List<Component> components = new ArrayList<Component>(propNet.getComponents());
+	    List<Proposition> basePropositions = propNet.getBasePropositionList();
+		List<Proposition> inputPropositions = propNet.getInputPropositionList();
+		System.out.print("	- Total num components to order: "+components.size()+"\n");
 
-		// All of the components in the PropNet
-		List<Component> components = new ArrayList<Component>(propNet.getComponents());
+		components.removeAll(basePropositions);
+		components.remove(propNet.getTerminalProposition());
+		components.removeAll(inputPropositions);
 
-		// All of the propositions in the PropNet.
-		List<Proposition> propositions = new ArrayList<Proposition>(propNet.getPropositions());
+		/* The beginning of the result is always init -> bases */
+	    result.add(propNet.getInitProposition());
+	    result.addAll(basePropositions);
 
-	    // TODO: Compute the topological ordering.
+		/* Step 1) Divide into components that depends on the base propositions vs. everything else*/
+		List<Component> dependentOnBase = new ArrayList<Component>();
+		List<Component> notDependentOnBase = new ArrayList<Component>();
 
-		return order;
+		for (Component c : notDependentOnBase) {
+			if (basePropositions.contains(c)) {
+				System.out.print("Base Proposition found where it shouldn't be\n");
+			}
+		}
+
+		/* Divide */
+		for (Component c : components) {
+			Set<Component> sources = c.getInputs();
+			if (includesBase(sources)) dependentOnBase.add(c);
+			else notDependentOnBase.add(c); // add only if not input proposition or base proposition.
+		}
+
+		/* AT THIS POINT ALL COMPONENTS SHOULD BE DEVIDED INTO TWO GROUPS */
+
+		/* Setp 2) Divide All that are dependent on Base propositions into:
+		 * 			1. left of terminal
+		 * 			2. Right of terminal */
+		List<Component> terminalLeft = new ArrayList<Component>();
+		List<Component> terminalRight = new ArrayList<Component>();
+
+		for (Component c : dependentOnBase) {
+
+			/* If the given component is a source of the terminal proposition, add to Left. Else add to Right */
+			if (propNet.getTerminalProposition().getInputs().contains(c)) terminalLeft.add(c);
+			else terminalRight.add(c);
+		}
+		terminalLeft.add(propNet.getTerminalProposition()); // terminal proposition goes to the left
+
+		topologicalSort(result, terminalLeft);
+		if (!checkTopologicalOrdering(result)) {
+			System.err.print("ERROR IN TOP SORT 1\n");
+
+		}
+		if (!result.get(result.size() - 1).equals(propNet.getTerminalProposition()))
+			System.err.print("THE TOPOLOGICAL SORTING IS NOT WORKING PROPERLY"); // check that the topologicalSort is right.
+
+		topologicalSort(result, terminalRight);
+		if (!checkTopologicalOrdering(result)) System.err.print("ERROR IN TOP SORT 2\n");
+		result.addAll(inputPropositions);
+		topologicalSort(result, notDependentOnBase);
+
+		if (!checkTopologicalOrdering(result)) {
+			System.err.print("ERROR IN TOP SORT 3\n");
+		} else {
+			System.out.print("Third has no error\n");
+		}
+
+
+		if (result.size() != (new ArrayList<Component>(propNet.getComponents())).size()) System.err.print("Size is diff.\n");
+		System.out.print("Result array size: "+result.size()+"\n");
+		System.out.print("All Components size: "+(new ArrayList<Component>(propNet.getComponents())).size()+"\n");
+		return result;
+	}
+
+	/* Function: topologicalSort
+	 * ========================================
+	 * Variation of topological Sort. Very poor performance.Can come up with better running time.
+	 * Will enter infinite loop if a component has itself as its own source. This shouldn't happen
+	 * */
+	private void topologicalSort(List<Component> L, List<Component> R) {
+
+		/* Topological Sort Loop */
+		while (!R.isEmpty()) {
+			List<Component> toRemove = new ArrayList<Component>();
+			/* For every Component in R, add to L if it has no source in R */
+			for (Component c : R) {
+
+				/* if c's source is not in R, remove from R and add to L*/
+				if (!hasSourceInR(c, R)) {
+					L.add(c);
+					toRemove.add(c);
+				}
+			}
+			R.removeAll(toRemove);
+		}
+	}
+
+	/* Function: checkTopologicalOrdering
+	 * ========================================
+	 * Checks if the given list of compoenets is topologically sorted
+	 * */
+	private boolean checkTopologicalOrdering(List<Component> list) {
+		int counter = 0;
+		System.out.print("Checking Topological Ordering...\n");
+		for (int i = 0; i < list.size(); i++) {
+			counter++;
+			if (hasSourceInR(list.get(i), list.subList(i + 1, list.size()))) {
+				System.out.print("Topological Ordering fails here: "+list.get(i).toString()+"\n");
+				if (propNet.getBasePropositionList().contains(list.get(i))) System.out.print("What is a base prop doing here. \n");
+				for (Component c : list.get(i).getInputs()) {
+					System.out.print("One source: "+c.toString()+"\n");
+					System.out.print("The source of the source: "+c.getSingleInput().toString()+"\n");
+				}
+				return false; // if the rightside contains any source, fail
+			}
+		}
+		System.out.print("Num Checked: "+counter+"\n");
+		return true;
+	}
+
+	/* Function: hasSourceInR
+	 * ========================================
+	 * Returns true if R contains any one of c's sources
+	 * */
+	private boolean hasSourceInR(Component c, List<Component> R) {
+		for (Component source : c.getInputs())
+			if (R.contains(source)) return true;
+
+		return false;
+	}
+
+	/* Function: includesBase
+	 * ========================================
+	 * Determines if the given set of components includes a baseProposition or not.
+	 * */
+	private boolean includesBase(Set<Component> sources) {
+		Map<GdlSentence, Proposition> basePropositions = propNet.getBasePropositions();
+
+		for (Component c : sources)
+			if (basePropositions.containsValue(c)) return true; //can optimize later
+
+		return false;
 	}
 
 	/* Already implemented for you */
@@ -205,3 +363,4 @@ public class PropNetStateMachine extends StateMachine {
 		return new MachineState(contents);
 	}
 }
+

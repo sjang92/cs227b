@@ -3,11 +3,9 @@ package org.ggp.base.player.gamer.statemachine.propnet.mcts;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.ggp.base.player.gamer.event.GamerSelectedMoveEvent;
 import org.ggp.base.player.gamer.statemachine.sample.SampleGamer;
-import org.ggp.base.util.propnet.architecture.components.Proposition;
 import org.ggp.base.util.statemachine.MachineState;
 import org.ggp.base.util.statemachine.Move;
 import org.ggp.base.util.statemachine.Role;
@@ -56,10 +54,6 @@ public final class BaB_MCTS_Propnet_Gamer extends SampleGamer
 		/* Construct Prop-net */
 		propNetStateMachine = new PropNetStateMachine();
 		propNetStateMachine.initialize(getMatch().getGame().getRules());
-		Set<Proposition> props = propNetStateMachine.propNet.getPropositions();
-		for (Proposition prop : props) {
-			System.out.print("Testing Proposition Name:"+prop.toString()+"\n");
-		}
 
 
 		long end = System.currentTimeMillis();

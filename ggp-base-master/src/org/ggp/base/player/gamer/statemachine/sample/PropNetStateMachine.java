@@ -29,7 +29,7 @@ public class PropNetStateMachine extends StateMachine {
 	/** The underlying proposition network  */
     private PropNet propNet;
     /** The topological ordering of the propositions */
-    private List<Proposition> ordering;
+    private List<Component> ordering;
     /** The player roles */
     private List<Role> roles;
     /** Singleton PropNetUtil class **/
@@ -140,20 +140,120 @@ public class PropNetStateMachine extends StateMachine {
 	 *
 	 * @return The order in which the truth values of propositions need to be set.
 	 */
-	public List<Proposition> getOrdering()
+	public List<Component> getOrdering()
 	{
-	    // List to contain the topological ordering.
-	    List<Proposition> order = new LinkedList<Proposition>();
 
-		// All of the components in the PropNet
-		List<Component> components = new ArrayList<Component>(propNet.getComponents());
+	    List<Component> result = new LinkedList<Component>();
+	    List<Component> components = new ArrayList<Component>(propNet.getComponents());
+	    List<Proposition> basePropositions = propNet.getBasePropositionList();
+		List<Proposition> inputPropositions = propNet.getInputPropositionList();
 
-		// All of the propositions in the PropNet.
-		List<Proposition> propositions = new ArrayList<Proposition>(propNet.getPropositions());
+	    result.add(propNet.getInitProposition());
+	    result.addAll(basePropositions);
 
-	    // TODO: Compute the topological ordering.
 
-		return order;
+
+
+
+		/* Step 1) Divide into components that depends on the base propositions vs. everything else*/
+		List<Component> dependentOnBase = new ArrayList<Component>();
+		List<Component> notDependentOnBase = new ArrayList<Component>();
+
+
+
+		/* Divide */
+		for (Component c : components) {
+			Set<Component> sources = c.getInputs();
+			if (includesBase(sources)) dependentOnBase.add(c);
+			else
+				if (!inputPropositions.contains(c)) notDependentOnBase.add(c); // add only if not input proposition.
+		}
+
+		/* AT THIS POINT ALL COMPONENTS SHOULD BE DEVIDED INTO TWO GROUPS */
+
+		/* Setp 2) Divide All that are dependent on Base propositions into:
+		 * 			1. left of terminal
+		 * 			2. Right of terminal */
+		List<Component> terminalLeft = new ArrayList<Component>();
+		List<Component> terminalRight = new ArrayList<Component>();
+
+		for (Component c : dependentOnBase) {
+
+			/* If the given component is a source of the terminal proposition, add to Left. Else add to Right */
+			if (propNet.getTerminalProposition().getInputs().contains(c)) terminalLeft.add(c);
+			else terminalRight.add(c);
+		}
+		terminalLeft.add(propNet.getTerminalProposition()); // terminal proposition goes to the left
+
+		topologicalSort(result, terminalLeft);
+		if (checkTopologicalOrdering(result)) System.err.print("ERROR IN TOP SORT 1");
+		if (!result.get(result.size() - 1).equals(propNet.getTerminalProposition()))
+			System.err.print("THE TOPOLOGICAL SORTING IS NOT WORKING PROPERLY"); // check that the topologicalSort is right.
+		topologicalSort(result, terminalRight);
+		if (checkTopologicalOrdering(result)) System.err.print("ERROR IN TOP SORT 2");
+		result.addAll(inputPropositions);
+		topologicalSort(result, notDependentOnBase);
+		if (checkTopologicalOrdering(result)) System.err.print("ERROR IN TOP SORT 3");
+
+
+		return result;
+	}
+
+	/* Function: topologicalSort
+	 * ========================================
+	 * Variation of topological Sort. Very poor performance.Can come up with better running time.
+	 * Will enter infinite loop if a component has itself as its own source. This shouldn't happen
+	 * */
+	private void topologicalSort(List<Component> L, List<Component> R) {
+
+		/* Topological Sort Loop */
+		while (!R.isEmpty()) {
+
+			/* For every Component in R, add to L if it has no source in R */
+			for (Component c : R) {
+
+				/* if c's source is not in R, remove from R and add to L*/
+				if (!hasSourceInR(c, R)) {
+					L.add(c);
+					R.remove(c);
+				}
+			}
+		}
+	}
+
+	/* Function: checkTopologicalOrdering
+	 * ========================================
+	 * Checks if the given list of compoenets is topologically sorted
+	 * */
+	private boolean checkTopologicalOrdering(List<Component> list) {
+		for (int i = 0; i < list.size(); i++) {
+			if (hasSourceInR(list.get(i), list.subList(i, list.size()))) return false; // if the rightside contains any source, fail
+		}
+		return true;
+	}
+
+	/* Function: hasSourceInR
+	 * ========================================
+	 * Returns true if R contains any one of c's sources
+	 * */
+	private boolean hasSourceInR(Component c, List<Component> R) {
+		for (Component source : c.getInputs())
+			if (R.contains(source)) return true;
+
+		return false;
+	}
+
+	/* Function: includesBase
+	 * ========================================
+	 * Determines if the given set of components includes a baseProposition or not.
+	 * */
+	private boolean includesBase(Set<Component> sources) {
+		Map<GdlSentence, Proposition> basePropositions = propNet.getBasePropositions();
+
+		for (Component c : sources)
+			if (basePropositions.containsValue(c)) return true; //can optimize later
+
+		return false;
 	}
 
 	/* Already implemented for you */
