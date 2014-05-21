@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 !SESSION 2014-05-07 16:27:53.487 -----------------------------------------------
 eclipse.buildId=4.3.2.M20140221-1700
 java.version=1.7.0_04
@@ -453,3 +454,15 @@ org.eclipse.jdi.TimeoutException: Timeout occurred while waiting for packet 4025
 
 !ENTRY org.eclipse.core.resources 4 380 2014-05-14 14:07:19.002
 !MESSAGE The resource tree is locked for modifications.
+=======
+!SESSION 2014-05-21 14:54:50.310 -----------------------------------------------
+eclipse.buildId=v22.0.1-685705
+java.version=1.7.0_51
+java.vendor=Oracle Corporation
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -product com.android.ide.eclipse.adt.package.product -keyring /Users/Hussain/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product com.android.ide.eclipse.adt.package.product -keyring /Users/Hussain/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2014-05-21 14:55:25.864
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+>>>>>>> FETCH_HEAD
