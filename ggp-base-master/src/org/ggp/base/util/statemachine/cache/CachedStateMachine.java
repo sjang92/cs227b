@@ -123,7 +123,12 @@ public final class CachedStateMachine extends StateMachine
 
 	@Override
 	public void initialize(List<Gdl> description) {
-		backingStateMachine.initialize(description);
+		try {
+			backingStateMachine.initialize(description);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

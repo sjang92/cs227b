@@ -1,0 +1,40 @@
+LOG 1400109506199 [L9]: <ERR> (in StateMachine) Got goal results of size: 2 when expecting size one.
+LOG 1400109506200 [L9]: <ERR> (in GamePlayer) Goal is poorly defined for black in [( true ( cell 5 2 black ) ), ( true ( cell 5 3 red ) ), ( true ( cell 1 1 black ) ), ( true ( cell 3 3 black ) ), ( true ( cell 5 1 red ) ), ( true ( cell 2 2 black ) ), ( true ( control black ) ), ( true ( cell 4 3 red ) ), ( true ( cell 2 1 red ) ), ( true ( cell 4 4 black ) ), ( true ( cell 4 2 red ) ), ( true ( cell 3 2 red ) ), ( true ( cell 3 1 black ) ), ( true ( cell 5 4 red ) ), ( true ( cell 7 1 black ) ), ( true ( cell 4 1 red ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getGoal(ProverStateMachine.java:61)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getGoal(CachedStateMachine.java:61)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:203)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:54)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1400109506200 [L9]: <ERR> (in GamePlayer) An unhandled exception ocurred during move selection: org.ggp.base.player.gamer.exception.MoveSelectionException: Goal is poorly defined for black in [( true ( cell 5 2 black ) ), ( true ( cell 5 3 red ) ), ( true ( cell 1 1 black ) ), ( true ( cell 3 3 black ) ), ( true ( cell 5 1 red ) ), ( true ( cell 2 2 black ) ), ( true ( control black ) ), ( true ( cell 4 3 red ) ), ( true ( cell 2 1 red ) ), ( true ( cell 4 4 black ) ), ( true ( cell 4 2 red ) ), ( true ( cell 3 2 red ) ), ( true ( cell 3 1 black ) ), ( true ( cell 5 4 red ) ), ( true ( cell 7 1 black ) ), ( true ( cell 4 1 red ) )]
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:215)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+Caused by: Goal is poorly defined for black in [( true ( cell 5 2 black ) ), ( true ( cell 5 3 red ) ), ( true ( cell 1 1 black ) ), ( true ( cell 3 3 black ) ), ( true ( cell 5 1 red ) ), ( true ( cell 2 2 black ) ), ( true ( control black ) ), ( true ( cell 4 3 red ) ), ( true ( cell 2 1 red ) ), ( true ( cell 4 4 black ) ), ( true ( cell 4 2 red ) ), ( true ( cell 3 2 red ) ), ( true ( cell 3 1 black ) ), ( true ( cell 5 4 red ) ), ( true ( cell 7 1 black ) ), ( true ( cell 4 1 red ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getGoal(ProverStateMachine.java:61)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getGoal(CachedStateMachine.java:61)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:203)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:54)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	... 2 more
+LOG 1400109511565 [L9]: <ERR> (in StateMachine) Got goal results of size: 2 when expecting size one.
+LOG 1400109511566 [L9]: <ERR> (in GamePlayer) Goal is poorly defined for black in [( true ( cell 5 2 black ) ), ( true ( cell 5 3 red ) ), ( true ( cell 1 1 black ) ), ( true ( cell 3 3 black ) ), ( true ( cell 5 1 red ) ), ( true ( cell 2 2 black ) ), ( true ( cell 4 5 black ) ), ( true ( cell 4 3 red ) ), ( true ( cell 2 1 red ) ), ( true ( cell 4 4 black ) ), ( true ( cell 4 2 red ) ), ( true ( cell 3 2 red ) ), ( true ( cell 3 1 black ) ), ( true ( cell 5 4 red ) ), ( true ( cell 7 1 black ) ), ( true ( control red ) ), ( true ( cell 4 1 red ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getGoal(ProverStateMachine.java:61)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getGoal(CachedStateMachine.java:61)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:203)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:54)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1400109511567 [L9]: <ERR> (in GamePlayer) An unhandled exception ocurred during move selection: org.ggp.base.player.gamer.exception.MoveSelectionException: Goal is poorly defined for black in [( true ( cell 5 2 black ) ), ( true ( cell 5 3 red ) ), ( true ( cell 1 1 black ) ), ( true ( cell 3 3 black ) ), ( true ( cell 5 1 red ) ), ( true ( cell 2 2 black ) ), ( true ( cell 4 5 black ) ), ( true ( cell 4 3 red ) ), ( true ( cell 2 1 red ) ), ( true ( cell 4 4 black ) ), ( true ( cell 4 2 red ) ), ( true ( cell 3 2 red ) ), ( true ( cell 3 1 black ) ), ( true ( cell 5 4 red ) ), ( true ( cell 7 1 black ) ), ( true ( control red ) ), ( true ( cell 4 1 red ) )]
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:215)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+Caused by: Goal is poorly defined for black in [( true ( cell 5 2 black ) ), ( true ( cell 5 3 red ) ), ( true ( cell 1 1 black ) ), ( true ( cell 3 3 black ) ), ( true ( cell 5 1 red ) ), ( true ( cell 2 2 black ) ), ( true ( cell 4 5 black ) ), ( true ( cell 4 3 red ) ), ( true ( cell 2 1 red ) ), ( true ( cell 4 4 black ) ), ( true ( cell 4 2 red ) ), ( true ( cell 3 2 red ) ), ( true ( cell 3 1 black ) ), ( true ( cell 5 4 red ) ), ( true ( cell 7 1 black ) ), ( true ( control red ) ), ( true ( cell 4 1 red ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getGoal(ProverStateMachine.java:61)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getGoal(CachedStateMachine.java:61)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:203)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:54)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	... 2 more
