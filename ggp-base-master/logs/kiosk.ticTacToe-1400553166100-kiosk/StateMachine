@@ -1,0 +1,17 @@
+LOG 1400553166377 [L3]: Beginning domain finding iteration: 0
+LOG 1400553166395 [L3]: 	Done with iteration.  Considered 27 rules.
+LOG 1400553166395 [L3]: Beginning domain finding iteration: 1
+LOG 1400553166407 [L3]: 	Done with iteration.  Considered 21 rules.
+LOG 1400553166407 [L3]: Beginning domain finding iteration: 2
+LOG 1400553166408 [L3]: 	Done with iteration.  Considered 7 rules.
+LOG 1400553166453 [L3]: Converting...
+LOG 1400553166479 [L9]: <ERR> java.lang.NullPointerException
+	at org.ggp.base.util.propnet.architecture.PropNet.recordBasePropositions(PropNet.java:320)
+	at org.ggp.base.util.propnet.architecture.PropNet.<init>(PropNet.java:124)
+	at org.ggp.base.util.propnet.factory.converter.PropNetConverter.convert(PropNetConverter.java:75)
+	at org.ggp.base.util.propnet.factory.PropNetFactory.create(PropNetFactory.java:36)
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.PropNetStateMachine.initialize(PropNetStateMachine.java:44)
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.BaB_MCTS_Propnet_Gamer.stateMachineMetaGame(BaB_MCTS_Propnet_Gamer.java:56)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.metaGame(StateMachineGamer.java:175)
+	at org.ggp.base.player.request.grammar.StartRequest.process(StartRequest.java:59)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)

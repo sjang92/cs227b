@@ -1,0 +1,150 @@
+LOG 1400107735415 [L0]: [Received at 1400107735415] ( START kiosk.connectFour-1400107735226 red (( role red ) ( role black ) ( <= ( base ( cell ?x ?y ?p ) ) ( x ?x ) ( y ?y ) ( role ?p ) ) ( base ( control red ) ) ( base ( control black ) ) ( <= ( input ?p ( drop ?x ) ) ( role ?p ) ( x ?x ) ) ( <= ( input ?p noop ) ( role ?p ) ) ( init ( control red ) ) ( <= ( legal red noop ) ( true ( control black ) ) ) ( <= ( legal red ( drop ?x ) ) ( true ( control red ) ) ( columnOpen ?x ) ) ( <= ( legal black noop ) ( true ( control red ) ) ) ( <= ( legal black ( drop ?x ) ) ( true ( control black ) ) ( columnOpen ?x ) ) ( <= ( next ( cell ?x 1 ?player ) ) ( does ?player ( drop ?x ) ) ( columnEmpty ?x ) ) ( <= ( next ( cell ?x ?y2 ?player ) ) ( does ?player ( drop ?x ) ) ( cellOpen ?x ?y2 ) ( succ ?y1 ?y2 ) ( not ( cellOpen ?x ?y1 ) ) ) ( <= ( next ( cell ?x ?y ?player ) ) ( true ( cell ?x ?y ?player ) ) ) ( <= ( next ( control red ) ) ( true ( control black ) ) ) ( <= ( next ( control black ) ) ( true ( control red ) ) ) ( <= terminal ( line red ) ) ( <= terminal ( line black ) ) ( <= terminal ( not boardOpen ) ) ( <= ( goal red 100 ) ( line red ) ) ( <= ( goal red 50 ) ( not ( line red ) ) ( not ( line black ) ) ( not boardOpen ) ) ( <= ( goal red 0 ) ( line black ) ) ( <= ( goal red 0 ) ( not ( line red ) ) ( not ( line black ) ) boardOpen ) ( <= ( goal black 100 ) ( line black ) ) ( <= ( goal black 50 ) ( not ( line red ) ) ( not ( line black ) ) ( not boardOpen ) ) ( <= ( goal black 0 ) ( line red ) ) ( <= ( goal black 0 ) ( not ( line red ) ) ( not ( line black ) ) boardOpen ) ( <= ( cellOpen ?x ?y ) ( x ?x ) ( y ?y ) ( not ( true ( cell ?x ?y red ) ) ) ( not ( true ( cell ?x ?y black ) ) ) ) ( <= ( columnOpen ?x ) ( cellOpen ?x 6 ) ) ( <= ( columnEmpty ?x ) ( cellOpen ?x 1 ) ) ( <= boardOpen ( x ?x ) ( columnOpen ?x ) ) ( <= ( line ?player ) ( true ( cell ?x1 ?y ?player ) ) ( succ ?x1 ?x2 ) ( succ ?x2 ?x3 ) ( succ ?x3 ?x4 ) ( true ( cell ?x2 ?y ?player ) ) ( true ( cell ?x3 ?y ?player ) ) ( true ( cell ?x4 ?y ?player ) ) ) ( <= ( line ?player ) ( true ( cell ?x ?y1 ?player ) ) ( succ ?y1 ?y2 ) ( succ ?y2 ?y3 ) ( succ ?y3 ?y4 ) ( true ( cell ?x ?y2 ?player ) ) ( true ( cell ?x ?y3 ?player ) ) ( true ( cell ?x ?y4 ?player ) ) ) ( <= ( line ?player ) ( true ( cell ?x1 ?y1 ?player ) ) ( succ ?x1 ?x2 ) ( succ ?x2 ?x3 ) ( succ ?x3 ?x4 ) ( succ ?y1 ?y2 ) ( succ ?y2 ?y3 ) ( succ ?y3 ?y4 ) ( true ( cell ?x2 ?y2 ?player ) ) ( true ( cell ?x3 ?y3 ?player ) ) ( true ( cell ?x4 ?y4 ?player ) ) ) ( <= ( line ?player ) ( true ( cell ?x1 ?y4 ?player ) ) ( succ ?x1 ?x2 ) ( succ ?x2 ?x3 ) ( succ ?x3 ?x4 ) ( succ ?y3 ?y4 ) ( succ ?y2 ?y3 ) ( succ ?y1 ?y2 ) ( true ( cell ?x2 ?y3 ?player ) ) ( true ( cell ?x3 ?y2 ?player ) ) ( true ( cell ?x4 ?y1 ?player ) ) ) ( succ 1 2 ) ( succ 2 3 ) ( succ 3 4 ) ( succ 4 5 ) ( succ 5 6 ) ( succ 6 7 ) ( succ 7 8 ) ( x 1 ) ( x 2 ) ( x 3 ) ( x 4 ) ( x 5 ) ( x 6 ) ( x 7 ) ( x 8 ) ( y 1 ) ( y 2 ) ( y 3 ) ( y 4 ) ( y 5 ) ( y 6 ) ) 30 10)
+LOG 1400107735417 [L0]: [Received at 1400107735417] ( START kiosk.connectFour-1400107735226 black (( role red ) ( role black ) ( <= ( base ( cell ?x ?y ?p ) ) ( x ?x ) ( y ?y ) ( role ?p ) ) ( base ( control red ) ) ( base ( control black ) ) ( <= ( input ?p ( drop ?x ) ) ( role ?p ) ( x ?x ) ) ( <= ( input ?p noop ) ( role ?p ) ) ( init ( control red ) ) ( <= ( legal red noop ) ( true ( control black ) ) ) ( <= ( legal red ( drop ?x ) ) ( true ( control red ) ) ( columnOpen ?x ) ) ( <= ( legal black noop ) ( true ( control red ) ) ) ( <= ( legal black ( drop ?x ) ) ( true ( control black ) ) ( columnOpen ?x ) ) ( <= ( next ( cell ?x 1 ?player ) ) ( does ?player ( drop ?x ) ) ( columnEmpty ?x ) ) ( <= ( next ( cell ?x ?y2 ?player ) ) ( does ?player ( drop ?x ) ) ( cellOpen ?x ?y2 ) ( succ ?y1 ?y2 ) ( not ( cellOpen ?x ?y1 ) ) ) ( <= ( next ( cell ?x ?y ?player ) ) ( true ( cell ?x ?y ?player ) ) ) ( <= ( next ( control red ) ) ( true ( control black ) ) ) ( <= ( next ( control black ) ) ( true ( control red ) ) ) ( <= terminal ( line red ) ) ( <= terminal ( line black ) ) ( <= terminal ( not boardOpen ) ) ( <= ( goal red 100 ) ( line red ) ) ( <= ( goal red 50 ) ( not ( line red ) ) ( not ( line black ) ) ( not boardOpen ) ) ( <= ( goal red 0 ) ( line black ) ) ( <= ( goal red 0 ) ( not ( line red ) ) ( not ( line black ) ) boardOpen ) ( <= ( goal black 100 ) ( line black ) ) ( <= ( goal black 50 ) ( not ( line red ) ) ( not ( line black ) ) ( not boardOpen ) ) ( <= ( goal black 0 ) ( line red ) ) ( <= ( goal black 0 ) ( not ( line red ) ) ( not ( line black ) ) boardOpen ) ( <= ( cellOpen ?x ?y ) ( x ?x ) ( y ?y ) ( not ( true ( cell ?x ?y red ) ) ) ( not ( true ( cell ?x ?y black ) ) ) ) ( <= ( columnOpen ?x ) ( cellOpen ?x 6 ) ) ( <= ( columnEmpty ?x ) ( cellOpen ?x 1 ) ) ( <= boardOpen ( x ?x ) ( columnOpen ?x ) ) ( <= ( line ?player ) ( true ( cell ?x1 ?y ?player ) ) ( succ ?x1 ?x2 ) ( succ ?x2 ?x3 ) ( succ ?x3 ?x4 ) ( true ( cell ?x2 ?y ?player ) ) ( true ( cell ?x3 ?y ?player ) ) ( true ( cell ?x4 ?y ?player ) ) ) ( <= ( line ?player ) ( true ( cell ?x ?y1 ?player ) ) ( succ ?y1 ?y2 ) ( succ ?y2 ?y3 ) ( succ ?y3 ?y4 ) ( true ( cell ?x ?y2 ?player ) ) ( true ( cell ?x ?y3 ?player ) ) ( true ( cell ?x ?y4 ?player ) ) ) ( <= ( line ?player ) ( true ( cell ?x1 ?y1 ?player ) ) ( succ ?x1 ?x2 ) ( succ ?x2 ?x3 ) ( succ ?x3 ?x4 ) ( succ ?y1 ?y2 ) ( succ ?y2 ?y3 ) ( succ ?y3 ?y4 ) ( true ( cell ?x2 ?y2 ?player ) ) ( true ( cell ?x3 ?y3 ?player ) ) ( true ( cell ?x4 ?y4 ?player ) ) ) ( <= ( line ?player ) ( true ( cell ?x1 ?y4 ?player ) ) ( succ ?x1 ?x2 ) ( succ ?x2 ?x3 ) ( succ ?x3 ?x4 ) ( succ ?y3 ?y4 ) ( succ ?y2 ?y3 ) ( succ ?y1 ?y2 ) ( true ( cell ?x2 ?y3 ?player ) ) ( true ( cell ?x3 ?y2 ?player ) ) ( true ( cell ?x4 ?y1 ?player ) ) ) ( succ 1 2 ) ( succ 2 3 ) ( succ 3 4 ) ( succ 4 5 ) ( succ 5 6 ) ( succ 6 7 ) ( succ 7 8 ) ( x 1 ) ( x 2 ) ( x 3 ) ( x 4 ) ( x 5 ) ( x 6 ) ( x 7 ) ( x 8 ) ( y 1 ) ( y 2 ) ( y 3 ) ( y 4 ) ( y 5 ) ( y 6 ) ) 30 10)
+LOG 1400107735460 [L0]: [Sent at 1400107735460] ready
+LOG 1400107735475 [L0]: [Sent at 1400107735475] ready
+LOG 1400107735504 [L0]: [Received at 1400107735504] ( PLAY kiosk.connectFour-1400107735226 NIL )
+LOG 1400107735504 [L0]: [Received at 1400107735504] ( PLAY kiosk.connectFour-1400107735226 NIL )
+LOG 1400107735522 [L0]: [Sent at 1400107735522] noop
+LOG 1400107739639 [L0]: [Sent at 1400107739639] ( drop 5 )
+LOG 1400107739666 [L0]: [Received at 1400107739666] ( PLAY kiosk.connectFour-1400107735226 (( drop 5 ) noop ) )
+LOG 1400107739667 [L0]: [Received at 1400107739666] ( PLAY kiosk.connectFour-1400107735226 (( drop 5 ) noop ) )
+LOG 1400107739676 [L0]: [Sent at 1400107739676] noop
+LOG 1400107748680 [L0]: [Sent at 1400107748680] ( drop 3 )
+LOG 1400107748683 [L0]: [Received at 1400107748682] ( PLAY kiosk.connectFour-1400107735226 (noop ( drop 3 ) ) )
+LOG 1400107748683 [L0]: [Received at 1400107748682] ( PLAY kiosk.connectFour-1400107735226 (noop ( drop 3 ) ) )
+LOG 1400107748688 [L0]: [Sent at 1400107748688] noop
+LOG 1400107758506 [L0]: [Sent at 1400107758506] ( drop 7 )
+LOG 1400107758511 [L0]: [Received at 1400107758511] ( PLAY kiosk.connectFour-1400107735226 (( drop 7 ) noop ) )
+LOG 1400107758511 [L0]: [Received at 1400107758511] ( PLAY kiosk.connectFour-1400107735226 (( drop 7 ) noop ) )
+LOG 1400107758513 [L0]: [Sent at 1400107758513] noop
+LOG 1400107761631 [L9]: <ERR> Goal is poorly defined for black in [( true ( cell 5 1 red ) ), ( true ( cell 2 1 black ) ), ( true ( cell 7 1 red ) ), ( true ( cell 8 1 red ) ), ( true ( cell 3 1 black ) ), ( true ( control red ) ), ( true ( cell 4 1 black ) ), ( true ( cell 1 1 black ) ), ( true ( cell 6 1 red ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getGoal(ProverStateMachine.java:61)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getGoal(CachedStateMachine.java:61)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:204)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:55)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1400107761632 [L9]: <ERR> An unhandled exception ocurred during move selection: org.ggp.base.player.gamer.exception.MoveSelectionException: Goal is poorly defined for black in [( true ( cell 5 1 red ) ), ( true ( cell 2 1 black ) ), ( true ( cell 7 1 red ) ), ( true ( cell 8 1 red ) ), ( true ( cell 3 1 black ) ), ( true ( control red ) ), ( true ( cell 4 1 black ) ), ( true ( cell 1 1 black ) ), ( true ( cell 6 1 red ) )]
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:215)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+Caused by: Goal is poorly defined for black in [( true ( cell 5 1 red ) ), ( true ( cell 2 1 black ) ), ( true ( cell 7 1 red ) ), ( true ( cell 8 1 red ) ), ( true ( cell 3 1 black ) ), ( true ( control red ) ), ( true ( cell 4 1 black ) ), ( true ( cell 1 1 black ) ), ( true ( cell 6 1 red ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getGoal(ProverStateMachine.java:61)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getGoal(CachedStateMachine.java:61)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:204)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:55)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	... 2 more
+LOG 1400107761632 [L0]: [Sent at 1400107761632] nil
+LOG 1400107761634 [L0]: [Received at 1400107761634] ( PLAY kiosk.connectFour-1400107735226 (noop ( drop 4 ) ) )
+LOG 1400107761634 [L0]: [Received at 1400107761634] ( PLAY kiosk.connectFour-1400107735226 (noop ( drop 4 ) ) )
+LOG 1400107761637 [L0]: [Sent at 1400107761637] noop
+LOG 1400107764883 [L0]: [Sent at 1400107764883] ( drop 7 )
+LOG 1400107764887 [L0]: [Received at 1400107764887] ( PLAY kiosk.connectFour-1400107735226 (( drop 7 ) noop ) )
+LOG 1400107764887 [L0]: [Received at 1400107764887] ( PLAY kiosk.connectFour-1400107735226 (( drop 7 ) noop ) )
+LOG 1400107764889 [L0]: [Sent at 1400107764889] noop
+LOG 1400107766493 [L9]: <ERR> Goal is poorly defined for black in [( true ( cell 5 1 red ) ), ( true ( cell 7 4 red ) ), ( true ( cell 2 1 black ) ), ( true ( cell 7 1 red ) ), ( true ( cell 3 1 black ) ), ( true ( cell 7 3 red ) ), ( true ( cell 7 2 red ) ), ( true ( cell 4 1 black ) ), ( true ( cell 1 1 black ) ), ( true ( control black ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getGoal(ProverStateMachine.java:61)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getGoal(CachedStateMachine.java:61)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:204)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:55)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1400107766493 [L9]: <ERR> An unhandled exception ocurred during move selection: org.ggp.base.player.gamer.exception.MoveSelectionException: Goal is poorly defined for black in [( true ( cell 5 1 red ) ), ( true ( cell 7 4 red ) ), ( true ( cell 2 1 black ) ), ( true ( cell 7 1 red ) ), ( true ( cell 3 1 black ) ), ( true ( cell 7 3 red ) ), ( true ( cell 7 2 red ) ), ( true ( cell 4 1 black ) ), ( true ( cell 1 1 black ) ), ( true ( control black ) )]
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:215)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+Caused by: Goal is poorly defined for black in [( true ( cell 5 1 red ) ), ( true ( cell 7 4 red ) ), ( true ( cell 2 1 black ) ), ( true ( cell 7 1 red ) ), ( true ( cell 3 1 black ) ), ( true ( cell 7 3 red ) ), ( true ( cell 7 2 red ) ), ( true ( cell 4 1 black ) ), ( true ( cell 1 1 black ) ), ( true ( control black ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getGoal(ProverStateMachine.java:61)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getGoal(CachedStateMachine.java:61)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:204)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:55)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	... 2 more
+LOG 1400107766494 [L0]: [Sent at 1400107766494] nil
+LOG 1400107766497 [L0]: [Received at 1400107766497] ( PLAY kiosk.connectFour-1400107735226 (noop ( drop 4 ) ) )
+LOG 1400107766497 [L0]: [Received at 1400107766497] ( PLAY kiosk.connectFour-1400107735226 (noop ( drop 4 ) ) )
+LOG 1400107766500 [L0]: [Sent at 1400107766500] noop
+LOG 1400107776575 [L0]: [Sent at 1400107776575] ( drop 5 )
+LOG 1400107776579 [L0]: [Received at 1400107776579] ( PLAY kiosk.connectFour-1400107735226 (( drop 5 ) noop ) )
+LOG 1400107776579 [L0]: [Received at 1400107776579] ( PLAY kiosk.connectFour-1400107735226 (( drop 5 ) noop ) )
+LOG 1400107776583 [L0]: [Sent at 1400107776583] noop
+LOG 1400107778586 [L9]: <ERR> Goal is poorly defined for black in [( true ( cell 5 1 red ) ), ( true ( cell 7 4 red ) ), ( true ( cell 7 1 red ) ), ( true ( cell 5 2 red ) ), ( true ( cell 3 1 black ) ), ( true ( cell 7 3 red ) ), ( true ( cell 7 2 red ) ), ( true ( cell 4 1 black ) ), ( true ( cell 4 4 black ) ), ( true ( cell 4 2 black ) ), ( true ( control black ) ), ( true ( cell 4 3 black ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getGoal(ProverStateMachine.java:61)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getGoal(CachedStateMachine.java:61)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:204)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:55)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1400107778587 [L9]: <ERR> An unhandled exception ocurred during move selection: org.ggp.base.player.gamer.exception.MoveSelectionException: Goal is poorly defined for black in [( true ( cell 5 1 red ) ), ( true ( cell 7 4 red ) ), ( true ( cell 7 1 red ) ), ( true ( cell 5 2 red ) ), ( true ( cell 3 1 black ) ), ( true ( cell 7 3 red ) ), ( true ( cell 7 2 red ) ), ( true ( cell 4 1 black ) ), ( true ( cell 4 4 black ) ), ( true ( cell 4 2 black ) ), ( true ( control black ) ), ( true ( cell 4 3 black ) )]
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:215)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+Caused by: Goal is poorly defined for black in [( true ( cell 5 1 red ) ), ( true ( cell 7 4 red ) ), ( true ( cell 7 1 red ) ), ( true ( cell 5 2 red ) ), ( true ( cell 3 1 black ) ), ( true ( cell 7 3 red ) ), ( true ( cell 7 2 red ) ), ( true ( cell 4 1 black ) ), ( true ( cell 4 4 black ) ), ( true ( cell 4 2 black ) ), ( true ( control black ) ), ( true ( cell 4 3 black ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getGoal(ProverStateMachine.java:61)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getGoal(CachedStateMachine.java:61)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:204)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:55)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	... 2 more
+LOG 1400107778588 [L0]: [Sent at 1400107778587] nil
+LOG 1400107778590 [L0]: [Received at 1400107778590] ( PLAY kiosk.connectFour-1400107735226 (noop ( drop 4 ) ) )
+LOG 1400107778590 [L0]: [Received at 1400107778590] ( PLAY kiosk.connectFour-1400107735226 (noop ( drop 4 ) ) )
+LOG 1400107778591 [L0]: [Sent at 1400107778591] noop
+LOG 1400107780818 [L0]: [Sent at 1400107780818] ( drop 4 )
+LOG 1400107780824 [L0]: [Received at 1400107780824] ( PLAY kiosk.connectFour-1400107735226 (( drop 4 ) noop ) )
+LOG 1400107780826 [L0]: [Received at 1400107780826] ( PLAY kiosk.connectFour-1400107735226 (( drop 4 ) noop ) )
+LOG 1400107780829 [L0]: [Sent at 1400107780829] noop
+LOG 1400107782116 [L9]: <ERR> Goal is poorly defined for black in [( true ( cell 2 1 black ) ), ( true ( cell 7 1 red ) ), ( true ( cell 5 2 red ) ), ( true ( cell 4 1 black ) ), ( true ( cell 1 1 black ) ), ( true ( cell 4 2 black ) ), ( true ( control black ) ), ( true ( cell 5 1 red ) ), ( true ( cell 7 4 red ) ), ( true ( cell 3 1 black ) ), ( true ( cell 7 3 red ) ), ( true ( cell 7 2 red ) ), ( true ( cell 4 4 red ) ), ( true ( cell 4 3 black ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getGoal(ProverStateMachine.java:61)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getGoal(CachedStateMachine.java:61)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:204)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:55)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1400107782116 [L9]: <ERR> An unhandled exception ocurred during move selection: org.ggp.base.player.gamer.exception.MoveSelectionException: Goal is poorly defined for black in [( true ( cell 2 1 black ) ), ( true ( cell 7 1 red ) ), ( true ( cell 5 2 red ) ), ( true ( cell 4 1 black ) ), ( true ( cell 1 1 black ) ), ( true ( cell 4 2 black ) ), ( true ( control black ) ), ( true ( cell 5 1 red ) ), ( true ( cell 7 4 red ) ), ( true ( cell 3 1 black ) ), ( true ( cell 7 3 red ) ), ( true ( cell 7 2 red ) ), ( true ( cell 4 4 red ) ), ( true ( cell 4 3 black ) )]
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:215)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+Caused by: Goal is poorly defined for black in [( true ( cell 2 1 black ) ), ( true ( cell 7 1 red ) ), ( true ( cell 5 2 red ) ), ( true ( cell 4 1 black ) ), ( true ( cell 1 1 black ) ), ( true ( cell 4 2 black ) ), ( true ( control black ) ), ( true ( cell 5 1 red ) ), ( true ( cell 7 4 red ) ), ( true ( cell 3 1 black ) ), ( true ( cell 7 3 red ) ), ( true ( cell 7 2 red ) ), ( true ( cell 4 4 red ) ), ( true ( cell 4 3 black ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getGoal(ProverStateMachine.java:61)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getGoal(CachedStateMachine.java:61)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:204)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:55)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	... 2 more
+LOG 1400107782117 [L0]: [Sent at 1400107782117] nil
+LOG 1400107782123 [L0]: [Received at 1400107782123] ( PLAY kiosk.connectFour-1400107735226 (noop ( drop 6 ) ) )
+LOG 1400107782123 [L0]: [Received at 1400107782123] ( PLAY kiosk.connectFour-1400107735226 (noop ( drop 6 ) ) )
+LOG 1400107782125 [L0]: [Sent at 1400107782125] noop
+LOG 1400107811408 [L0]: [Sent at 1400107811408] ( drop 5 )
+LOG 1400107811413 [L0]: [Received at 1400107811413] ( PLAY kiosk.connectFour-1400107735226 (( drop 5 ) noop ) )
+LOG 1400107811413 [L0]: [Received at 1400107811413] ( PLAY kiosk.connectFour-1400107735226 (( drop 5 ) noop ) )
+LOG 1400107811414 [L0]: [Sent at 1400107811414] noop
+LOG 1400107812332 [L9]: <ERR> Goal is poorly defined for black in [( true ( cell 2 1 black ) ), ( true ( cell 7 1 red ) ), ( true ( cell 5 2 red ) ), ( true ( cell 4 1 black ) ), ( true ( cell 6 1 black ) ), ( true ( control red ) ), ( true ( cell 1 1 black ) ), ( true ( cell 4 2 black ) ), ( true ( cell 5 1 red ) ), ( true ( cell 6 2 red ) ), ( true ( cell 3 1 black ) ), ( true ( cell 5 3 red ) ), ( true ( cell 7 2 red ) ), ( true ( cell 4 4 red ) ), ( true ( cell 4 3 black ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getGoal(ProverStateMachine.java:61)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getGoal(CachedStateMachine.java:61)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:204)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:55)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1400107812332 [L9]: <ERR> An unhandled exception ocurred during move selection: org.ggp.base.player.gamer.exception.MoveSelectionException: Goal is poorly defined for black in [( true ( cell 2 1 black ) ), ( true ( cell 7 1 red ) ), ( true ( cell 5 2 red ) ), ( true ( cell 4 1 black ) ), ( true ( cell 6 1 black ) ), ( true ( control red ) ), ( true ( cell 1 1 black ) ), ( true ( cell 4 2 black ) ), ( true ( cell 5 1 red ) ), ( true ( cell 6 2 red ) ), ( true ( cell 3 1 black ) ), ( true ( cell 5 3 red ) ), ( true ( cell 7 2 red ) ), ( true ( cell 4 4 red ) ), ( true ( cell 4 3 black ) )]
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:215)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+Caused by: Goal is poorly defined for black in [( true ( cell 2 1 black ) ), ( true ( cell 7 1 red ) ), ( true ( cell 5 2 red ) ), ( true ( cell 4 1 black ) ), ( true ( cell 6 1 black ) ), ( true ( control red ) ), ( true ( cell 1 1 black ) ), ( true ( cell 4 2 black ) ), ( true ( cell 5 1 red ) ), ( true ( cell 6 2 red ) ), ( true ( cell 3 1 black ) ), ( true ( cell 5 3 red ) ), ( true ( cell 7 2 red ) ), ( true ( cell 4 4 red ) ), ( true ( cell 4 3 black ) )]
+	at org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine.getGoal(ProverStateMachine.java:61)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getGoal(CachedStateMachine.java:61)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.simulateToTerminal(BaB_MCTSGamer.java:204)
+	at org.ggp.base.player.gamer.statemachine.sample.BaB_MCTSGamer.stateMachineSelectMove(BaB_MCTSGamer.java:55)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	... 2 more
+LOG 1400107812332 [L0]: [Sent at 1400107812332] nil
+LOG 1400107812336 [L0]: [Received at 1400107812336] ( PLAY kiosk.connectFour-1400107735226 (noop ( drop 2 ) ) )
+LOG 1400107812336 [L0]: [Received at 1400107812336] ( PLAY kiosk.connectFour-1400107735226 (noop ( drop 2 ) ) )
+LOG 1400107812337 [L0]: [Sent at 1400107812337] noop

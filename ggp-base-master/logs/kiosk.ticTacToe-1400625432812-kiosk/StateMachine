@@ -1,0 +1,11 @@
+LOG 1400625433058 [L3]: Beginning domain finding iteration: 0
+LOG 1400625433064 [L3]: 	Done with iteration.  Considered 27 rules.
+LOG 1400625433065 [L3]: Beginning domain finding iteration: 1
+LOG 1400625433079 [L3]: 	Done with iteration.  Considered 16 rules.
+LOG 1400625433079 [L3]: Beginning domain finding iteration: 2
+LOG 1400625433092 [L3]: 	Done with iteration.  Considered 10 rules.
+LOG 1400625433092 [L3]: Beginning domain finding iteration: 3
+LOG 1400625433093 [L3]: 	Done with iteration.  Considered 3 rules.
+LOG 1400625433093 [L3]: Beginning domain finding iteration: 4
+LOG 1400625433094 [L3]: 	Done with iteration.  Considered 4 rules.
+LOG 1400625433150 [L3]: Converting...

@@ -1,0 +1,26 @@
+LOG 1400553345907 [L9]: <ERR> (in StateMachine) java.lang.NullPointerException
+	at org.ggp.base.util.propnet.architecture.PropNet.recordBasePropositions(PropNet.java:320)
+	at org.ggp.base.util.propnet.architecture.PropNet.<init>(PropNet.java:124)
+	at org.ggp.base.util.propnet.factory.converter.PropNetConverter.convert(PropNetConverter.java:75)
+	at org.ggp.base.util.propnet.factory.PropNetFactory.create(PropNetFactory.java:36)
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.PropNetStateMachine.initialize(PropNetStateMachine.java:44)
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.BaB_MCTS_Propnet_Gamer.stateMachineMetaGame(BaB_MCTS_Propnet_Gamer.java:56)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.metaGame(StateMachineGamer.java:175)
+	at org.ggp.base.player.request.grammar.StartRequest.process(StartRequest.java:59)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1400553345908 [L9]: <ERR> (in GamePlayer) java.lang.NullPointerException
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.PropNetStateMachine.initialize(PropNetStateMachine.java:46)
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.BaB_MCTS_Propnet_Gamer.stateMachineMetaGame(BaB_MCTS_Propnet_Gamer.java:56)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.metaGame(StateMachineGamer.java:175)
+	at org.ggp.base.player.request.grammar.StartRequest.process(StartRequest.java:59)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1400553345908 [L9]: <ERR> (in GamePlayer) An unhandled exception occurred during metagaming: org.ggp.base.player.gamer.exception.MetaGamingException: java.lang.NullPointerException
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.metaGame(StateMachineGamer.java:180)
+	at org.ggp.base.player.request.grammar.StartRequest.process(StartRequest.java:59)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+Caused by: java.lang.NullPointerException
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.PropNetStateMachine.initialize(PropNetStateMachine.java:46)
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.BaB_MCTS_Propnet_Gamer.stateMachineMetaGame(BaB_MCTS_Propnet_Gamer.java:56)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.metaGame(StateMachineGamer.java:175)
+	... 2 more
+LOG 1400553345924 [L9]: <ERR> (in GamePlayer) Got play message not intended for current game: ignoring.
