@@ -212,12 +212,7 @@ public final class Server extends JPanel implements ActionListener
                 return;
 
             StateMachine stateMachine = new ProverStateMachine();
-            try {
-				stateMachine.initialize(theGame.getRules());
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+            stateMachine.initialize(theGame.getRules());
             List<Role> roles = stateMachine.getRoles();
 
             int newRowCount = 11;
