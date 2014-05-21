@@ -3,7 +3,6 @@ package org.ggp.base.util.propnet.architecture;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -69,10 +68,6 @@ import org.ggp.base.util.statemachine.Role;
 
 public final class PropNet
 {
-	/* My Implementation */
-	private List<Proposition> basePropositionList;
-	private List<Proposition> inputPropositionList;
-
 	/** References to every component in the PropNet. */
 	private final Set<Component> components;
 
@@ -118,8 +113,7 @@ public final class PropNet
 	 */
 	public PropNet(List<Role> roles, Set<Component> components)
 	{
-		basePropositionList = new ArrayList<Proposition>();
-		inputPropositionList = new ArrayList<Proposition>();
+
 	    this.roles = roles;
 		this.components = components;
 		this.propositions = recordPropositions();
@@ -131,17 +125,6 @@ public final class PropNet
 		this.terminalProposition = recordTerminalProposition();
 		this.legalInputMap = makeLegalInputMap();
 	}
-
-	/*==========My IMPLEMENTATION */
-	public List<Proposition> getBasePropositionList() {
-		return this.basePropositionList;
-	}
-
-	public List<Proposition> getInputPropositionList() {
-		return this.inputPropositionList;
-	}
-
-	/* ================*/
 
 	public List<Role> getRoles()
 	{
@@ -319,9 +302,9 @@ public final class PropNet
 			Component component = proposition.getSingleInput();
 			if (component instanceof Transition) {
 				basePropositions.put(proposition.getName(), proposition);
-				basePropositionList.add(proposition); // added code: add proposition to base PropositionList
 			}
 		}
+
 		return basePropositions;
 	}
 
@@ -396,7 +379,6 @@ public final class PropNet
 			GdlRelation relation = (GdlRelation) proposition.getName();
 			if (relation.getName().getValue().equals("does")) {
 				inputPropositions.put(proposition.getName(), proposition);
-				inputPropositionList.add(proposition);
 			}
 		}
 

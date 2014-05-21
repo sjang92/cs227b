@@ -32,9 +32,8 @@ public abstract class StateMachine
 	 * <p>
 	 * This method should only be called once, and it should be called before any
 	 * other methods on the StateMachine.
-	 * @throws InterruptedException 
 	 */
-    public abstract void initialize(List<Gdl> description) throws InterruptedException;
+    public abstract void initialize(List<Gdl> description);
     /**
      * Returns the goal value for the given role in the given state. Goal values
      * are always between 0 and 100.
