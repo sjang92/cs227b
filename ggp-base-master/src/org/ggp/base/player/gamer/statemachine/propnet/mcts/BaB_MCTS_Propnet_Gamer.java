@@ -110,16 +110,16 @@ public final class BaB_MCTS_Propnet_Gamer extends SampleGamer
 		}
 
 		/* Get Best Move from the MCTS Tree */
-		System.out.print("- Interpreting the MCTS Tree... \n");
+		System.out.print("	- Interpreting the MCTS Tree... \n");
 		if (moves.size() != 1) bestMove = getBestMove(root);
 		System.out.print("================================================= \n");
 
 		/* Print Readable End Turn Report */
-		System.out.print("================== END TURN REPORT ===============\n");
+		System.out.print("================= END TURN REPORT ===============\n");
 		System.out.print("	- Move made: "+bestMove.toString()+"\n");
 		System.out.print("	- Best Utility: "+bestUtility+"\n");
 		System.out.print("	- Number of Rounds: " + numRounds + "\n");
-		System.out.print("==================================================\n");
+		System.out.print("=================================================\n");
 
 		/* Notify the server */
 		long stop = System.currentTimeMillis();

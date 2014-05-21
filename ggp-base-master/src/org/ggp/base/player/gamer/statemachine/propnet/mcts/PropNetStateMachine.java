@@ -33,6 +33,12 @@ public class PropNetStateMachine extends StateMachine {
     /** The player roles */
     private List<Role> roles;
 
+    private int basePropositionIndex;
+    private int basePropositionSize;
+    private int inputPropositionIndex;
+    private int inputPropositionSize;
+    private int terminalPropositionIndex;
+
 
     /**
      * Initializes the PropNetStateMachine. You should compute the topological
@@ -158,22 +164,32 @@ public class PropNetStateMachine extends StateMachine {
 
 		/* The beginning of the result is always init -> bases */
 	    result.add(propNet.getInitProposition());
+	    basePropositionIndex = result.size();
 	    result.addAll(basePropositions);
-
+	    basePropositionSize = basePropositions.size();
 		topologicalSort(result, terminalLeft);
+		terminalPropositionIndex = result.size() - 1;
+
 		topologicalSort(result, terminalRight);
+		inputPropositionIndex = result.size();
 		result.addAll(inputPropositions);
+		inputPropositionSize = inputPropositions.size();
 		topologicalSort(result, notDependentOnBase);
 
 		if (!isValidTopologicalOrdering(result))
 			System.err.print("	- Error Found while doing topological sort of propositions \n");
-
+		else {
+			System.out.print("	- Finished findidng the Topological Ordering of Game Propositions...\n");
+			System.out.print("	- base Proposition range: "+basePropositionIndex+"->"+(basePropositionIndex + basePropositionSize)+"\n");
+			System.out.print("  - terminal Proposition index: "+terminalPropositionIndex+"\n");
+			System.out.print("	- input Proposition range: "+inputPropositionIndex+"->"+(inputPropositionIndex + inputPropositionSize)+"\n");
+		}
 		return result;
 	}
 
 	/* Function: isReverseDependentOnTerminalProposition
 	 * ========================================
-	 * Recursively compute if a given component is reverse dependent on the terminal proposition
+	 * Recursively computes if a given component is reverse dependent on the terminal proposition
 	 * */
 	private boolean isReverseDependentOnTerminal(Map<Component, Boolean> reverseDependencyMap, Component c, List<Proposition> baseProps) {
 		if (reverseDependencyMap.containsKey(c)) {
@@ -202,7 +218,7 @@ public class PropNetStateMachine extends StateMachine {
 
 	/* Function: isDependentOnBaseProposition
 	 * ========================================
-	 * Recursively compute if a given component is dependent on base propositions
+	 * Recursively computes if a given component is dependent on base propositions
 	 * */
 	private boolean isDependentOnBaseProposition(Map<Component, Boolean> dependencyMap, Component c, List<Proposition> inputProps, List<Proposition> baseProps) {
 
