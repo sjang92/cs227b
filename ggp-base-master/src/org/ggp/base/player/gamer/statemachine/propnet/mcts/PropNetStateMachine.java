@@ -32,8 +32,7 @@ public class PropNetStateMachine extends StateMachine {
     private List<Component> ordering;
     /** The player roles */
     private List<Role> roles;
-    /** Singleton PropNetUtil class **/
-    private PropNetUtil propNetUtil;
+
 
     /**
      * Initializes the PropNetStateMachine. You should compute the topological
@@ -45,12 +44,10 @@ public class PropNetStateMachine extends StateMachine {
     public void initialize(List<Gdl> description) throws InterruptedException {
     	System.out.print("	- Creating propNet... \n");
         propNet = OptimizingPropNetFactory.create(description);
-        propNet.renderToFile("TicTactoe.dot");
         if (propNet == null) System.err.print("propNet is null for some reason");
         System.out.print("	- Finished initializing propNet... \n");
         roles = propNet.getRoles();
         ordering = getOrdering();
-        propNetUtil = new PropNetUtil(propNet);
     }
 
 	/**
@@ -59,8 +56,7 @@ public class PropNetStateMachine extends StateMachine {
 	 */
 	@Override
 	public boolean isTerminal(MachineState state) {
-		propNetUtil.markBases(state);
-		return propNetUtil.propMarkP(propNet.getTerminalProposition());
+		return true;
 	}
 
 	/**
@@ -73,9 +69,6 @@ public class PropNetStateMachine extends StateMachine {
 	@Override
 	public int getGoal(MachineState state, Role role)
 	throws GoalDefinitionException {
-		propNetUtil.markBases(state);
-		List<Role> roles = propNet.getRoles();
-
 		return -1;
 	}
 
@@ -96,17 +89,7 @@ public class PropNetStateMachine extends StateMachine {
 	@Override
 	public List<Move> getLegalMoves(MachineState state, Role role)
 	throws MoveDefinitionException {
-		propNetUtil.markBases(state);
-		List<Role> roles = propNet.getRoles();
-		List<Move> actions = new ArrayList<Move>();
-		Set<Proposition> legals = propNet.getLegalPropositions().get(role);
-
-		for (Proposition p : legals) {
-			if (propNetUtil.propMarkP(p))
-				actions.add(new Move(p.getName().toTerm()));
-		}
-
-		return actions;
+		return null;
 	}
 
 	/**
@@ -115,20 +98,7 @@ public class PropNetStateMachine extends StateMachine {
 	@Override
 	public MachineState getNextState(MachineState state, List<Move> moves)
 	throws TransitionDefinitionException {
-
-		/* Mark action propositions from the list of moves, and the base proposition from the given state */
-		propNetUtil.markActions(moves);
-		propNetUtil.markBases(state);
-
-		Map<GdlSentence, Proposition> bases = propNet.getBasePropositions();
-		Set<GdlSentence> stateInfo = new HashSet<GdlSentence>();
-		for (GdlSentence gdl: bases.keySet()) {
-			if (propNetUtil.propMarkP(bases.get(gdl).getSingleInput().getSingleInput())) {
-				//stateInfo.add(gdl)
-			}
-		}
-
-		return new MachineState(stateInfo);
+		return null;
 	}
 
 	/**
@@ -191,27 +161,13 @@ public class PropNetStateMachine extends StateMachine {
 	    result.addAll(basePropositions);
 
 		topologicalSort(result, terminalLeft);
-		if (!isValidTopologicalOrdering(result)) {
-			System.err.print("ERROR IN TOP SORT 1\n");
-		}
-		if (!result.get(result.size() - 1).equals(propNet.getTerminalProposition()))
-			System.err.print("THE TOPOLOGICAL SORTING IS NOT WORKING PROPERLY"); // check that the topologicalSort is right.
-
 		topologicalSort(result, terminalRight);
-
-		if (!isValidTopologicalOrdering(result)) System.err.print("ERROR IN TOP SORT 2\n");
-
 		result.addAll(inputPropositions);
 		topologicalSort(result, notDependentOnBase);
 
-		if (!isValidTopologicalOrdering(result)) {
-			System.err.print("ERROR IN TOP SORT 3\n");
-		}
+		if (!isValidTopologicalOrdering(result))
+			System.err.print("	- Error Found while doing topological sort of propositions \n");
 
-
-		if (result.size() != (new ArrayList<Component>(propNet.getComponents())).size()) System.err.print("Size is diff.\n");
-		System.out.print("Result array size: "+result.size()+"\n");
-		System.out.print("All Components size: "+(new ArrayList<Component>(propNet.getComponents())).size()+"\n");
 		return result;
 	}
 

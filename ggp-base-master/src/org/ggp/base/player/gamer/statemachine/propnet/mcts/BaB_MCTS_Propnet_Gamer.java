@@ -52,11 +52,11 @@ public final class BaB_MCTS_Propnet_Gamer extends SampleGamer
 		myRole = getRole();
 
 		/* Construct Prop-net */
-		propNetStateMachine = new PropNetStateMachine();
 		try {
+			propNetStateMachine = new PropNetStateMachine();
 			propNetStateMachine.initialize(getMatch().getGame().getRules());
+			hasPropNet = true;
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
