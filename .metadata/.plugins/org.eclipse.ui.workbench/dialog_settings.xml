@@ -2,11 +2,16 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.internal.QuickAccess">
 <<<<<<< HEAD
+<<<<<<< HEAD
 		<item value="1025" key="dialogWidth"/>
 		<item value="525" key="dialogHeight"/>
 =======
 		<item value="800" key="dialogWidth"/>
 		<item value="500" key="dialogHeight"/>
+>>>>>>> FETCH_HEAD
+=======
+		<item value="1025" key="dialogWidth"/>
+		<item value="525" key="dialogHeight"/>
 >>>>>>> FETCH_HEAD
 		<list key="orderedProviders">
 		</list>
@@ -18,10 +23,16 @@
 		</list>
 	</section>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> FETCH_HEAD
 	<section name="WorkbenchPreferenceDialogSettings">
 		<item value="26" key="DIALOG_Y_ORIGIN"/>
 		<item value="199" key="DIALOG_X_ORIGIN"/>
 	</section>
+<<<<<<< HEAD
+=======
+>>>>>>> FETCH_HEAD
 =======
 >>>>>>> FETCH_HEAD
 	<section name="ImportExportAction">
@@ -29,8 +40,12 @@
 		<list key="ImportExportPage.STORE_EXPANDED_IMPORT_CATEGORIES">
 			<item value="org.eclipse.ui.Basic"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
 			<item value="org.eclipse.team.cvs.ui.importWizards"/>
 =======
+>>>>>>> FETCH_HEAD
+=======
+			<item value="org.eclipse.team.cvs.ui.importWizards"/>
 >>>>>>> FETCH_HEAD
 		</list>
 	</section>
