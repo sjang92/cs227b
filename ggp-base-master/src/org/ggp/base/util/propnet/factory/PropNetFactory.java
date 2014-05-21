@@ -36,7 +36,6 @@ public final class PropNetFactory
             return new PropNetConverter().convert(Role.computeRoles(description), flatDescription);
         } catch(Exception e) {
             GamerLogger.logStackTrace("StateMachine", e);
-            e.printStackTrace();
             return null;
         }
 	}
