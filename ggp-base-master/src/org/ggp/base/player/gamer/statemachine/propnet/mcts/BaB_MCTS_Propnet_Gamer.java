@@ -9,6 +9,7 @@ import org.ggp.base.player.gamer.statemachine.sample.SampleGamer;
 import org.ggp.base.util.statemachine.MachineState;
 import org.ggp.base.util.statemachine.Move;
 import org.ggp.base.util.statemachine.Role;
+import org.ggp.base.util.statemachine.StateMachine;
 import org.ggp.base.util.statemachine.exceptions.GoalDefinitionException;
 import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException;
 import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
@@ -33,6 +34,12 @@ public final class BaB_MCTS_Propnet_Gamer extends SampleGamer
 	/* =======================================================================
 	 * ====================== Inheritance Methods ============================
 	 * ======================================================================= */
+
+	@Override
+	public StateMachine getInitialStateMachine() {
+		return new PropNetStateMachine();
+		//return new ProverStateMachine();
+	}
 
 	/* Method: stateMachineMetaGame
 	 * =======================================================================
