@@ -13,8 +13,14 @@ import org.ggp.base.util.gdl.grammar.GdlConstant;
 import org.ggp.base.util.gdl.grammar.GdlRelation;
 import org.ggp.base.util.gdl.grammar.GdlSentence;
 import org.ggp.base.util.propnet.architecture.Component;
+import org.ggp.base.util.propnet.architecture.Component.ComponentType;
 import org.ggp.base.util.propnet.architecture.PropNet;
+import org.ggp.base.util.propnet.architecture.components.And;
+import org.ggp.base.util.propnet.architecture.components.Not;
+import org.ggp.base.util.propnet.architecture.components.Or;
 import org.ggp.base.util.propnet.architecture.components.Proposition;
+import org.ggp.base.util.propnet.architecture.components.Proposition.PropositionType;
+import org.ggp.base.util.propnet.architecture.components.Transition;
 import org.ggp.base.util.propnet.factory.OptimizingPropNetFactory;
 import org.ggp.base.util.statemachine.MachineState;
 import org.ggp.base.util.statemachine.Move;
@@ -29,7 +35,8 @@ public class PropNetStateMachine extends StateMachine {
 	/** The underlying proposition network  */
     private PropNet propNet;
     /** The topological ordering of the propositions */
-    private List<Component> ordering;
+    //private List<Component> ordering;
+    private List<Proposition> ordering;
     /** The player roles */
     private List<Role> roles;
 
@@ -103,8 +110,32 @@ public class PropNetStateMachine extends StateMachine {
         inputPropositionList = propNet.getInputPropositionList();
         moveInputMap = getInputMoveMap();
         goalMap = getGoalMap();
+        addTypeTagToComponents(propNet.getComponents());
         ordering = getOrdering();
         System.out.print("	- Finished initializing propNet... \n");
+    }
+
+    private void addTypeTagToComponents(Set<Component> components) {
+    	for (Component c : components) {
+    		if (c instanceof And) {
+    			c.type = ComponentType.AND;
+    		} else if (c instanceof Or) {
+    			c.type = ComponentType.OR;
+    		} else if (c instanceof Not) {
+    			c.type = ComponentType.NEG;
+    		} else if (c instanceof Transition) {
+    			c.type = ComponentType.TRAN;
+    		} else if (c instanceof Proposition) {
+    			c.type = ComponentType.PROP;
+    			((Proposition)c).type = PropositionType.ELSE;
+    		}
+    	}
+    	for (Proposition p : basePropositionList) {
+    		p.type = PropositionType.BASE;
+    	}
+    	for (Proposition p : inputPropositionList) {
+    		p.type = PropositionType.INPUT;
+    	}
     }
 
     private Map<Proposition, Integer> getGoalMap() {
@@ -213,6 +244,7 @@ public class PropNetStateMachine extends StateMachine {
 		initializeBasePropositions(state);
 		forwardPropagation(basePropositionIndex + basePropositionSize, inputPropositionIndex); //legal Propositions are always before inputProps
 		Set<Proposition> legalProps = legalPropositions.get(role);
+
 		for (Proposition p : legalProps) {
 			if (p.getValue()) result.add(getMoveFromProposition(p));
 		}
@@ -236,6 +268,7 @@ public class PropNetStateMachine extends StateMachine {
 		forwardPropagation(basePropositionIndex + basePropositionSize, ordering.size() - 1);
 
 		Set<GdlSentence> nextProps = new HashSet<GdlSentence>();
+
 
 		for (Proposition baseProp : basePropositionList) { // iterate through all basePropositions
 
@@ -306,24 +339,24 @@ public class PropNetStateMachine extends StateMachine {
 	/* Start from the starting index, and propagate to the end index  INCLUSIVE !! */
 	protected void forwardPropagation(int startIndex, int endIndex) {
 		long start = System.currentTimeMillis();
-		int counter = 0;
 		for (int i = startIndex; i <= endIndex; i++) {
-
+			Component c = ordering.get(i);
+			Proposition p = ordering.get(i);
 			/* If the current component that we're looking at is an instance of Proposition */
-			if (ordering.get(i) instanceof Proposition) {
-
+			//if (ordering.get(i) instanceof Proposition) {
+			//if (c.type == ComponentType.PROP && ((Proposition)c).type != PropositionType.INPUT) {
+			if (p.type != PropositionType.INPUT) {
 				/* Make sure this proposition is not an input Proposition*/
-				if (ordering.get(i).getInputs().size() != 0) {
-					boolean value = ordering.get(i).getSingleInput().getValue(); // propositions only have single sources?
-					((Proposition)ordering.get(i)).setValue(value);
-				}
+				//if (ordering.get(i).getInputs().size() != 0) {
+				//if (((Proposition)c).type != PropositionType.INPUT) {
+					boolean value = p.getSingleInput().getValue(); // propositions only have single sources?
+					//((Proposition)c).setValue(value);
+					p.setValue(value);
+				//}
 			}
-			counter ++;
 		}
 		long end = System.currentTimeMillis();
 		time_forwardPropagate += (end - start);
-		//call_forwardPropagate += 1;
-		//System.out.print("	- Num Components Visited: "+(counter)+"\n");
 	}
 
 	/* Topological Ordering */
@@ -342,7 +375,7 @@ public class PropNetStateMachine extends StateMachine {
 	 *
 	 * @return The order in which the truth values of propositions need to be set.
 	 */
-	public List<Component> getOrdering()
+	public List<Proposition> getOrdering()
 	{
 		System.out.print("	- Starting Topological Ordering... \n");
 
@@ -399,15 +432,34 @@ public class PropNetStateMachine extends StateMachine {
 		inputPropositionSize = inputPropositions.size();
 		topologicalSort(result, notDependentOnBase);
 
-		if (!isValidTopologicalOrdering(result))
-			System.err.print("	- Error Found while doing topological sort of propositions \n");
-		else {
-			System.out.print("	- Finished findidng the Topological Ordering of Game Propositions...\n");
-			System.out.print("	- base Proposition range: "+basePropositionIndex+"->"+(basePropositionIndex + basePropositionSize)+"\n");
-			System.out.print("  - terminal Proposition index: "+terminalPropositionIndex+"\n");
-			System.out.print("	- input Proposition range: "+inputPropositionIndex+"->"+(inputPropositionIndex + inputPropositionSize)+"\n");
+		//if (!isValidTopologicalOrdering(result))
+		//	System.err.print("	- Error Found while doing topological sort of propositions \n");
+		//else {
+
+		//}
+		List<Proposition> realResult = new ArrayList<Proposition>();
+		int resultSize = result.size();
+		boolean foundInputIndex = false;
+		for (int i = 0; i < resultSize; i++) {
+			if (result.get(i).type == ComponentType.PROP)
+				realResult.add((Proposition)result.get(i));
+
+			if (result.get(i).equals(propNet.getTerminalProposition())) {
+				//System.out.print("FOUND TERMINAL PROPOSITION!!!!!!\n");
+				terminalPropositionIndex = realResult.size()-1;
+			} else if (!foundInputIndex && result.get(i).type == ComponentType.PROP && ((Proposition)result.get(i)).type == PropositionType.INPUT) {
+				foundInputIndex = true;
+				inputPropositionIndex = realResult.size() - 1;
+			}
+
 		}
-		return result;
+
+		System.out.print("	- Optimized Ordering size: "+realResult.size()+"\n");
+		System.out.print("	- Finished findidng the Topological Ordering of Game Propositions...\n");
+		System.out.print("	- base Proposition range: "+basePropositionIndex+"->"+(basePropositionIndex + basePropositionSize)+"\n");
+		System.out.print("	- terminal Proposition index: "+terminalPropositionIndex+"\n");
+		System.out.print("	- input Proposition range: "+inputPropositionIndex+"->"+(inputPropositionIndex + inputPropositionSize)+"\n");
+		return realResult; //optimized. Ordering only contains propositions, not transitions or gates
 	}
 
 	/* Function: isReverseDependentOnTerminalProposition
@@ -455,9 +507,12 @@ public class PropNetStateMachine extends StateMachine {
 
 			boolean isDependent = true;
 			for (Component source : sources) {
-				if (baseProps.contains(source)) continue;
+				//if (baseProps.contains(source)) continue;
+				if (source.type == ComponentType.PROP && ((Proposition)source).type == PropositionType.BASE) continue;
+
 				/* if a single source is base proposition, this is dependent on the base proposition */
-				if (inputProps.contains(source)) {
+				//if (inputProps.contains(source)) {
+				if (source.type == ComponentType.PROP && ((Proposition)source).type == PropositionType.INPUT) {
 					isDependent = false;
 				/* If a single source is dependent, then the current component is dependent */
 				} else if (!isDependentOnBaseProposition(dependencyMap, source, inputProps, baseProps))
@@ -497,7 +552,7 @@ public class PropNetStateMachine extends StateMachine {
 	 * */
 	private boolean isValidTopologicalOrdering(List<Component> list) {
 		int counter = 0;
-		System.out.print("Checking Topological Ordering...\n");
+		System.out.print("	- Checking Topological Ordering...\n");
 		for (int i = 0; i < list.size(); i++) {
 			counter++;
 			if (hasSourceInR(list.get(i), list.subList(i + 1, list.size()))) {
@@ -511,7 +566,7 @@ public class PropNetStateMachine extends StateMachine {
 				 // if the rightside contains any source, fail
 			}
 		}
-		System.out.print("Num Checked: "+counter+"\n");
+		System.out.print("	- Num Checked: "+counter+"\n");
 		return true;
 	}
 

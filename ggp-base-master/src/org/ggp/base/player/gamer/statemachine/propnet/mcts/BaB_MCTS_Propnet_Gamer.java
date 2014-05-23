@@ -24,10 +24,14 @@ public final class BaB_MCTS_Propnet_Gamer extends SampleGamer
 	private Map<Role, Integer> roleIndices;
 	private Role myRole;
 	private double bestUtility;
+
 	private int numRounds;
 	private boolean hasPropNet = false;
 	private int C_Constant = 1;
 	private PropNetStateMachine propNetStateMachine;
+
+	private MonteCarloTreeNode root = null;
+	private MonteCarloTreeNode bestChild = null;
 
 	private final int TIME_BUFFER = 1000;
 
@@ -94,7 +98,15 @@ public final class BaB_MCTS_Propnet_Gamer extends SampleGamer
 		/* Initialize and Reset Variables */
 		System.out.print("	- Initializing Move Variables... \n");
 		List<Move> moves = getStateMachine().getLegalMoves(getCurrentState(), getRole());
-		MonteCarloTreeNode root = new MonteCarloTreeNode(getCurrentState(), true, null, null, roleIndices.size());
+		//if (root == null) {
+			//System.out.print("	- There is not root. Constructing the very first Node...\n");
+		root = new MonteCarloTreeNode(getCurrentState(), true, null, null, roleIndices.size());
+		//} else {
+		//	System.out.print("	- There is a root. Update the root to its best child... \n");
+			//System.out.print("	- The Previous root had numChildren: "+root.getNumChildren()+"\n");
+			//root = bestChild;
+			//root.setParent(null);
+		//}
 		Move bestMove= moves.get(0);
 		numRounds = 0;
 		bestUtility = 0;
@@ -102,10 +114,10 @@ public final class BaB_MCTS_Propnet_Gamer extends SampleGamer
 		/* Construct & Update MCTS Tree  */
 		System.out.print("	- Constructing the MCTS Tree... \n");
 		while (System.currentTimeMillis() < timeout - TIME_BUFFER) { // loop until 1 second is left.
-			if (moves.size() == 1) {
-				System.out.print("	- Detected only one possible move. Returning it... \n");
-				break;
-			}
+			//if (moves.size() == 1) {
+			//	System.out.print("	- Detected only one possible move. Returning it... \n");
+			//	break;
+			//}
 
 			/* MCTS Tree Traverse Routine: Select -> Expand -> Simulate -> Backpropagate */
 			MonteCarloTreeNode selection = select(root);
@@ -119,6 +131,8 @@ public final class BaB_MCTS_Propnet_Gamer extends SampleGamer
 		/* Get Best Move from the MCTS Tree */
 		System.out.print("	- Interpreting the MCTS Tree... \n");
 		if (moves.size() != 1) bestMove = getBestMove(root);
+		/* update the root to the child we've selected. */
+
 		System.out.print("================================================= \n");
 
 		/* Print Readable End Turn Report */
@@ -128,6 +142,7 @@ public final class BaB_MCTS_Propnet_Gamer extends SampleGamer
 		System.out.print("	- Number of Rounds: " + numRounds + "\n");
 		System.out.print("=================================================\n");
 
+		//if (bestChild == null) System.err.println("BEST CHILD IS NULL!!??");
 		/* Notify the server */
 		long stop = System.currentTimeMillis();
 		notifyObservers(new GamerSelectedMoveEvent(moves, bestMove, stop - start));
@@ -149,16 +164,20 @@ public final class BaB_MCTS_Propnet_Gamer extends SampleGamer
 		/* comparing variables */
 		Move bestMove = null;
 		double bestScore = 0;
+		//bestChild = root.getChildAtIndex(0);
 
 		/* Loop through all children nodes */
 		for (MonteCarloTreeNode child : root.getChildren()) {
 
-			if (child.getAverageUtility(roleIndices.get(myRole)) > bestScore) {
+			if (child.getAverageUtility(roleIndices.get(myRole)) >= bestScore) {
 				bestScore = child.getAverageUtility(roleIndices.get(myRole));
 				bestMove = child.moveIfMin;
+				bestChild = child;
 			}
 		}
-
+		//if (bestChild == null) System.err.println("HOW CAN THIS BE NULL?");
+		//root = bestChild;
+		//root.setParent(null);
 		/* set Instance Variables for End-turn reporting */
 		bestUtility = bestScore;
 		return bestMove;

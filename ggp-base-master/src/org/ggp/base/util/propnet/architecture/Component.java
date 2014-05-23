@@ -19,6 +19,25 @@ public abstract class Component implements Serializable
     /** The outputs of the component. */
     private final Set<Component> outputs;
 
+    /* Store the type in the component class. ?? Or maybe bitset?
+     * 0: Proposition - either input or base or else
+     * 1: AND
+     * 2: OR
+     * 3: NEG
+     * 4: Transition
+     * */
+   // private int type;
+    public ComponentType type;
+
+    public enum ComponentType {
+    	PROP(0), AND(1), OR(2), NEG(3), TRAN(4);
+    	private int value;
+
+    	private ComponentType(int value) {
+    		this.value = value;
+    	}
+    };
+
     /**
      * Creates a new Component with no inputs or outputs.
      */

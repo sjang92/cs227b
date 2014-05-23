@@ -1,0 +1,19 @@
+LOG 1400887710861 [L9]: <ERR> (in GamePlayer) java.lang.NullPointerException
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.MonteCarloTreeNode.getSelectFnResult(MonteCarloTreeNode.java:80)
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.BaB_MCTS_Propnet_Gamer.getOpponentsMoves(BaB_MCTS_Propnet_Gamer.java:286)
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.BaB_MCTS_Propnet_Gamer.select(BaB_MCTS_Propnet_Gamer.java:205)
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.BaB_MCTS_Propnet_Gamer.stateMachineSelectMove(BaB_MCTS_Propnet_Gamer.java:123)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1400887710862 [L9]: <ERR> (in GamePlayer) An unhandled exception ocurred during move selection: org.ggp.base.player.gamer.exception.MoveSelectionException: java.lang.NullPointerException
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:215)
+	at org.ggp.base.player.request.grammar.PlayRequest.process(PlayRequest.java:49)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+Caused by: java.lang.NullPointerException
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.MonteCarloTreeNode.getSelectFnResult(MonteCarloTreeNode.java:80)
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.BaB_MCTS_Propnet_Gamer.getOpponentsMoves(BaB_MCTS_Propnet_Gamer.java:286)
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.BaB_MCTS_Propnet_Gamer.select(BaB_MCTS_Propnet_Gamer.java:205)
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.BaB_MCTS_Propnet_Gamer.stateMachineSelectMove(BaB_MCTS_Propnet_Gamer.java:123)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.selectMove(StateMachineGamer.java:210)
+	... 2 more

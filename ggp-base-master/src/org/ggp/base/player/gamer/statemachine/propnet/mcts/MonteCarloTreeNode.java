@@ -105,6 +105,10 @@ public class MonteCarloTreeNode {
 		return parent;
 	}
 
+	public void setParent(MonteCarloTreeNode parent) {
+		this.parent = parent;
+	}
+
 	public ArrayList<MonteCarloTreeNode> getChildren() {
 		return this.children;
 	}

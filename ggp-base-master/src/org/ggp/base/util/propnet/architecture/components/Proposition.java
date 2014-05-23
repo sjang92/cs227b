@@ -14,6 +14,23 @@ public final class Proposition extends Component
 	/** The value of the Proposition. */
 	private boolean value;
 
+	/* 0 = base
+	 * 1 = input
+	 * 2 = else
+	 * */
+	//public int type;
+
+	public PropositionType type;
+
+    public enum PropositionType {
+    	BASE(0), INPUT(1), ELSE(2);
+    	private int value;
+
+    	private PropositionType(int value) {
+    		this.value = value;
+    	}
+    };
+
 	/**
 	 * Creates a new Proposition with name <tt>name</tt>.
 	 *
