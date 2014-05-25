@@ -73,6 +73,7 @@ public class PropNetStateMachine extends StateMachine {
 
     private int basePropositionIndex;
     private int basePropositionSize;
+    private int endOfBaseProposition;
     private int inputPropositionIndex;
     private int inputPropositionSize;
     private int terminalPropositionIndex;
@@ -177,7 +178,7 @@ public class PropNetStateMachine extends StateMachine {
 	public boolean isTerminal(MachineState state) {
 		long start = System.currentTimeMillis();
 		initializeBasePropositions(state);
-		forwardPropagation(basePropositionIndex + basePropositionSize, terminalPropositionIndex);
+		forwardPropagation(endOfBaseProposition, terminalPropositionIndex);
 		long end = System.currentTimeMillis();
 		time_isTerminal += (end-start);
 
@@ -198,7 +199,7 @@ public class PropNetStateMachine extends StateMachine {
 		initializeBasePropositions(state);
 
 		/* Goal Proposition is always before inputProposition*/
-		forwardPropagation(basePropositionIndex + basePropositionSize, inputPropositionIndex);
+		forwardPropagation(endOfBaseProposition, inputPropositionIndex);
 		Set<Proposition> goalProps = goalPropositions.get(role);
 		Proposition goalProposition = null;
 		int counter = 0;
@@ -226,7 +227,7 @@ public class PropNetStateMachine extends StateMachine {
 
 		clearBasePropositions();
 		initProposition.setValue(true);
-		forwardPropagation(basePropositionIndex, basePropositionIndex + basePropositionSize - 1); // -1 since it's inclusive
+		forwardPropagation(basePropositionIndex, endOfBaseProposition - 1); // -1 since it's inclusive
 		MachineState baseState = getStateFromBase();
 		initProposition.setValue(false);
 		return baseState;
@@ -242,7 +243,7 @@ public class PropNetStateMachine extends StateMachine {
 
 		List<Move> result = new ArrayList<Move>();
 		initializeBasePropositions(state);
-		forwardPropagation(basePropositionIndex + basePropositionSize, inputPropositionIndex); //legal Propositions are always before inputProps
+		forwardPropagation(endOfBaseProposition, inputPropositionIndex); //legal Propositions are always before inputProps
 		Set<Proposition> legalProps = legalPropositions.get(role);
 
 		for (Proposition p : legalProps) {
@@ -265,7 +266,7 @@ public class PropNetStateMachine extends StateMachine {
 
 		initializeBasePropositions(state);
 		initializeInputPropositions(moves);
-		forwardPropagation(basePropositionIndex + basePropositionSize, ordering.size() - 1);
+		forwardPropagation(endOfBaseProposition, ordering.size() - 1);
 
 		Set<GdlSentence> nextProps = new HashSet<GdlSentence>();
 
@@ -313,11 +314,7 @@ public class PropNetStateMachine extends StateMachine {
 	/* sets input proposition truth values to the given list of moves */
 	protected void initializeInputPropositions(List<Move> moves)
 	{
-		long start = System.currentTimeMillis();
 		clearInputPropositions();
-		List<GdlSentence> doesMoves = toDoes(moves);
-
-		/*
 		Map<Role, Integer> roleIndices = getRoleIndices();
 
 		for (Role rl : roles) {
@@ -326,33 +323,17 @@ public class PropNetStateMachine extends StateMachine {
 			Proposition p = moveInputMapForRl.get(moves.get(roleIndex));
 			p.setValue(true);
 		}
-		*/
-		long end = System.currentTimeMillis();
-		// set props to true based on moves:
-
-		for(GdlSentence g : doesMoves){
-			Proposition p = inputPropositions.get(g);
-			p.setValue(true);
-		}
 	}
 
 	/* Start from the starting index, and propagate to the end index  INCLUSIVE !! */
 	protected void forwardPropagation(int startIndex, int endIndex) {
 		long start = System.currentTimeMillis();
 		for (int i = startIndex; i <= endIndex; i++) {
-			Component c = ordering.get(i);
 			Proposition p = ordering.get(i);
 			/* If the current component that we're looking at is an instance of Proposition */
-			//if (ordering.get(i) instanceof Proposition) {
-			//if (c.type == ComponentType.PROP && ((Proposition)c).type != PropositionType.INPUT) {
 			if (p.type != PropositionType.INPUT) {
-				/* Make sure this proposition is not an input Proposition*/
-				//if (ordering.get(i).getInputs().size() != 0) {
-				//if (((Proposition)c).type != PropositionType.INPUT) {
-					boolean value = p.getSingleInput().getValue(); // propositions only have single sources?
-					//((Proposition)c).setValue(value);
-					p.setValue(value);
-				//}
+				boolean value = p.getSingleInput().getValue(); // propositions only have single sources?
+				p.setValue(value);
 			}
 		}
 		long end = System.currentTimeMillis();
@@ -453,7 +434,7 @@ public class PropNetStateMachine extends StateMachine {
 			}
 
 		}
-
+		endOfBaseProposition = basePropositionIndex + basePropositionSize;
 		System.out.print("	- Optimized Ordering size: "+realResult.size()+"\n");
 		System.out.print("	- Finished findidng the Topological Ordering of Game Propositions...\n");
 		System.out.print("	- base Proposition range: "+basePropositionIndex+"->"+(basePropositionIndex + basePropositionSize)+"\n");
@@ -593,6 +574,8 @@ public class PropNetStateMachine extends StateMachine {
 
 		return false;
 	}
+
+	/* Factoring */
 
 	/* Already implemented for you */
 	@Override
