@@ -15,7 +15,7 @@ import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException;
 import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
 
 
-public final class fBaB_MCTS_Multithread_Propnet_Gamer extends SampleGamer
+public final class BaB_MCTS_Multithread_Complete_Propnet_Gamer extends SampleGamer
 {
 
 	/* =======================================================================
@@ -43,14 +43,17 @@ public final class fBaB_MCTS_Multithread_Propnet_Gamer extends SampleGamer
 	private long timeout;
 
 	private int numReturnedWorkers;
+	private int numSpawnedWorkers;
 
 	private class MCTSWorker implements Runnable {
 		private MonteCarloTreeNode threadRoot;
 		private int threadNum; // same as child index
+		private int numDC;
 
 		public MCTSWorker(MonteCarloTreeNode root, int threadNum) {
 			System.out.println("	- Spawning Thread: "+threadNum);
 			this.threadRoot = root;
+			this.numDC = 0;
 		}
 
 		@Override
@@ -74,16 +77,21 @@ public final class fBaB_MCTS_Multithread_Propnet_Gamer extends SampleGamer
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				this.numDC++;
 			}
 
-			updateNumWorkers();
+			updateNumWorkers(this.numDC);
 			System.out.println("	- Killing Thread: "+this.threadNum);
 		}
 
 	}
 
-	private synchronized void updateNumWorkers() {
+	private synchronized void updateNumWorkers(int numDC) {
 		numReturnedWorkers ++;
+		numRounds += numDC;
+		//if (numReturnedWorkers == numSpawnedWorkers) {
+		//
+		//}
 	}
 
 	/* =======================================================================
@@ -171,27 +179,28 @@ public final class fBaB_MCTS_Multithread_Propnet_Gamer extends SampleGamer
 		numRounds = 0;
 		bestUtility = 0;
 
+		/* MULTITHREADED IMPLEMENTATION */
+
+		/* Construct first generation children */
+		MonteCarloTreeNode selection = select(root);
+		expandGeneral(selection);
+		List<Integer> terminalValues = simulateToTerminal(selection);
+		backpropagate(selection, terminalValues);
+		numReturnedWorkers = 0;
+		numSpawnedWorkers = root.getNumChildren();
+		System.out.println("	- Number of children at root node: "+root.getNumChildren());
+
 		/* Construct & Update MCTS Tree  */
 		System.out.print("	- Constructing the MCTS Tree... \n");
 
-		while (System.currentTimeMillis() < timeout - TIME_BUFFER) { // loop until TIME_BUFFEr second is left.
+		/* Spawn Threads */
+		for (int i = 0; i < numSpawnedWorkers; i++) {
+			Thread newWorker = new Thread(new MCTSWorker(root.getChildAtIndex(i), i));
+			newWorker.start();
+		}
 
-			/* MCTS Tree Traverse Routine: Select -> Expand -> Simulate -> Backpropagate */
-			long time1 = System.currentTimeMillis();
-			MonteCarloTreeNode selection = select(root);
-			long time2 = System.currentTimeMillis();
-			expandGeneral(selection);
-			long time3 = System.currentTimeMillis();
-			List<Integer> terminalValues = simulateToTerminal(selection);
-			long time4 = System.currentTimeMillis();
-			backpropagate(selection, terminalValues);
-			long time5 = System.currentTimeMillis();
-
-			time_select += (time2 - time1);
-			time_expand += (time3 - time2);
-			time_simulate += (time4 - time3);
-			time_backpropagate += (time5 - time4);
-			numRounds++;
+		while (true) {
+			if (numReturnedWorkers == numSpawnedWorkers) break;
 		}
 
 		/* Get Best Move from the MCTS Tree */

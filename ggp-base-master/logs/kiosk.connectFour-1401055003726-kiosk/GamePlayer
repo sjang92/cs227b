@@ -1,0 +1,56 @@
+LOG 1401055003922 [L0]: [Received at 1401055003922] ( START kiosk.connectFour-1401055003726 black (( role red ) ( role black ) ( <= ( base ( cell ?x ?y ?p ) ) ( x ?x ) ( y ?y ) ( role ?p ) ) ( base ( control red ) ) ( base ( control black ) ) ( <= ( input ?p ( drop ?x ) ) ( role ?p ) ( x ?x ) ) ( <= ( input ?p noop ) ( role ?p ) ) ( init ( control red ) ) ( <= ( legal red noop ) ( true ( control black ) ) ) ( <= ( legal red ( drop ?x ) ) ( true ( control red ) ) ( columnOpen ?x ) ) ( <= ( legal black noop ) ( true ( control red ) ) ) ( <= ( legal black ( drop ?x ) ) ( true ( control black ) ) ( columnOpen ?x ) ) ( <= ( next ( cell ?x 1 ?player ) ) ( does ?player ( drop ?x ) ) ( columnEmpty ?x ) ) ( <= ( next ( cell ?x ?y2 ?player ) ) ( does ?player ( drop ?x ) ) ( cellOpen ?x ?y2 ) ( succ ?y1 ?y2 ) ( not ( cellOpen ?x ?y1 ) ) ) ( <= ( next ( cell ?x ?y ?player ) ) ( true ( cell ?x ?y ?player ) ) ) ( <= ( next ( control red ) ) ( true ( control black ) ) ) ( <= ( next ( control black ) ) ( true ( control red ) ) ) ( <= terminal ( line red ) ) ( <= terminal ( line black ) ) ( <= terminal ( not boardOpen ) ) ( <= ( goal red 100 ) ( line red ) ) ( <= ( goal red 50 ) ( not ( line red ) ) ( not ( line black ) ) ( not boardOpen ) ) ( <= ( goal red 0 ) ( line black ) ) ( <= ( goal red 0 ) ( not ( line red ) ) ( not ( line black ) ) boardOpen ) ( <= ( goal black 100 ) ( line black ) ) ( <= ( goal black 50 ) ( not ( line red ) ) ( not ( line black ) ) ( not boardOpen ) ) ( <= ( goal black 0 ) ( line red ) ) ( <= ( goal black 0 ) ( not ( line red ) ) ( not ( line black ) ) boardOpen ) ( <= ( cellOpen ?x ?y ) ( x ?x ) ( y ?y ) ( not ( true ( cell ?x ?y red ) ) ) ( not ( true ( cell ?x ?y black ) ) ) ) ( <= ( columnOpen ?x ) ( cellOpen ?x 6 ) ) ( <= ( columnEmpty ?x ) ( cellOpen ?x 1 ) ) ( <= boardOpen ( x ?x ) ( columnOpen ?x ) ) ( <= ( line ?player ) ( true ( cell ?x1 ?y ?player ) ) ( succ ?x1 ?x2 ) ( succ ?x2 ?x3 ) ( succ ?x3 ?x4 ) ( true ( cell ?x2 ?y ?player ) ) ( true ( cell ?x3 ?y ?player ) ) ( true ( cell ?x4 ?y ?player ) ) ) ( <= ( line ?player ) ( true ( cell ?x ?y1 ?player ) ) ( succ ?y1 ?y2 ) ( succ ?y2 ?y3 ) ( succ ?y3 ?y4 ) ( true ( cell ?x ?y2 ?player ) ) ( true ( cell ?x ?y3 ?player ) ) ( true ( cell ?x ?y4 ?player ) ) ) ( <= ( line ?player ) ( true ( cell ?x1 ?y1 ?player ) ) ( succ ?x1 ?x2 ) ( succ ?x2 ?x3 ) ( succ ?x3 ?x4 ) ( succ ?y1 ?y2 ) ( succ ?y2 ?y3 ) ( succ ?y3 ?y4 ) ( true ( cell ?x2 ?y2 ?player ) ) ( true ( cell ?x3 ?y3 ?player ) ) ( true ( cell ?x4 ?y4 ?player ) ) ) ( <= ( line ?player ) ( true ( cell ?x1 ?y4 ?player ) ) ( succ ?x1 ?x2 ) ( succ ?x2 ?x3 ) ( succ ?x3 ?x4 ) ( succ ?y3 ?y4 ) ( succ ?y2 ?y3 ) ( succ ?y1 ?y2 ) ( true ( cell ?x2 ?y3 ?player ) ) ( true ( cell ?x3 ?y2 ?player ) ) ( true ( cell ?x4 ?y1 ?player ) ) ) ( succ 1 2 ) ( succ 2 3 ) ( succ 3 4 ) ( succ 4 5 ) ( succ 5 6 ) ( succ 6 7 ) ( succ 7 8 ) ( x 1 ) ( x 2 ) ( x 3 ) ( x 4 ) ( x 5 ) ( x 6 ) ( x 7 ) ( x 8 ) ( y 1 ) ( y 2 ) ( y 3 ) ( y 4 ) ( y 5 ) ( y 6 ) ) 30 10)
+LOG 1401055003925 [L0]: [Received at 1401055003925] ( START kiosk.connectFour-1401055003726 red (( role red ) ( role black ) ( <= ( base ( cell ?x ?y ?p ) ) ( x ?x ) ( y ?y ) ( role ?p ) ) ( base ( control red ) ) ( base ( control black ) ) ( <= ( input ?p ( drop ?x ) ) ( role ?p ) ( x ?x ) ) ( <= ( input ?p noop ) ( role ?p ) ) ( init ( control red ) ) ( <= ( legal red noop ) ( true ( control black ) ) ) ( <= ( legal red ( drop ?x ) ) ( true ( control red ) ) ( columnOpen ?x ) ) ( <= ( legal black noop ) ( true ( control red ) ) ) ( <= ( legal black ( drop ?x ) ) ( true ( control black ) ) ( columnOpen ?x ) ) ( <= ( next ( cell ?x 1 ?player ) ) ( does ?player ( drop ?x ) ) ( columnEmpty ?x ) ) ( <= ( next ( cell ?x ?y2 ?player ) ) ( does ?player ( drop ?x ) ) ( cellOpen ?x ?y2 ) ( succ ?y1 ?y2 ) ( not ( cellOpen ?x ?y1 ) ) ) ( <= ( next ( cell ?x ?y ?player ) ) ( true ( cell ?x ?y ?player ) ) ) ( <= ( next ( control red ) ) ( true ( control black ) ) ) ( <= ( next ( control black ) ) ( true ( control red ) ) ) ( <= terminal ( line red ) ) ( <= terminal ( line black ) ) ( <= terminal ( not boardOpen ) ) ( <= ( goal red 100 ) ( line red ) ) ( <= ( goal red 50 ) ( not ( line red ) ) ( not ( line black ) ) ( not boardOpen ) ) ( <= ( goal red 0 ) ( line black ) ) ( <= ( goal red 0 ) ( not ( line red ) ) ( not ( line black ) ) boardOpen ) ( <= ( goal black 100 ) ( line black ) ) ( <= ( goal black 50 ) ( not ( line red ) ) ( not ( line black ) ) ( not boardOpen ) ) ( <= ( goal black 0 ) ( line red ) ) ( <= ( goal black 0 ) ( not ( line red ) ) ( not ( line black ) ) boardOpen ) ( <= ( cellOpen ?x ?y ) ( x ?x ) ( y ?y ) ( not ( true ( cell ?x ?y red ) ) ) ( not ( true ( cell ?x ?y black ) ) ) ) ( <= ( columnOpen ?x ) ( cellOpen ?x 6 ) ) ( <= ( columnEmpty ?x ) ( cellOpen ?x 1 ) ) ( <= boardOpen ( x ?x ) ( columnOpen ?x ) ) ( <= ( line ?player ) ( true ( cell ?x1 ?y ?player ) ) ( succ ?x1 ?x2 ) ( succ ?x2 ?x3 ) ( succ ?x3 ?x4 ) ( true ( cell ?x2 ?y ?player ) ) ( true ( cell ?x3 ?y ?player ) ) ( true ( cell ?x4 ?y ?player ) ) ) ( <= ( line ?player ) ( true ( cell ?x ?y1 ?player ) ) ( succ ?y1 ?y2 ) ( succ ?y2 ?y3 ) ( succ ?y3 ?y4 ) ( true ( cell ?x ?y2 ?player ) ) ( true ( cell ?x ?y3 ?player ) ) ( true ( cell ?x ?y4 ?player ) ) ) ( <= ( line ?player ) ( true ( cell ?x1 ?y1 ?player ) ) ( succ ?x1 ?x2 ) ( succ ?x2 ?x3 ) ( succ ?x3 ?x4 ) ( succ ?y1 ?y2 ) ( succ ?y2 ?y3 ) ( succ ?y3 ?y4 ) ( true ( cell ?x2 ?y2 ?player ) ) ( true ( cell ?x3 ?y3 ?player ) ) ( true ( cell ?x4 ?y4 ?player ) ) ) ( <= ( line ?player ) ( true ( cell ?x1 ?y4 ?player ) ) ( succ ?x1 ?x2 ) ( succ ?x2 ?x3 ) ( succ ?x3 ?x4 ) ( succ ?y3 ?y4 ) ( succ ?y2 ?y3 ) ( succ ?y1 ?y2 ) ( true ( cell ?x2 ?y3 ?player ) ) ( true ( cell ?x3 ?y2 ?player ) ) ( true ( cell ?x4 ?y1 ?player ) ) ) ( succ 1 2 ) ( succ 2 3 ) ( succ 3 4 ) ( succ 4 5 ) ( succ 5 6 ) ( succ 6 7 ) ( succ 7 8 ) ( x 1 ) ( x 2 ) ( x 3 ) ( x 4 ) ( x 5 ) ( x 6 ) ( x 7 ) ( x 8 ) ( y 1 ) ( y 2 ) ( y 3 ) ( y 4 ) ( y 5 ) ( y 6 ) ) 30 10)
+LOG 1401055003997 [L0]: [Sent at 1401055003997] ready
+LOG 1401055005132 [L0]: [Sent at 1401055005132] ready
+LOG 1401055005143 [L0]: [Received at 1401055005143] ( PLAY kiosk.connectFour-1401055003726 NIL )
+LOG 1401055005143 [L0]: [Received at 1401055005143] ( PLAY kiosk.connectFour-1401055003726 NIL )
+LOG 1401055006446 [L0]: [Sent at 1401055006446] ( drop 5 )
+LOG 1401055014444 [L0]: [Sent at 1401055014444] noop
+LOG 1401055014453 [L0]: [Received at 1401055014453] ( PLAY kiosk.connectFour-1401055003726 (( drop 5 ) noop ) )
+LOG 1401055014453 [L0]: [Received at 1401055014453] ( PLAY kiosk.connectFour-1401055003726 (( drop 5 ) noop ) )
+LOG 1401055014458 [L0]: [Sent at 1401055014458] noop
+LOG 1401055023754 [L0]: [Sent at 1401055023754] ( drop 3 )
+LOG 1401055023762 [L0]: [Received at 1401055023762] ( PLAY kiosk.connectFour-1401055003726 (noop ( drop 3 ) ) )
+LOG 1401055023762 [L0]: [Received at 1401055023762] ( PLAY kiosk.connectFour-1401055003726 (noop ( drop 3 ) ) )
+LOG 1401055028441 [L0]: [Sent at 1401055028441] ( drop 5 )
+LOG 1401055033064 [L0]: [Sent at 1401055033064] noop
+LOG 1401055033072 [L0]: [Received at 1401055033072] ( PLAY kiosk.connectFour-1401055003726 (( drop 5 ) noop ) )
+LOG 1401055033072 [L0]: [Received at 1401055033072] ( PLAY kiosk.connectFour-1401055003726 (( drop 5 ) noop ) )
+LOG 1401055033076 [L0]: [Sent at 1401055033076] noop
+LOG 1401055042376 [L0]: [Sent at 1401055042376] ( drop 3 )
+LOG 1401055042384 [L0]: [Received at 1401055042384] ( PLAY kiosk.connectFour-1401055003726 (noop ( drop 3 ) ) )
+LOG 1401055042384 [L0]: [Received at 1401055042384] ( PLAY kiosk.connectFour-1401055003726 (noop ( drop 3 ) ) )
+LOG 1401055044697 [L0]: [Sent at 1401055044697] ( drop 5 )
+LOG 1401055051686 [L0]: [Sent at 1401055051686] noop
+LOG 1401055051697 [L0]: [Received at 1401055051697] ( PLAY kiosk.connectFour-1401055003726 (( drop 5 ) noop ) )
+LOG 1401055051697 [L0]: [Received at 1401055051697] ( PLAY kiosk.connectFour-1401055003726 (( drop 5 ) noop ) )
+LOG 1401055051703 [L0]: [Sent at 1401055051703] noop
+LOG 1401055061004 [L0]: [Sent at 1401055061004] ( drop 5 )
+LOG 1401055061012 [L0]: [Received at 1401055061012] ( PLAY kiosk.connectFour-1401055003726 (noop ( drop 5 ) ) )
+LOG 1401055061012 [L0]: [Received at 1401055061012] ( PLAY kiosk.connectFour-1401055003726 (noop ( drop 5 ) ) )
+LOG 1401055066610 [L0]: [Sent at 1401055066610] ( drop 6 )
+LOG 1401055070314 [L0]: [Sent at 1401055070314] noop
+LOG 1401055070326 [L0]: [Received at 1401055070326] ( PLAY kiosk.connectFour-1401055003726 (( drop 6 ) noop ) )
+LOG 1401055070327 [L0]: [Received at 1401055070327] ( PLAY kiosk.connectFour-1401055003726 (( drop 6 ) noop ) )
+LOG 1401055070331 [L0]: [Sent at 1401055070331] noop
+LOG 1401055079629 [L0]: [Sent at 1401055079629] ( drop 2 )
+LOG 1401055079635 [L0]: [Received at 1401055079635] ( PLAY kiosk.connectFour-1401055003726 (noop ( drop 2 ) ) )
+LOG 1401055079635 [L0]: [Received at 1401055079635] ( PLAY kiosk.connectFour-1401055003726 (noop ( drop 2 ) ) )
+LOG 1401055088935 [L0]: [Sent at 1401055088935] noop
+LOG 1401055091318 [L0]: [Sent at 1401055091318] ( drop 6 )
+LOG 1401055091327 [L0]: [Received at 1401055091327] ( PLAY kiosk.connectFour-1401055003726 (( drop 6 ) noop ) )
+LOG 1401055091327 [L0]: [Received at 1401055091327] ( PLAY kiosk.connectFour-1401055003726 (( drop 6 ) noop ) )
+LOG 1401055091332 [L0]: [Sent at 1401055091332] noop
+LOG 1401055100630 [L0]: [Sent at 1401055100630] ( drop 4 )
+LOG 1401055100640 [L0]: [Received at 1401055100640] ( PLAY kiosk.connectFour-1401055003726 (noop ( drop 4 ) ) )
+LOG 1401055100640 [L0]: [Received at 1401055100640] ( PLAY kiosk.connectFour-1401055003726 (noop ( drop 4 ) ) )
+LOG 1401055109942 [L0]: [Sent at 1401055109942] noop
+LOG 1401055113866 [L0]: [Sent at 1401055113866] ( drop 6 )
+LOG 1401055113873 [L0]: [Received at 1401055113873] ( PLAY kiosk.connectFour-1401055003726 (( drop 6 ) noop ) )
+LOG 1401055113873 [L0]: [Received at 1401055113873] ( PLAY kiosk.connectFour-1401055003726 (( drop 6 ) noop ) )
+LOG 1401055113876 [L0]: [Sent at 1401055113876] noop
+LOG 1401055123173 [L0]: [Sent at 1401055123173] ( drop 1 )
+LOG 1401055123195 [L0]: [Received at 1401055123195] ( STOP kiosk.connectFour-1401055003726 (noop ( drop 1 ) ) )
+LOG 1401055123195 [L0]: [Received at 1401055123195] ( STOP kiosk.connectFour-1401055003726 (noop ( drop 1 ) ) )
+LOG 1401055123204 [L0]: [Sent at 1401055123204] done
+LOG 1401055123204 [L0]: [Sent at 1401055123204] done

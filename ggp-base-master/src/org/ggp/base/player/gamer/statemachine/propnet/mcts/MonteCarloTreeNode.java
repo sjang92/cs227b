@@ -17,8 +17,9 @@ public class MonteCarloTreeNode {
 	public boolean isMax;
 	public Move moveIfMin;
 	public static int numNodesConstructed = 0;
+	private List<Move> jointLegalMoves;
 
-	public static final int C_CONSTANT = 1;
+	public static final int C_CONSTANT = 20;
 
 	/* Constructor: takes the state as the param. */
 	public MonteCarloTreeNode(MachineState state, boolean isMax, Move move, MonteCarloTreeNode parent, int numPlayers) {
@@ -40,6 +41,14 @@ public class MonteCarloTreeNode {
 	}
 
 	/* Getters & Setters */
+
+	public void setJointLegalMoves(List<Move> jlm) {
+		this.jointLegalMoves = jlm;
+	}
+
+	public List<Move> getJointLegalMoves() {
+		return this.jointLegalMoves;
+	}
 
 	/* NUM VISITS */
 	public int getNumVisits() {
