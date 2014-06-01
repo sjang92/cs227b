@@ -31,12 +31,12 @@ import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException;
 import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
 import org.ggp.base.util.statemachine.implementation.prover.query.ProverQueryBuilder;
 
-public class PropNetStateMachine extends StateMachine {
+public class OptimizedPropNetStateMachine extends StateMachine {
 	/** The underlying proposition network  */
     private PropNet propNet;
     /** The topological ordering of the propositions */
-    //private List<Component> ordering;
-    private List<Proposition> ordering;
+    private List<Component> ordering;
+    //private List<Proposition> ordering;
     /** The player roles */
     private List<Role> roles;
 
@@ -69,7 +69,7 @@ public class PropNetStateMachine extends StateMachine {
 
 	private Map<Proposition, Integer> goalMap;
 
-	//private Map<Proposition, Move> in
+	private boolean[] valueArray;
 
     private int basePropositionIndex;
     private int basePropositionSize;
@@ -88,6 +88,12 @@ public class PropNetStateMachine extends StateMachine {
 
     public int call_forwardPropagate = 0;
 
+    private Map<Component, Integer> compIndexMap;
+    private Map<ComponentType, GATEFUNC> compFuncMap;
+
+    public interface GATEFUNC {
+    	public boolean gateOp(Component gate);
+    }
 
     /**
      * Initializes the PropNetStateMachine. You should compute the topological
@@ -112,8 +118,84 @@ public class PropNetStateMachine extends StateMachine {
         moveInputMap = getInputMoveMap();
         goalMap = getGoalMap();
         addTypeTagToComponents(propNet.getComponents());
-        ordering = getOrdering();
+
+        /* OPTIMIZATION */
+        valueArray = new boolean[propNet.getComponents().size()];
+        compIndexMap = new HashMap<Component, Integer>();
+        compFuncMap = new HashMap<ComponentType, GATEFUNC>();
+
+
+        ordering = getOrdering(); // ordering of all components
+        for (int i = 0; i < ordering.size(); i++) { // mapping from component to index
+        	compIndexMap.put(ordering.get(i), i);
+        }
+        constructGateFunctions(); // mapping from class to function
+
+
         System.out.print("	- Finished initializing propNet... \n");
+    }
+
+    private void constructGateFunctions() {
+    	compFuncMap.put(ComponentType.AND, new GATEFUNC() {
+
+			@Override
+			public boolean gateOp(Component gate) {
+				Set<Component> inputs = gate.getInputs();
+				for (Component c : inputs) {
+					int index = compIndexMap.get(c);
+					if (valueArray[index] == false) return false;
+				}
+
+				return true;
+			}
+
+    	});
+    	compFuncMap.put(ComponentType.OR, new GATEFUNC() {
+
+			@Override
+			public boolean gateOp(Component gate) {
+				Set<Component> inputs = gate.getInputs();
+				for (Component c : inputs) {
+					int index = compIndexMap.get(c);
+					if (valueArray[index] == true) return true;
+				}
+
+				return false;
+			}
+
+    	});
+    	compFuncMap.put(ComponentType.NEG, new GATEFUNC() {
+
+			@Override
+			public boolean gateOp(Component gate) {
+				int index = compIndexMap.get(gate.getSingleInput());
+				return !valueArray[index];
+			}
+
+    	});
+
+    	compFuncMap.put(ComponentType.TRAN, new GATEFUNC() {
+
+			@Override
+			public boolean gateOp(Component gate) {
+				int index = compIndexMap.get(gate.getSingleInput());
+				//System.out.println("Transitiion Op called. Index of parent: "+index);
+				return valueArray[index];
+			}
+
+    	});
+
+    	compFuncMap.put(ComponentType.PROP, new GATEFUNC() {
+
+			@Override
+			public boolean gateOp(Component gate) {
+				int index = compIndexMap.get(gate.getSingleInput());
+				//System.out.println("Proposition Op called. Index of parent: "+index);
+				return valueArray[index];
+			}
+
+    	});
+
     }
 
     private void addTypeTagToComponents(Set<Component> components) {
@@ -176,13 +258,14 @@ public class PropNetStateMachine extends StateMachine {
 	 */
 	@Override
 	public boolean isTerminal(MachineState state) {
-		//long start = System.currentTimeMillis();
+		long start = System.currentTimeMillis();
 		initializeBasePropositions(state);
 		forwardPropagation(endOfBaseProposition, terminalPropositionIndex);
-		//long end = System.currentTimeMillis();
-		//time_isTerminal += (end-start);
+		long end = System.currentTimeMillis();
+		time_isTerminal += (end-start);
 
-		return ordering.get(terminalPropositionIndex).getValue();
+		//return ordering.get(terminalPropositionIndex).getValue();
+		return valueArray[compIndexMap.get(terminalProposition)];
 	}
 
 	/**
@@ -195,21 +278,30 @@ public class PropNetStateMachine extends StateMachine {
 	@Override
 	public int getGoal(MachineState state, Role role)
 	throws GoalDefinitionException {
-		//long start = System.currentTimeMillis();
+		long start = System.currentTimeMillis();
 		initializeBasePropositions(state);
 
 		/* Goal Proposition is always before inputProposition*/
-		forwardPropagation(endOfBaseProposition, inputPropositionIndex-1);
+		forwardPropagation(endOfBaseProposition, inputPropositionIndex);
 		Set<Proposition> goalProps = goalPropositions.get(role);
 		Proposition goalProposition = null;
+		int counter = 0;
 		for (Proposition p : goalProps) {
+			/*
 			if (p.getValue()) {
+				counter++;
+				goalProposition = p;
+			}*/
+
+			if (valueArray[compIndexMap.get(p)] == true) {
+				counter++;
 				goalProposition = p;
 			}
 		}
 
-		//long end = System.currentTimeMillis();
-		//time_getGoal += (end - start);
+		if (counter != 1) throw new GoalDefinitionException(state, role);
+		long end = System.currentTimeMillis();
+		time_getGoal += (end - start);
 		//return getGoalValue(goalProposition);
 		return goalMap.get(goalProposition);
 	}
@@ -218,15 +310,28 @@ public class PropNetStateMachine extends StateMachine {
 	 * Returns the initial state. The initial state can be computed
 	 * by only setting the truth value of the INIT proposition to true,
 	 * and then computing the resulting state.
+	 * CHECKKK
 	 */
 	@Override
 	public MachineState getInitialState() {
 
-		clearBasePropositions();
+		//clearBasePropositions();
+		for (Proposition p :basePropositionList) {
+			p.setValue(false);
+		}
+
 		initProposition.setValue(true);
 		forwardPropagation(basePropositionIndex, endOfBaseProposition - 1); // -1 since it's inclusive
 		MachineState baseState = getStateFromBase();
 		initProposition.setValue(false);
+
+		/*
+		valueArray[compIndexMap.get(initProposition)] = true;
+		forwardPropagation(basePropositionIndex, endOfBaseProposition - 1);
+		//forwardPropagation(0, endOfBaseProposition - 1);
+		MachineState baseState = getStateFromBaseOp();
+		valueArray[compIndexMap.get(initProposition)] = false;
+		*/
 		return baseState;
 	}
 
@@ -236,30 +341,32 @@ public class PropNetStateMachine extends StateMachine {
 	@Override
 	public List<Move> getLegalMoves(MachineState state, Role role)
 	throws MoveDefinitionException {
-		//long start = System.currentTimeMillis();
+		long start = System.currentTimeMillis();
 
 		List<Move> result = new ArrayList<Move>();
 		initializeBasePropositions(state);
-		forwardPropagation(endOfBaseProposition, inputPropositionIndex - 1); //legal Propositions are always before inputProps
+		forwardPropagation(endOfBaseProposition, inputPropositionIndex); //legal Propositions are always before inputProps
 		Set<Proposition> legalProps = legalPropositions.get(role);
 
 		for (Proposition p : legalProps) {
-			if (p.getValue()) result.add(getMoveFromProposition(p));
+			//if (p.getValue()) result.add(getMoveFromProposition(p));
+
+			if (valueArray[compIndexMap.get(p)]==true) result.add(getMoveFromProposition(p));
 		}
 
 		//if (result.size() == 0) throw new MoveDefinitionException(state, role);
-		//long end = System.currentTimeMillis();
-		//time_getLegal += (end - start);
+		long end = System.currentTimeMillis();
+		time_getLegal += (end - start);
 		return result;
 	}
 
 	/**
-	 * Computes the next state given state and the list of moves.
+	 * Computes the next state given state and the list of moves. CHECKK
 	 */
 	@Override
 	public MachineState getNextState(MachineState state, List<Move> moves)
 	throws TransitionDefinitionException {
-		//long start = System.currentTimeMillis();
+		long start = System.currentTimeMillis();
 
 		initializeBasePropositions(state);
 		initializeInputPropositions(moves);
@@ -272,87 +379,88 @@ public class PropNetStateMachine extends StateMachine {
 
 			/* All base propositions have a single source that is a transition.
 			 * If that transition is true, it means the base Proposition will be true in the next state */
+			/*
 			if (baseProp.getSingleInput().getValue()) {
 				nextProps.add(baseProp.getName());
-			}
+			}*/
+
+			if (valueArray[compIndexMap.get(baseProp.getSingleInput())] == true)
+				nextProps.add(baseProp.getName());
 		}
-		//long end = System.currentTimeMillis();
-		//time_getNext += (end - start);
+		long end = System.currentTimeMillis();
+		time_getNext += (end - start);
 		return new MachineState(nextProps);
 	}
 
 	/* Helper Methods */
 
-	/* turn off all base propositions */
+	/* turn off all base propositions CHECKK */
 	protected void clearBasePropositions() {
+		/*
 		for (Proposition p :basePropositionList) {
 			p.setValue(false);
+		}*/
+		for (int i = basePropositionIndex; i < basePropositionIndex + basePropositionSize; i++) {
+			valueArray[i] = false;
 		}
 	}
 
-	/* turn off all input propositions */
+	/* turn off all input propositions CHECKK */
 	protected void clearInputPropositions(){
+		/*
 		for (Proposition p: inputPropositionList) {
 			p.setValue(false);
+		}*/
+		for (int i = inputPropositionIndex; i < inputPropositionIndex + inputPropositionSize; i++) {
+			valueArray[i] = false;
 		}
 	}
 
-	/* sets base proposition truth values to the machine state  */
+	/* sets base proposition truth values to the machine state  CHECKKK */
 	protected void initializeBasePropositions(MachineState state){
 
 		clearBasePropositions();
+
 		Set<GdlSentence> g = state.getContents();
+
+		/*
 		for(GdlSentence s : g){
 			Proposition p = basePropositions.get(s);
 			p.setValue(true);
+		}*/
+
+		for (GdlSentence s : g) {
+			valueArray[compIndexMap.get(basePropositions.get(s))] = true;
 		}
 	}
 
-	/* sets input proposition truth values to the given list of moves */
+	/* sets input proposition truth values to the given list of moves CHECKK */
 	protected void initializeInputPropositions(List<Move> moves)
 	{
 		clearInputPropositions();
-
-		/*
 		Map<Role, Integer> roleIndices = getRoleIndices();
+
 		for (Role rl : roles) {
 			int roleIndex = roleIndices.get(rl);
 			Map<Move, Proposition> moveInputMapForRl = moveInputMap.get(rl);
 			Proposition p = moveInputMapForRl.get(moves.get(roleIndex));
-			p.setValue(true);
-		}*/
 
-		for (int i = 0; i < roles.size(); i++) {
-			Map<Move, Proposition> moveInputMapForRl = moveInputMap.get(roles.get(i));
-			Proposition p = moveInputMapForRl.get(moves.get(i));
-			p.setValue(true);
+			valueArray[compIndexMap.get(p)] = true;
+			//p.setValue(true);
 		}
 	}
 
 	/* Start from the starting index, and propagate to the end index  INCLUSIVE !! */
 	protected void forwardPropagation(int startIndex, int endIndex) {
-		if (endIndex >= inputPropositionIndex) {
-			for (int i = startIndex; i < inputPropositionIndex; i++) {
-				Proposition p = ordering.get(i);
-				boolean value = p.getSingleInput().getValue(); // propositions only have single sources?
-				p.setValue(value);
+		long start = System.currentTimeMillis();
+		for (int i = startIndex; i <= endIndex; i++) {
 
-			}
-			/* Hop over input Propositions*/
-
-			for (int i = inputPropositionIndex + inputPropositionSize; i <= endIndex; i++) {
-				Proposition p = ordering.get(i);
-				boolean value = p.getSingleInput().getValue(); // propositions only have single sources?
-				p.setValue(value);
-			}
-
-		} else {
-			for (int i = startIndex; i <= endIndex; i++) {
-				Proposition p = ordering.get(i);
-				boolean value = p.getSingleInput().getValue(); // propositions only have single sources?
-				p.setValue(value);
-			}
+			Component c = ordering.get(i);
+			if (c.getInputs().size() != 0)
+				valueArray[i] = compFuncMap.get(c.type).gateOp(c);
 		}
+		long end = System.currentTimeMillis();
+		time_forwardPropagate += (end - start);
 	}
 
 	/* Topological Ordering */
@@ -371,7 +479,7 @@ public class PropNetStateMachine extends StateMachine {
 	 *
 	 * @return The order in which the truth values of propositions need to be set.
 	 */
-	public List<Proposition> getOrdering()
+	public List<Component> getOrdering()
 	{
 		System.out.print("	- Starting Topological Ordering... \n");
 
@@ -434,6 +542,8 @@ public class PropNetStateMachine extends StateMachine {
 		inputPropositionSize = inputPropositions.size();
 		topologicalSort(result, notDependentOnBase);
 
+		/* Optimization block */
+		/*
 		List<Proposition> realResult = new ArrayList<Proposition>();
 		int resultSize = result.size();
 		boolean foundInputIndex = false;
@@ -449,14 +559,16 @@ public class PropNetStateMachine extends StateMachine {
 				inputPropositionIndex = realResult.size() - 1;
 			}
 
-		}
+		}*/
+
 		endOfBaseProposition = basePropositionIndex + basePropositionSize;
-		System.out.print("	- Optimized Ordering size: "+realResult.size()+"\n");
+		//System.out.print("	- Optimized Ordering size: "+realResult.size()+"\n");
 		System.out.print("	- Finished findidng the Topological Ordering of Game Propositions...\n");
 		System.out.print("	- base Proposition range: "+basePropositionIndex+"->"+(basePropositionIndex + basePropositionSize)+"\n");
 		System.out.print("	- terminal Proposition index: "+terminalPropositionIndex+"\n");
 		System.out.print("	- input Proposition range: "+inputPropositionIndex+"->"+(inputPropositionIndex + inputPropositionSize)+"\n");
-		return realResult; //optimized. Ordering only contains propositions, not transitions or gates
+		//return realResult; //optimized. Ordering only contains propositions, not transitions or gates
+		return result;
 	}
 
 	/* Function: isReverseDependentOnTerminalProposition
@@ -666,6 +778,17 @@ public class PropNetStateMachine extends StateMachine {
 
 		}
 		return new MachineState(contents);
+	}
+
+	public MachineState getStateFromBaseOp() {
+		Set<GdlSentence> contents = new HashSet<GdlSentence>();
+		for (Proposition p : propNet.getBasePropositionList()) {
+			if (valueArray[compIndexMap.get(p)] == true) {
+				contents.add(p.getName());
+			}
+		}
+		return new MachineState(contents);
+
 	}
 }
 

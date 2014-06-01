@@ -19,6 +19,8 @@ public abstract class Component implements Serializable
     /** The outputs of the component. */
     private final Set<Component> outputs;
 
+    public boolean isConnectedToTerminal; // I added this. Indicates if this component leads to the terminal state at some point.
+
     /* Store the type in the component class. ?? Or maybe bitset?
      * 0: Proposition - either input or base or else
      * 1: AND
@@ -43,6 +45,7 @@ public abstract class Component implements Serializable
      */
     public Component()
     {
+    	this.isConnectedToTerminal = false;
         this.inputs = new HashSet<Component>();
         this.outputs = new HashSet<Component>();
     }

@@ -28,6 +28,7 @@ public class BaB_Propnet_Test_Gamer extends SampleGamer {
 
 		// The only line you have to adapt in this file
 		StateMachine stateMachineX = new CachedStateMachine(new PropNetStateMachine());
+		//StateMachine stateMachineX = new CachedStateMachine(new OptimizedPropNetStateMachine());
 
 		try {
 			stateMachineX.initialize(gdlDescription);

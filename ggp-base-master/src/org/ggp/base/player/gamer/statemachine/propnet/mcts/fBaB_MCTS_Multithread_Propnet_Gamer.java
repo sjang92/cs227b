@@ -104,6 +104,8 @@ public final class fBaB_MCTS_Multithread_Propnet_Gamer extends SampleGamer
 	@Override
 	public void stateMachineMetaGame(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
+
+		root = null;
 		/* Record Start Time */
 		this.timeout = timeout;
 		long start = System.currentTimeMillis();
