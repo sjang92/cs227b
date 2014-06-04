@@ -14,6 +14,7 @@ import org.ggp.base.util.propnet.architecture.Component.ComponentType;
 import org.ggp.base.util.propnet.architecture.PropNet;
 import org.ggp.base.util.propnet.architecture.components.Or;
 import org.ggp.base.util.propnet.architecture.components.Proposition;
+import org.ggp.base.util.propnet.architecture.components.Proposition.PropositionType;
 import org.ggp.base.util.propnet.architecture.components.Transition;
 import org.ggp.base.util.statemachine.Role;
 
@@ -47,6 +48,28 @@ public class PropNetProcessor {
 			if (c.type == ComponentType.PROP) validPropositions.add((Proposition)c);
 		}
 
+		/* TO DO: put all legals the correspond the the input propositions that are connected */
+		Map<Proposition, Proposition> legalInputMap = propNet.getLegalInputMap();
+
+		List<Proposition> thingsToAdd = new ArrayList<Proposition>();
+
+		for (Proposition p : validPropositions) {
+
+			/* If it is an input proposition, find its corresponding legal and add it. */
+			if (p.type == PropositionType.INPUT) {
+
+				/* Given an input proposition, iterate through every key-value pair and find its legal key. */
+				for (Proposition legal : legalInputMap.keySet()) {
+					if (legalInputMap.get(legal).equals(p)) {
+						thingsToAdd.add(legal);
+					}
+				}
+			}
+		}
+
+		validPropositions.addAll(thingsToAdd);
+
+
 		roleLegalMap = recordLegalPropositions();
 
 		List<Component> notIncluded = new ArrayList<Component>();
@@ -57,6 +80,7 @@ public class PropNetProcessor {
 				notIncluded.add(c);
 			}
 		}
+
 //
 //		Map<Role, Set<Proposition>> legalMap = propNet.getLegalPropositions();
 //		for (Role rl : propNet.getRoles()) {
@@ -104,8 +128,12 @@ public class PropNetProcessor {
 			if (!(proposition.getName() instanceof GdlRelation))
 			    continue;
 
+
+
 			GdlRelation relation = (GdlRelation) proposition.getName();
 			if (relation.getName().getValue().equals("legal")) {
+				System.out.println("Got legal");
+
 				GdlConstant name = (GdlConstant) relation.get(0);
 				Role r = new Role(name);
 				if (!legalPropositions.containsKey(r)) {

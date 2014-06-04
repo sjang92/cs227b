@@ -248,6 +248,8 @@ public class PropNetStateMachine extends StateMachine {
 
 		/* If Factoring Throws some crazy errors */
 		if (smallLegalProps == null) {
+
+			//System.out.println("Fetching Legal Propositions from the unfactored propNet...");
 			Set<Proposition> legalProps = legalPropositions.get(role);
 
 			for (Proposition p : legalProps) {
