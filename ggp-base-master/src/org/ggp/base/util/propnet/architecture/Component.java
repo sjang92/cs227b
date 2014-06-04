@@ -1,7 +1,9 @@
 package org.ggp.base.util.propnet.architecture;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -18,6 +20,10 @@ public abstract class Component implements Serializable
     private final Set<Component> inputs;
     /** The outputs of the component. */
     private final Set<Component> outputs;
+
+    public List<Integer> inputIndices;
+
+    public int index;
 
     public boolean isConnectedToTerminal; // I added this. Indicates if this component leads to the terminal state at some point.
 
@@ -48,6 +54,7 @@ public abstract class Component implements Serializable
     	this.isConnectedToTerminal = false;
         this.inputs = new HashSet<Component>();
         this.outputs = new HashSet<Component>();
+        this.inputIndices = new ArrayList<Integer>(); //added
     }
 
     /**

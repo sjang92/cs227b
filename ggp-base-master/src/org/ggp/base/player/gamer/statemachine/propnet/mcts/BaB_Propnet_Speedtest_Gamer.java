@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.ggp.base.player.gamer.event.GamerSelectedMoveEvent;
 import org.ggp.base.player.gamer.statemachine.sample.SampleGamer;
+import org.ggp.base.util.propnet.architecture.Component;
 import org.ggp.base.util.statemachine.MachineState;
 import org.ggp.base.util.statemachine.Move;
 import org.ggp.base.util.statemachine.StateMachine;
@@ -26,6 +27,8 @@ public class BaB_Propnet_Speedtest_Gamer extends SampleGamer {
 		System.out.println("Metagame. Speed benchmark started.");
 		PropNetStateMachine stateMachine = (PropNetStateMachine) getStateMachine();
 		MachineState rootState = stateMachine.getInitialState();
+
+		List<Component> subGraph = stateMachine.processor.subGraph;
 
 		long start = System.currentTimeMillis();
 		long finishBy = timeout - 1000;

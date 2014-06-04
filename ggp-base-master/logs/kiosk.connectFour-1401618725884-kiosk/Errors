@@ -1,0 +1,20 @@
+LOG 1401618727088 [L9]: <ERR> (in GamePlayer) java.lang.NullPointerException
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.OptimizedPropNetStateMachine.forwardPropagation(OptimizedPropNetStateMachine.java:411)
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.OptimizedPropNetStateMachine.getLegalMoves(OptimizedPropNetStateMachine.java:325)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getLegalMoves(CachedStateMachine.java:76)
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.BaB_Propnet_Test_Gamer.stateMachineMetaGame(BaB_Propnet_Test_Gamer.java:82)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.metaGame(StateMachineGamer.java:175)
+	at org.ggp.base.player.request.grammar.StartRequest.process(StartRequest.java:59)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+LOG 1401618727088 [L9]: <ERR> (in GamePlayer) An unhandled exception occurred during metagaming: org.ggp.base.player.gamer.exception.MetaGamingException: java.lang.NullPointerException
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.metaGame(StateMachineGamer.java:180)
+	at org.ggp.base.player.request.grammar.StartRequest.process(StartRequest.java:59)
+	at org.ggp.base.player.GamePlayer.run(GamePlayer.java:90)
+Caused by: java.lang.NullPointerException
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.OptimizedPropNetStateMachine.forwardPropagation(OptimizedPropNetStateMachine.java:411)
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.OptimizedPropNetStateMachine.getLegalMoves(OptimizedPropNetStateMachine.java:325)
+	at org.ggp.base.util.statemachine.cache.CachedStateMachine.getLegalMoves(CachedStateMachine.java:76)
+	at org.ggp.base.player.gamer.statemachine.propnet.mcts.BaB_Propnet_Test_Gamer.stateMachineMetaGame(BaB_Propnet_Test_Gamer.java:82)
+	at org.ggp.base.player.gamer.statemachine.StateMachineGamer.metaGame(StateMachineGamer.java:175)
+	... 2 more
+LOG 1401618727102 [L9]: <ERR> (in GamePlayer) Got play message not intended for current game: ignoring.

@@ -49,6 +49,8 @@ public class PropNetStateMachine extends StateMachine {
 	/** References to every LegalProposition in the PropNet, indexed by role. */
 	private Map<Role, Set<Proposition>> legalPropositions;
 
+	private Map<Role, Set<Proposition>> smallLegalPropostions;
+
 	/** References to every GoalProposition in the PropNet, indexed by role. */
 	private Map<Role, Set<Proposition>> goalPropositions;
 
@@ -68,6 +70,10 @@ public class PropNetStateMachine extends StateMachine {
 	private Map<Role, Map<Move, Proposition> > moveInputMap;
 
 	private Map<Proposition, Integer> goalMap;
+
+	private boolean[] valueArray;
+
+	public PropNetProcessor processor;
 
 	//private Map<Proposition, Move> in
 
@@ -113,6 +119,11 @@ public class PropNetStateMachine extends StateMachine {
         goalMap = getGoalMap();
         addTypeTagToComponents(propNet.getComponents());
         ordering = getOrdering();
+        valueArray = new boolean[ordering.size()];
+        processor = new PropNetProcessor(propNet, ordering);
+        processor.getMainGraph();
+        //processor.
+        smallLegalPropostions = processor.roleLegalMap;
         System.out.print("	- Finished initializing propNet... \n");
     }
 
@@ -176,12 +187,8 @@ public class PropNetStateMachine extends StateMachine {
 	 */
 	@Override
 	public boolean isTerminal(MachineState state) {
-		//long start = System.currentTimeMillis();
 		initializeBasePropositions(state);
 		forwardPropagation(endOfBaseProposition, terminalPropositionIndex);
-		//long end = System.currentTimeMillis();
-		//time_isTerminal += (end-start);
-
 		return ordering.get(terminalPropositionIndex).getValue();
 	}
 
@@ -195,7 +202,6 @@ public class PropNetStateMachine extends StateMachine {
 	@Override
 	public int getGoal(MachineState state, Role role)
 	throws GoalDefinitionException {
-		//long start = System.currentTimeMillis();
 		initializeBasePropositions(state);
 
 		/* Goal Proposition is always before inputProposition*/
@@ -208,9 +214,6 @@ public class PropNetStateMachine extends StateMachine {
 			}
 		}
 
-		//long end = System.currentTimeMillis();
-		//time_getGoal += (end - start);
-		//return getGoalValue(goalProposition);
 		return goalMap.get(goalProposition);
 	}
 
@@ -236,20 +239,28 @@ public class PropNetStateMachine extends StateMachine {
 	@Override
 	public List<Move> getLegalMoves(MachineState state, Role role)
 	throws MoveDefinitionException {
-		//long start = System.currentTimeMillis();
 
 		List<Move> result = new ArrayList<Move>();
 		initializeBasePropositions(state);
 		forwardPropagation(endOfBaseProposition, inputPropositionIndex - 1); //legal Propositions are always before inputProps
-		Set<Proposition> legalProps = legalPropositions.get(role);
 
-		for (Proposition p : legalProps) {
-			if (p.getValue()) result.add(getMoveFromProposition(p));
+		Set<Proposition> smallLegalProps = smallLegalPropostions.get(role);
+
+		/* If Factoring Throws some crazy errors */
+		if (smallLegalProps == null) {
+			Set<Proposition> legalProps = legalPropositions.get(role);
+
+			for (Proposition p : legalProps) {
+				if (p.getValue()) result.add(getMoveFromProposition(p));
+			}
+
+		/* No errors */
+		} else {
+			for (Proposition p : smallLegalProps) {
+				if (p.getValue()) result.add(getMoveFromProposition(p));
+			}
 		}
 
-		//if (result.size() == 0) throw new MoveDefinitionException(state, role);
-		//long end = System.currentTimeMillis();
-		//time_getLegal += (end - start);
 		return result;
 	}
 
@@ -259,7 +270,6 @@ public class PropNetStateMachine extends StateMachine {
 	@Override
 	public MachineState getNextState(MachineState state, List<Move> moves)
 	throws TransitionDefinitionException {
-		//long start = System.currentTimeMillis();
 
 		initializeBasePropositions(state);
 		initializeInputPropositions(moves);
@@ -276,8 +286,7 @@ public class PropNetStateMachine extends StateMachine {
 				nextProps.add(baseProp.getName());
 			}
 		}
-		//long end = System.currentTimeMillis();
-		//time_getNext += (end - start);
+
 		return new MachineState(nextProps);
 	}
 
@@ -287,6 +296,7 @@ public class PropNetStateMachine extends StateMachine {
 	protected void clearBasePropositions() {
 		for (Proposition p :basePropositionList) {
 			p.setValue(false);
+			//valueArray[p.index] = false; // optimization
 		}
 	}
 
@@ -294,6 +304,7 @@ public class PropNetStateMachine extends StateMachine {
 	protected void clearInputPropositions(){
 		for (Proposition p: inputPropositionList) {
 			p.setValue(false);
+			//valueArray[p.index] = false; // optimization
 		}
 	}
 
@@ -305,6 +316,7 @@ public class PropNetStateMachine extends StateMachine {
 		for(GdlSentence s : g){
 			Proposition p = basePropositions.get(s);
 			p.setValue(true);
+			//valueArray[p.index] = true; //optimization
 		}
 	}
 
@@ -312,15 +324,6 @@ public class PropNetStateMachine extends StateMachine {
 	protected void initializeInputPropositions(List<Move> moves)
 	{
 		clearInputPropositions();
-
-		/*
-		Map<Role, Integer> roleIndices = getRoleIndices();
-		for (Role rl : roles) {
-			int roleIndex = roleIndices.get(rl);
-			Map<Move, Proposition> moveInputMapForRl = moveInputMap.get(rl);
-			Proposition p = moveInputMapForRl.get(moves.get(roleIndex));
-			p.setValue(true);
-		}*/
 
 		for (int i = 0; i < roles.size(); i++) {
 			Map<Move, Proposition> moveInputMapForRl = moveInputMap.get(roles.get(i));
@@ -436,10 +439,15 @@ public class PropNetStateMachine extends StateMachine {
 
 		List<Proposition> realResult = new ArrayList<Proposition>();
 		int resultSize = result.size();
+		int counter = 0;
+
 		boolean foundInputIndex = false;
 		for (int i = 0; i < resultSize; i++) {
-			if (result.get(i).type == ComponentType.PROP)
+			if (result.get(i).type == ComponentType.PROP) {
 				realResult.add((Proposition)result.get(i));
+				result.get(i).index = counter;
+				counter++;
+			}
 
 			if (result.get(i).equals(propNet.getTerminalProposition())) {
 				//System.out.print("FOUND TERMINAL PROPOSITION!!!!!!\n");
