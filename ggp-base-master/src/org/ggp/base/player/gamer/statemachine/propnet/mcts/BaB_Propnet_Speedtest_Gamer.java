@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.ggp.base.player.gamer.event.GamerSelectedMoveEvent;
 import org.ggp.base.player.gamer.statemachine.sample.SampleGamer;
+import org.ggp.base.util.propnet.architecture.Component;
 import org.ggp.base.util.statemachine.MachineState;
 import org.ggp.base.util.statemachine.Move;
 import org.ggp.base.util.statemachine.StateMachine;
@@ -16,6 +17,7 @@ public class BaB_Propnet_Speedtest_Gamer extends SampleGamer {
 	@Override
 	public StateMachine getInitialStateMachine() {
 		return new PropNetStateMachine();
+		//return new OptimizedPropNetStateMachine();
 		//return new ProverStateMachine();
 	}
 
@@ -25,6 +27,8 @@ public class BaB_Propnet_Speedtest_Gamer extends SampleGamer {
 		System.out.println("Metagame. Speed benchmark started.");
 		PropNetStateMachine stateMachine = (PropNetStateMachine) getStateMachine();
 		MachineState rootState = stateMachine.getInitialState();
+
+		List<Component> subGraph = stateMachine.processor.subGraph;
 
 		long start = System.currentTimeMillis();
 		long finishBy = timeout - 1000;
@@ -53,12 +57,13 @@ public class BaB_Propnet_Speedtest_Gamer extends SampleGamer {
 		long end = System.currentTimeMillis();
 		System.out.println("Metagaming finished");
 		System.out.println("Nb expansion/second : " + 1000*nbExpansion/(end-start));
+		/*
 		System.out.println("time_getLegal: "+stateMachine.time_getLegal);
 		System.out.println("time_getNext: "+stateMachine.time_getNext);
 		System.out.println("time_getGoal: "+stateMachine.time_getGoal);
 		System.out.println("time_propagate: "+stateMachine.time_forwardPropagate);
 		System.out.println("time_isTerminal: "+stateMachine.time_isTerminal);
-		System.out.println("call_forwardPropagate: "+stateMachine.call_forwardPropagate);
+		System.out.println("call_forwardPropagate: "+stateMachine.call_forwardPropagate);*/
 
 	}
 

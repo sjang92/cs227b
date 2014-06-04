@@ -104,6 +104,8 @@ public final class fBaB_MCTS_Multithread_Propnet_Gamer extends SampleGamer
 	@Override
 	public void stateMachineMetaGame(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
+
+		root = null;
 		/* Record Start Time */
 		this.timeout = timeout;
 		long start = System.currentTimeMillis();
@@ -227,6 +229,7 @@ public final class fBaB_MCTS_Multithread_Propnet_Gamer extends SampleGamer
 
 	/* Updates the root based on the move that the opponent has made. */
 	public void updateRoot() {
+		/*
 		if (bestMove.getContents().toString().equals("noop")) {
 			for (MonteCarloTreeNode child : root.getChildren()) {
 				if (child.getState().equals(getCurrentState())) {
@@ -238,6 +241,13 @@ public final class fBaB_MCTS_Multithread_Propnet_Gamer extends SampleGamer
 		} else {
 			root = bestChild;
 			root.setParent(null);
+		}*/
+		for (MonteCarloTreeNode child : root.getChildren()) {
+			if (child.getState().equals(getCurrentState())) {
+				root = child;
+				root.setParent(null);
+				break;
+			}
 		}
 	}
 
